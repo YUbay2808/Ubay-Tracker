@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="html-title-tag">Ubay - Deadpool Edition v3.2</title>
+    <title id="html-title-tag">Ubay - Deadpool Edition v3.3</title>
     <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
@@ -98,21 +98,20 @@
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar transition-all duration-300">
 
-    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN (100% SOLID HITAM ANTI-INTIP) -->
+    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN (100% SOLID HITAM TANPA TEKS PASSWORD) -->
     <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center p-6 space-y-6">
         <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
             <i class="fa-solid fa-lock text-3xl text-red-400"></i>
         </div>
         <div class="text-center space-y-1">
-            <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Vault</h2>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Progress</h2>
             <p class="text-xs text-slate-400">Masukkan PIN Keamanan untuk Membuka Aplikasi</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
-            <input type="password" id="lock-pin-input" maxlength="8" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest">
+            <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest">
             <button onclick="unlockApp()" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl">
                 <i class="fa-solid fa-key mr-1.5"></i> Buka Akses
             </button>
-            <span class="text-[10px] text-slate-500 block">PIN Default: <strong class="text-slate-400">ubay</strong></span>
         </div>
     </div>
 
@@ -136,7 +135,7 @@
                         <div class="space-y-1">
                             <div class="flex items-center gap-2">
                                 <h1 onclick="customRenameAppName()" class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5 cursor-pointer group" title="Klik untuk ganti nama aplikasi">
-                                    <span id="display-app-title">Ubay</span> 
+                                    <span id="display-app-title">Ubay Progress</span> 
                                     <i class="fa-solid fa-pen text-[10px] text-slate-500 group-hover:text-red-400 transition-colors"></i>
                                 </h1>
                                 <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
@@ -149,6 +148,9 @@
                     </div>
 
                     <div class="flex items-center gap-1.5">
+                        <button onclick="changePinModal()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti PIN Keamanan">
+                            <i class="fa-solid fa-key text-red-500"></i>
+                        </button>
                         <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti Tema">
                             <i class="fa-solid fa-palette text-amber-400"></i>
                         </button>
@@ -590,7 +592,7 @@
 
         <!-- FOOTER -->
         <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
-            <span id="footer-app-name">© 2026 Ubay - Deadpool Edition ⚔️</span>
+            <span id="footer-app-name">© 2026 Ubay Progress - Deadpool Edition ⚔️</span>
             <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
                 <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
             </button>
@@ -615,236 +617,6 @@
         </div>
     </div>
 
-    <!-- MODAL RECONCILE KAS REAL -->
-    <div id="reconcile-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-amber-500/50 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <h3 class="text-sm font-black text-white flex items-center gap-2">
-                    <i class="fa-solid fa-scale-balanced text-amber-400"></i> Adjustment Kas Real vs Sistem
-                </h3>
-                <button onclick="closeReconcileModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            
-            <p class="text-xs text-slate-300">Masukkan total uang fisik / dompet real kamu saat ini. Selisih minus akan <strong>otomatis masuk ke pos "Pengeluaran Tidak Tercatat"</strong>.</p>
-            
-            <form id="reconcile-form" onsubmit="handleReconcileSubmit(event)" class="space-y-3.5">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Total Sisa Uang Real Saat Ini (Rp)</label>
-                    <input type="number" id="input-real-cash" required placeholder="Misal: 900000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500 font-bold">
-                </div>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeReconcileModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-2.5 rounded-xl text-xs">Proses Adjustment</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL PANIC BUTTON -->
-    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-5 text-center relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closePanicModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-
-            <div class="space-y-1">
-                <span class="text-xs font-black text-amber-400 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
-                    🚨 Deadpool Emergency Urge Rescue
-                </span>
-                <h3 class="text-xl font-black text-white mt-2">Tahan Impulsnya, Ubay! ⚔️</h3>
-                <p class="text-xs text-slate-300 italic">"Pikiran cuma trik sementara. Rasakan dorongannya tanpa menuruti kemauannya!"</p>
-            </div>
-
-            <div class="py-4 flex flex-col items-center justify-center">
-                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full breath-circle border-4 border-red-500/80 flex flex-col items-center justify-center transition-all shadow-2xl">
-                    <span class="text-xs font-black text-white uppercase tracking-wider">Tarik - Tahan - Hembus</span>
-                    <span class="text-[10px] text-slate-200 mt-1 font-bold">Relaksasi 4-7-8</span>
-                </div>
-            </div>
-
-            <div class="bg-zinc-950 p-4 rounded-2xl border border-red-900/60 space-y-2 text-left">
-                <span class="text-xs font-bold text-red-400 uppercase block">💪 Tantangan Alihkan Fokus Cepat:</span>
-                <ul class="text-xs text-slate-200 space-y-1.5 list-disc list-inside font-semibold">
-                    <li><strong>Push-up 15x SEKARANG JUGA</strong> untuk mengalirkan darah ke otot!</li>
-                    <li>Ambil air wudhu & basuh wajah dengan air dingin.</li>
-                    <li>Minum air putih 1 gelas tinggi.</li>
-                </ul>
-            </div>
-
-            <button onclick="closePanicModal(); checkInNoFap();" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">
-                ✅ Saya Berhasil Melewati Godaan Ini!
-            </button>
-        </div>
-    </div>
-
-    <!-- MODALS KEUANGAN & SHOLAT -->
-    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-red-400"></i> Target Budget Kategori
-                </h3>
-                <button onclick="closeBudgetModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="budget-form" class="space-y-3">
-                <div id="budget-inputs-container" class="space-y-3"></div>
-                <div class="pt-3 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeBudgetModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-wallet text-red-400"></i> Edit Pemasukan
-                </h3>
-                <button onclick="closeIncomeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="income-form" class="space-y-3.5">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Gaji Pokok / Utama (Rp)</label>
-                    <input type="number" id="input-salary" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Bonus / Side Income (Rp)</label>
-                    <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeIncomeModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-red-400"></i> Catat Pengeluaran
-                </h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-
-            <div class="space-y-1.5">
-                <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">⚡ Quick Tap:</span>
-                <div class="flex flex-wrap gap-1.5">
-                    <button type="button" onclick="quickFill('Bensin / Transportasi / Tol', 'Bensin', 26000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">⛽ Bensin Rp26k</button>
-                    <button type="button" onclick="quickFill('Makan & Belanja Dapur Harian', 'Nasi Goreng', 15000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">🍛 Nasgor Rp15k</button>
-                    <button type="button" onclick="quickFill('Belanja Pribadi & Lain-Lain', 'Vaps / Rokok', 140000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">💨 Vaps Rp140k</button>
-                </div>
-            </div>
-
-            <form id="expense-form" class="space-y-3.5">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal</label>
-                    <input type="date" id="exp-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Pos Pengeluaran</label>
-                    <select id="exp-category" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                        <option value="Makan & Belanja Dapur Harian">Makan & Belanja Dapur Harian</option>
-                        <option value="Bensin / Transportasi / Tol">Bensin / Transportasi / Tol</option>
-                        <option value="Listrik, Air, Wifi & Pulsa">Listrik, Air, Wifi & Pulsa</option>
-                        <option value="Orang Tua / Keluarga">Orang Tua / Keluarga</option>
-                        <option value="Cicilan Utang & Kewajiban Bulanan">Cicilan Utang & Kewajiban Bulanan</option>
-                        <option value="Tabungan / Dana Darurat">Tabungan / Dana Darurat</option>
-                        <option value="Investasi / Asuransi">Investasi / Asuransi</option>
-                        <option value="Belanja Pribadi & Lain-Lain">Belanja Pribadi & Lain-Lain</option>
-                        <option value="Pengeluaran Tidak Tercatat">Pengeluaran Tidak Tercatat 🚨</option>
-                        <option value="Hiburan, Hangout & Self-Reward">Hiburan, Hangout & Self-Reward</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi / Catatan</label>
-                    <input type="text" id="exp-desc" placeholder="Misal: Beli Bensin, Nasi Goreng" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nominal (Rp)</label>
-                    <input type="number" id="exp-amount" placeholder="0" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Metode Bayar</label>
-                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                        <option value="Mbanking">Mbanking / QRIS</option>
-                        <option value="Cash">Cash</option>
-                        <option value="E-Wallet">E-Wallet</option>
-                    </select>
-                </div>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL CHECK-IN SHOLAT -->
-    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Mutabaah
-                </h3>
-                <button onclick="closeSholatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="sholat-form" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal Check-in</label>
-                    <input type="date" id="input-sholat-date" required onchange="loadSholatByDate()" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
-                </div>
-
-                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib</span>
-                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
-                        <div><label class="text-xs text-slate-400 block mb-1">Subuh</label><select id="s-subuh" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
-                        <div><label class="text-xs text-slate-400 block mb-1">Dzuhur</label><select id="s-dzuhur" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
-                        <div><label class="text-xs text-slate-400 block mb-1">Ashar</label><select id="s-ashar" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
-                        <div><label class="text-xs text-slate-400 block mb-1">Maghrib</label><select id="s-maghrib" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
-                        <div><label class="text-xs text-slate-400 block mb-1">Isya</label><select id="s-isya" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
-                    </div>
-                </div>
-
-                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-3">
-                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sholat Sunnah & Mutabaah Yaumiyah</span>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                        <div>
-                            <label class="text-xs text-slate-300 block mb-1">Sholat Dhuha (Max 12 Rakaat)</label>
-                            <select id="sunnah-dhuha" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white">
-                                <option value="0">❌ Tidak (0 Rakaat)</option>
-                                <option value="2">✨ 2 Rakaat</option>
-                                <option value="4">✨ 4 Rakaat</option>
-                                <option value="6">✨ 6 Rakaat</option>
-                                <option value="8">✨ 8 Rakaat</option>
-                                <option value="10">✨ 10 Rakaat</option>
-                                <option value="12">👑 12 Rakaat (Maksimal)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud (Manual Rakaat)</label>
-                            <input type="number" id="sunnah-tahajud" placeholder="Rakaat..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-300 block mb-1">📖 Tilawah Al-Qur'an (Halaman)</label>
-                            <input type="number" id="mutabaah-tilawah" placeholder="Jumlah Halaman..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-300 block mb-1">🤲 Sedekah Subuh / Harian (Rp)</label>
-                            <input type="number" id="mutabaah-sedekah" placeholder="Nominal Rp..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeSholatModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan Check-in</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Script Utama Application -->
     <script>
         if ('serviceWorker' in navigator) {
@@ -856,7 +628,7 @@
         const themes = ['default', 'theme-oled', 'theme-emerald'];
 
         function customRenameAppName() {
-            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay';
+            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
             const newTitle = prompt("Masukkan Nama Baru untuk Aplikasi Kamu:", currentTitle);
             if (newTitle && newTitle.trim() !== "") {
                 const cleaned = newTitle.trim();
@@ -875,11 +647,34 @@
 
         function unlockApp() {
             const inputPin = document.getElementById('lock-pin-input').value;
-            if (inputPin === 'ubay' || inputPin === '1234' || inputPin === '') {
+            const currentPin = localStorage.getItem('user_security_pin') || 'ubay';
+            if (inputPin === currentPin) {
                 document.getElementById('app-lock-screen').style.display = 'none';
                 document.getElementById('app-main-content').classList.remove('hidden');
             } else {
                 alert("❌ PIN Keamanan Salah!");
+            }
+        }
+
+        function changePinModal() {
+            const currentSavedPin = localStorage.getItem('user_security_pin') || 'ubay';
+            const oldPinInput = prompt("Masukkan PIN Lama kamu:");
+            if (oldPinInput === null) return;
+            
+            if (oldPinInput !== currentSavedPin) {
+                alert("❌ PIN Lama Salah!");
+                return;
+            }
+
+            const newPin = prompt("Masukkan PIN Baru kamu:");
+            if (newPin && newPin.trim() !== "") {
+                const confirmPin = prompt("Konfirmasi PIN Baru:");
+                if (newPin === confirmPin) {
+                    localStorage.setItem('user_security_pin', newPin.trim());
+                    alert("🔑 PIN Keamanan berhasil diperbarui!");
+                } else {
+                    alert("❌ Konfirmasi PIN Baru tidak cocok!");
+                }
             }
         }
 
@@ -893,7 +688,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay';
+            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
             applyCustomAppName(savedAppName);
 
             const savedTheme = localStorage.getItem('user_app_theme');
@@ -958,25 +753,8 @@
                 document.getElementById('nav-app-icon-img').src = base64String;
                 document.getElementById('app-favicon').href = base64String;
                 document.getElementById('app-apple-icon').href = base64String;
-                
-                // Regenerate Manifest Link dynamically
-                const manifestData = {
-                    short_name: localStorage.getItem('user_custom_app_title') || "Ubay",
-                    name: localStorage.getItem('user_custom_app_title') || "Ubay Deadpool Edition",
-                    icons: [{ src: base64String, sizes: "512x512", type: "image/png" }],
-                    start_url: "./index.html",
-                    display: "standalone",
-                    background_color: "#090506",
-                    theme_color: "#dc2626"
-                };
-                const stringManifest = JSON.stringify(manifestData);
-                const blobManifest = new Blob([stringManifest], { type: 'application/json' });
-                const manifestURL = URL.createObjectURL(blobManifest);
-                let manifestLink = document.querySelector('link[rel="manifest"]');
-                if (manifestLink) manifestLink.setAttribute('href', manifestURL);
-
                 triggerConfetti();
-                alert("✨ Icon / Logo aplikasi berhasil diperbarui! Jika sudah terpasang di HP, hapus pintasan lama lalu klik 'Tambahkan ke Layar Utama' ulang agar ikon baru di HP aktif.");
+                alert("✨ Icon / Logo aplikasi berhasil diperbarui!");
             };
             reader.readAsDataURL(file);
         }
@@ -1301,7 +1079,7 @@
             else {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        new Notification("Ubay Deadpool", { body: "⚔️ Maximum Effort! Jaga Sholat, Keuangan, & Target Mindset Ubay." });
+                        new Notification("Ubay Progress", { body: "⚔️ Maximum Effort! Jaga Sholat, Keuangan, & Target Mindset Ubay." });
                     }
                 });
             }
@@ -1508,9 +1286,10 @@
         function toggleLockTransaction(id) {
             const t = transactions.find(x => x.id === id);
             if (!t) return;
+            const currentSavedPin = localStorage.getItem('user_security_pin') || 'ubay';
             if (t.locked) {
-                const pin = prompt("🔒 Kunci Deadpool aktif! Masukkan PIN 'ubay':");
-                if (pin === 'ubay') { t.locked = false; alert("🔓 Di-unlock!"); } 
+                const pin = prompt("🔒 Kunci Deadpool aktif! Masukkan PIN Security kamu:");
+                if (pin === currentSavedPin) { t.locked = false; alert("🔓 Di-unlock!"); } 
                 else if (pin !== null) alert("❌ PIN salah!");
             } else {
                 t.locked = true; alert("🔒 Transaksi dikunci!");
@@ -1732,7 +1511,8 @@
                 sholat_records: sholats,
                 nofap_streak_data: nofapData,
                 user_app_icon: localStorage.getItem('user_app_icon') || '',
-                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay',
+                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Progress',
+                user_security_pin: localStorage.getItem('user_security_pin') || 'ubay',
                 user_app_theme: localStorage.getItem('user_app_theme') || 'default'
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
@@ -1761,6 +1541,7 @@
                     if (imported.fin_impulsive_wishlist) localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(imported.fin_impulsive_wishlist));
                     if (imported.user_app_icon) localStorage.setItem('user_app_icon', imported.user_app_icon);
                     if (imported.user_custom_app_title) localStorage.setItem('user_custom_app_title', imported.user_custom_app_title);
+                    if (imported.user_security_pin) localStorage.setItem('user_security_pin', imported.user_security_pin);
                     alert("📥 Data berhasil dipulihkan total!");
                     location.reload();
                 } catch(err) {
