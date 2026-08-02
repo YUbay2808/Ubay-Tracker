@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <!-- KUNCI VIEWPORT HP: MATIKAN ZOOM & FIT TO SCREEN TOTAL -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Deadpool Edition v3.4</title>
+    <title id="html-title-tag">Ubay Progress - Master Ultimate Edition v4.5</title>
     <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     <link id="app-apple-icon" rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -20,6 +20,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- ANTI-BLINK REFRESH LOCK SCREEN CHECKER -->
+    <script>
+        (function() {
+            var isUnlocked = sessionStorage.getItem('app_unlocked_session') === 'true';
+            document.documentElement.classList.add(isUnlocked ? 'app-unlocked' : 'app-locked');
+        })();
+    </script>
 
     <script>
         tailwind.config = {
@@ -56,7 +64,12 @@
             --border-color: rgba(16, 185, 129, 0.35);
         }
 
-        /* CEGAH LERAN/MELUBER KE KANAN */
+        /* PERATURAN TAMPILAN LOCK SCREEN SUPAYA TIDAK BERKEDIP SAAT REFRESH */
+        html.app-unlocked #app-lock-screen { display: none !important; }
+        html.app-unlocked #app-main-content { display: block !important; }
+        html.app-locked #app-lock-screen { display: flex !important; }
+        html.app-locked #app-main-content { display: none !important; }
+
         html, body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #090506; 
@@ -80,6 +93,21 @@
             transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
         }
 
+        /* BOTTOM SHEET POPUP ANIMATION FOR MOBILE */
+        @media (max-width: 640px) {
+            .bottom-sheet {
+                border-bottom-left-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+                border-top-left-radius: 1.5rem !important;
+                border-top-right-radius: 1.5rem !important;
+                animation: slideUp 0.3s cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
         .breath-circle {
             animation: breatheAnimation 19s infinite ease-in-out;
         }
@@ -98,8 +126,8 @@
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
 
-    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN -->
-    <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center p-6 space-y-6">
+    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN (ZERO-BLINK) -->
+    <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex-col items-center justify-center p-6 space-y-6">
         <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
             <i class="fa-solid fa-lock text-3xl text-red-400"></i>
         </div>
@@ -109,22 +137,22 @@
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
             <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest">
-            <button onclick="unlockApp()" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl">
+            <button onclick="haptic(); unlockApp();" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl">
                 <i class="fa-solid fa-key mr-1.5"></i> Buka Akses
             </button>
         </div>
     </div>
 
     <!-- KONTEN UTAMA APLIKASI -->
-    <div id="app-main-content" class="hidden">
-        <!-- TOP NAVIGATION BAR COMPACT (RAPI & GAK MELUBER KE KANAN) -->
+    <div id="app-main-content">
+        <!-- TOP NAVIGATION BAR COMPACT -->
         <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
             <div class="max-w-4xl mx-auto px-3 py-2 space-y-2">
                 
                 <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2.5 min-w-0">
                         <!-- Dynamic App Icon -->
-                        <div onclick="document.getElementById('app-icon-input').click()" class="w-10 h-10 rounded-xl overflow-hidden border border-red-600 shadow-md bg-red-950 flex items-center justify-center shrink-0 relative cursor-pointer" title="Ganti Icon">
+                        <div onclick="haptic(); document.getElementById('app-icon-input').click();" class="w-10 h-10 rounded-xl overflow-hidden border border-red-600 shadow-md bg-red-950 flex items-center justify-center shrink-0 relative cursor-pointer" title="Ganti Icon">
                             <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover">
                         </div>
                         <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
@@ -138,46 +166,41 @@
                         </div>
                     </div>
 
-                    <!-- ACTION BUTTONS TOP RIGHT (GRID DIBUAT KETAT & COMPACT) -->
+                    <!-- ACTION BUTTONS TOP RIGHT -->
                     <div class="flex items-center gap-1 shrink-0">
-                        <button onclick="changePinModal()" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Ganti PIN"><i class="fa-solid fa-key"></i></button>
-                        <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Ganti Tema"><i class="fa-solid fa-palette"></i></button>
-                        <button onclick="triggerSmartNotification()" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Notifikasi"><i class="fa-solid fa-bell"></i></button>
-                        <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 border border-red-900/60 text-slate-300 p-2 rounded-xl text-xs" title="Restore"><i class="fa-solid fa-file-import"></i></button>
+                        <button onclick="haptic(); changePinModal();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Ganti PIN"><i class="fa-solid fa-key"></i></button>
+                        <button onclick="haptic(); cycleTheme();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Ganti Tema"><i class="fa-solid fa-palette"></i></button>
+                        <button onclick="haptic(); triggerSmartNotification();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Notifikasi"><i class="fa-solid fa-bell"></i></button>
+                        <button onclick="haptic(); document.getElementById('restore-file-input').click();" class="bg-zinc-900 border border-red-900/60 text-slate-300 p-2 rounded-xl text-xs" title="Restore"><i class="fa-solid fa-file-import"></i></button>
                         <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
                     </div>
-                </div>
-
-                <!-- 3 MAIN SWITCH TABS -->
-                <div class="bg-zinc-950 p-1 border border-red-900/50 rounded-xl grid grid-cols-3 gap-1 shadow-inner">
-                    <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-wallet"></i> <span>Keuangan</span>
-                    </button>
-                    <button id="tab-btn-sholat" onclick="switchTab('sholat')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-mosque"></i> <span>Sholat</span>
-                    </button>
-                    <button id="tab-btn-nofap" onclick="switchTab('nofap')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-fire"></i> <span>NoFap</span>
-                    </button>
                 </div>
 
             </div>
         </nav>
 
-        <!-- MASTER DAILY GLANCE WIDGET -->
+        <!-- MASTER DAILY GLANCE WIDGET (COLLAPSIBLE) -->
         <div class="max-w-4xl mx-auto px-3 pt-3">
-            <div class="grid grid-cols-3 gap-1.5 bg-zinc-950 p-2 rounded-xl border border-red-900/50 shadow-md">
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Batas Harian</span>
-                    <span id="glance-safe-limit" class="text-xs font-black text-red-400 block truncate">Rp 0 / hr</span>
+            <div class="bg-zinc-950 border border-red-900/50 rounded-xl p-2 shadow-md space-y-2">
+                <div class="flex justify-between items-center px-1 cursor-pointer" onclick="haptic(); toggleSummaryCollapse();">
+                    <span class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1">
+                        <i class="fa-solid fa-gauge-high"></i> Master Daily Glance
+                    </span>
+                    <button id="summary-toggle-btn" class="text-xs text-slate-400"><i class="fa-solid fa-chevron-up"></i></button>
                 </div>
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Sholat</span>
-                    <span id="glance-sholat-status" class="text-xs font-black text-emerald-400 block truncate">0/5 Jamaah</span>
-                </div>
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
-                    <span id="glance-nofap-days" class="text-xs font-black text-amber-400 block truncate">0 Hari</span>
+                <div id="summary-content-grid" class="grid grid-cols-3 gap-1.5">
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Batas Harian</span>
+                        <span id="glance-safe-limit" class="text-xs font-black text-red-400 block truncate">Rp 0 / hr</span>
+                    </div>
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Sholat</span>
+                        <span id="glance-sholat-status" class="text-xs font-black text-emerald-400 block truncate">0/5 Jamaah</span>
+                    </div>
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
+                        <span id="glance-nofap-days" class="text-xs font-black text-amber-400 block truncate">0 Hari</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -199,7 +222,7 @@
                     <span class="text-[10px] uppercase font-black text-amber-400 block">Koreksi Kas Real vs Sistem</span>
                     <p id="cash-reconcile-status" class="text-[11px] text-slate-300">Kas Real: <strong id="disp-real-cash" class="text-emerald-400">Rp 0</strong></p>
                 </div>
-                <button onclick="openReconcileModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs shrink-0">
+                <button onclick="haptic(); openReconcileModal();" class="bg-amber-600 hover:bg-amber-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs shrink-0">
                     Adjust Kas
                 </button>
             </section>
@@ -213,13 +236,13 @@
                         <span class="text-xs font-black text-red-400 uppercase flex items-center gap-1">
                             <i class="fa-solid fa-bolt text-xs"></i> Catat Cepat AI / Voice
                         </span>
-                        <button onclick="startVoiceRecognition()" class="bg-red-950 border border-red-600/60 text-red-300 text-[10px] px-2 py-0.5 rounded font-bold">
+                        <button onclick="haptic(); startVoiceRecognition();" class="bg-red-950 border border-red-600/60 text-red-300 text-[10px] px-2 py-0.5 rounded font-bold">
                             <i class="fa-solid fa-microphone text-amber-400"></i> Voice
                         </button>
                     </div>
                     <form id="ai-parser-form" class="flex gap-2">
                         <input type="text" id="ai-parser-input" placeholder="Tulis contoh: Nasgor 15k / Bensin 20k" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
-                        <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl text-xs shrink-0">Simpan</button>
+                        <button type="submit" onclick="haptic()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl text-xs shrink-0">Simpan</button>
                     </form>
                 </section>
 
@@ -234,8 +257,8 @@
                     </div>
 
                     <div class="flex items-center gap-1.5">
-                        <button onclick="exportCSV()" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold p-2 rounded-xl text-xs"><i class="fa-solid fa-file-csv"></i></button>
-                        <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
+                        <button onclick="haptic(); exportCSV();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold p-2 rounded-xl text-xs"><i class="fa-solid fa-file-csv"></i></button>
+                        <button onclick="haptic(); openModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> <span>Catat</span>
                         </button>
                     </div>
@@ -255,7 +278,7 @@
                             <div class="text-[10px] text-slate-400">Gaji: <strong class="text-slate-200" id="disp-salary">Rp 0</strong></div>
                             <div class="text-xs font-black text-red-400" id="disp-total-income">Total: Rp 0</div>
                         </div>
-                        <button onclick="openIncomeModal()" class="bg-zinc-800 text-red-400 p-2 rounded-lg text-xs" title="Edit Gaji"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="haptic(); openIncomeModal();" class="bg-zinc-800 text-red-400 p-2 rounded-lg text-xs" title="Edit Gaji"><i class="fa-solid fa-pen"></i></button>
                     </div>
                 </section>
 
@@ -285,14 +308,14 @@
                         <span class="text-[11px] font-black text-amber-400 uppercase flex items-center gap-1">
                             <i class="fa-solid fa-hourglass-start"></i> Impulsive Wishlist
                         </span>
-                        <button onclick="addImpulsiveWishlist()" class="text-[10px] bg-amber-950 text-amber-300 border border-amber-600/40 px-2 py-0.5 rounded font-bold">
+                        <button onclick="haptic(); addImpulsiveWishlist();" class="text-[10px] bg-amber-950 text-amber-300 border border-amber-600/40 px-2 py-0.5 rounded font-bold">
                             + Lock Wishlist
                         </button>
                     </div>
                     <div id="wishlist-delay-list" class="space-y-1.5 text-xs"></div>
                 </section>
 
-                <!-- TRACKER UTANG & CICILAN DENGAN SISTEM EDIT & SISA BULAN MANUAL -->
+                <!-- TRACKER UTANG & CICILAN -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-red-900/40">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
@@ -300,7 +323,7 @@
                         </h2>
                         <div class="flex items-center gap-2">
                             <span id="total-debt-sum" class="text-[10px] font-extrabold text-red-400">Total: Rp 0</span>
-                            <button onclick="openAddDebtModal()" class="bg-red-950 text-red-300 border border-red-600/40 text-[10px] px-2 py-0.5 rounded font-bold">+ Utang</button>
+                            <button onclick="haptic(); openAddDebtModal();" class="bg-red-950 text-red-300 border border-red-600/40 text-[10px] px-2 py-0.5 rounded font-bold">+ Utang</button>
                         </div>
                     </div>
                     <div id="debt-tracker-container" class="grid grid-cols-1 gap-2 text-xs"></div>
@@ -320,16 +343,38 @@
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-list-check text-red-400 mr-1"></i> Monitoring Budget</h2>
-                        <button onclick="openBudgetModal()" class="bg-zinc-800 text-red-400 px-2 py-1 rounded-lg text-[10px] font-bold">Edit Budget</button>
+                        <button onclick="haptic(); openBudgetModal();" class="bg-zinc-800 text-red-400 px-2 py-1 rounded-lg text-[10px] font-bold">Edit Budget</button>
                     </div>
                     <div id="budget-cards-container" class="grid grid-cols-1 gap-2"></div>
                 </section>
 
-                <!-- Tabel Riwayat Keuangan -->
+                <!-- TABEL RIWAYAT KEUANGAN DENGAN FILTER BULAN & MAX 5 TRANSAKSI -->
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
-                    <div class="flex justify-between items-center gap-2 border-b border-zinc-800 pb-2">
-                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-receipt text-red-400 mr-1"></i> Riwayat</h2>
-                        <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="bg-zinc-950 border border-zinc-700 rounded-lg px-2 py-1 text-xs text-white w-28 focus:outline-none">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-800 pb-2">
+                        <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
+                            <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Transaksi
+                        </h2>
+                        
+                        <div class="flex items-center gap-1.5 w-full sm:w-auto">
+                            <!-- FILTER BULAN -->
+                            <select id="month-filter" onchange="renderApp()" class="bg-zinc-950 border border-zinc-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none">
+                                <option value="ALL">Semua Bulan</option>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Maret</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Juni</option>
+                                <option value="07">Juli</option>
+                                <option value="08">Agustus</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+
+                            <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="bg-zinc-950 border border-zinc-700 rounded-lg px-2 py-1 text-xs text-white flex-1 sm:w-28 focus:outline-none">
+                        </div>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -345,11 +390,18 @@
                             <tbody id="history-table" class="divide-y divide-zinc-800/60"></tbody>
                         </table>
                     </div>
+
+                    <!-- TOGGLE MAKSIMAL 5 TRANSAKSI -->
+                    <div id="history-toggle-container" class="text-center pt-1 hidden">
+                        <button onclick="haptic(); toggleShowAllHistory();" id="history-toggle-btn" class="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-red-400 text-xs font-bold px-3 py-1.5 rounded-xl transition-all">
+                            Lihat Semua Transaksi 👇
+                        </button>
+                    </div>
                 </section>
             </main>
         </div>
 
-        <!-- SECTION 2: SHOLAT APP FIXED (NO MORE INFINITE LOADING) -->
+        <!-- SECTION 2: SHOLAT & PUASA SUNNAH -->
         <div id="section-sholat" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
                 <div class="flex justify-between items-center gap-2">
@@ -359,10 +411,21 @@
                         </h2>
                         <p class="text-[10px] text-slate-400">Lokasi GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
                     </div>
-                    <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
+                    <button onclick="haptic(); openSholatModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
                         <i class="fa-solid fa-circle-plus"></i> <span>Check-in</span>
                     </button>
                 </div>
+
+                <!-- WIDGET PUASA SUNNAH -->
+                <section class="bg-zinc-950 p-3 rounded-xl border border-amber-600/40 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-amber-400 uppercase block">🌙 Tracker Puasa Sunnah</span>
+                        <span id="fasting-today-status" class="text-xs text-slate-200 font-bold block mt-0.5">Hari ini: Rekomendasi Puasa Sunnah</span>
+                    </div>
+                    <button onclick="haptic(); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950 border border-amber-600/50 text-amber-300 px-3 py-1.5 rounded-lg text-xs font-bold">
+                        Niat Puasa Hari Ini
+                    </button>
+                </section>
 
                 <!-- JADWAL SHOLAT GPS -->
                 <section class="bg-zinc-950 p-3 rounded-xl border border-red-900/50 space-y-1.5">
@@ -379,7 +442,7 @@
                     <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
                 </section>
 
-                <!-- ANALISIS SHOLAT (FIXED SAFETY RENDERING) -->
+                <!-- ANALISIS SHOLAT -->
                 <section class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     <div class="glass-card rounded-xl p-3 space-y-1 border-red-600/50">
                         <span class="text-[10px] text-slate-400 font-bold uppercase block">Hari Ini</span>
@@ -407,6 +470,13 @@
         <!-- SECTION 3: NOFAP APP -->
         <div id="section-nofap" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
+                
+                <!-- DAILY MINDSET AFFIRMATION -->
+                <section class="bg-gradient-to-r from-red-950 via-zinc-950 to-zinc-900 border border-red-600/50 p-3 rounded-xl space-y-1">
+                    <span class="text-[9px] font-black text-amber-400 uppercase tracking-widest block">🔥 Daily Mindset Quote</span>
+                    <p id="daily-affirmation-text" class="text-xs text-slate-200 italic font-semibold">"Disiplin adalah memilih antara apa yang kamu inginkan sekarang dengan apa yang paling kamu inginkan nanti."</p>
+                </section>
+
                 <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border border-red-600 p-3 rounded-xl text-xs text-red-200 flex items-center gap-2 animate-pulse">
                     <i class="fa-solid fa-triangle-exclamation text-xl text-amber-400 shrink-0"></i>
                     <div>
@@ -431,15 +501,52 @@
                     </div>
 
                     <div class="flex flex-wrap justify-center gap-2 pt-1">
-                        <button onclick="checkInNoFap()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg">
+                        <button onclick="haptic(); checkInNoFap();" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg">
                             ✅ Check-in Clean
                         </button>
-                        <button onclick="openPanicModal()" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg animate-pulse">
+                        <button onclick="haptic(); openPanicModal();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg animate-pulse">
                             🚨 Emergency
                         </button>
-                        <button onclick="resetNoFap()" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-xl text-xs">
+                        <button onclick="haptic(); resetNoFap();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-xl text-xs">
                             Reset
                         </button>
+                    </div>
+                </section>
+
+                <!-- JURNAL REFLEKSI MENTAL HARIAN -->
+                <section class="glass-card rounded-xl p-3 space-y-2 border-amber-600/40">
+                    <span class="text-xs font-black text-amber-400 uppercase block">⭐ Jurnal Refleksi Mental Harian</span>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Energy</span>
+                            <select id="mental-energy" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-amber-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Focus</span>
+                            <select id="mental-focus" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-blue-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Mood</span>
+                            <select id="mental-mood" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-emerald-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
                     </div>
                 </section>
 
@@ -472,41 +579,59 @@
             </main>
         </div>
 
+        <!-- BOTTOM NAVIGATION BAR MOBILE (JEMPOL FRIENDLY) -->
+        <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/95 backdrop-blur-lg border-t border-red-900/60 pb-safe">
+            <div class="max-w-4xl mx-auto grid grid-cols-3 h-14">
+                <button id="nav-btn-fin" onclick="haptic(); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-wallet text-base"></i>
+                    <span class="text-[10px] font-bold">Keuangan</span>
+                </button>
+                <button id="nav-btn-sholat" onclick="haptic(); switchTab('sholat');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-mosque text-base"></i>
+                    <span class="text-[10px] font-bold">Sholat</span>
+                </button>
+                <button id="nav-btn-nofap" onclick="haptic(); switchTab('nofap');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-fire text-base"></i>
+                    <span class="text-[10px] font-bold">NoFap</span>
+                </button>
+            </div>
+        </nav>
+
         <!-- FOOTER -->
         <footer class="max-w-4xl mx-auto px-3 mt-8 pt-3 border-t border-zinc-800 text-center text-xs text-slate-500 flex justify-between items-center gap-2">
             <span id="footer-app-name">© 2026 Ubay Progress ⚔️</span>
-            <button onclick="backupJSON()" class="bg-zinc-900 text-slate-300 border border-zinc-800 px-2.5 py-1 rounded-lg text-[10px] font-bold">
+            <button onclick="haptic(); backupJSON();" class="bg-zinc-900 text-slate-300 border border-zinc-800 px-2.5 py-1 rounded-lg text-[10px] font-bold">
                 <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
             </button>
         </footer>
 
         <!-- FAB BUTTON -->
-        <div class="fixed bottom-5 right-5 z-40">
+        <div class="fixed bottom-16 right-4 z-40">
             <div id="fab-menu" class="hidden mb-2 space-y-2 flex flex-col items-end">
-                <button onclick="switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
+                <button onclick="haptic(); switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
                     <span>Emergency</span> <i class="fa-solid fa-triangle-exclamation"></i>
                 </button>
-                <button onclick="switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 text-red-400 font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
+                <button onclick="haptic(); switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 text-red-400 font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
                     <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
                 </button>
-                <button onclick="switchTab('finance'); openModal(); toggleFab();" class="bg-red-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
+                <button onclick="haptic(); switchTab('finance'); openModal(); toggleFab();" class="bg-red-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
                     <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
                 </button>
             </div>
-            <button onclick="toggleFab()" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl">
+            <button onclick="haptic(); toggleFab();" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl">
                 <i class="fa-solid fa-plus"></i>
             </button>
         </div>
     </div>
 
-    <!-- MODAL UTANG (MANUAL ADJUSTMENT UTANG, SISA BULAN, & STATUS LUNAS) -->
-    <div id="debt-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-red-600/60 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4">
+    <!-- MODAL UTANG (BOTTOM SHEET) -->
+    <div id="debt-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-red-600/60 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-4 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-2">
                     <i class="fa-solid fa-link-slash text-red-400"></i> Edit / Tambah Utang
                 </h3>
-                <button onclick="closeDebtModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeDebtModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="debt-form" onsubmit="handleDebtSubmit(event)" class="space-y-3">
                 <input type="hidden" id="debt-edit-id">
@@ -536,21 +661,21 @@
                     </select>
                 </div>
                 <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeDebtModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2 rounded-xl text-xs">Simpan Utang</button>
+                    <button type="button" onclick="haptic(); closeDebtModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2 rounded-xl text-xs">Simpan Utang</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL RECONCILE KAS REAL -->
-    <div id="reconcile-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-amber-500/50 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
+    <div id="reconcile-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-amber-500/50 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-black text-white flex items-center gap-2">
                     <i class="fa-solid fa-scale-balanced text-amber-400"></i> Adjustment Kas Real
                 </h3>
-                <button onclick="closeReconcileModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeReconcileModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="reconcile-form" onsubmit="handleReconcileSubmit(event)" class="space-y-3">
                 <div>
@@ -558,55 +683,64 @@
                     <input type="number" id="input-real-cash" required placeholder="Misal: 900000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none font-bold">
                 </div>
                 <div class="pt-1 flex gap-2">
-                    <button type="button" onclick="closeReconcileModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-amber-600 text-white font-bold py-2 rounded-xl text-xs">Adjust Kas</button>
+                    <button type="button" onclick="haptic(); closeReconcileModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-amber-600 text-white font-bold py-2 rounded-xl text-xs">Adjust Kas</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL PANIC BUTTON NOFAP -->
-    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-4 text-center relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closePanicModal()" class="absolute right-3 top-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- MODAL PANIC BUTTON NOFAP DENGAN AUDIO RELAKSASI GENERATOR -->
+    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-4 text-center relative max-h-[90vh] overflow-y-auto bottom-sheet">
+            <button onclick="haptic(); closePanicModal();" class="absolute right-3 top-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div class="space-y-1">
                 <h3 class="text-lg font-black text-white">Tahan Impulsnya, Ubay! ⚔️</h3>
                 <p class="text-xs text-slate-300 italic">"Rasakan dorongannya tanpa menuruti kemauannya!"</p>
             </div>
+
+            <!-- AUDIO WHITE NOISE / FREKUENSI TENANG GENERATOR -->
+            <div class="bg-zinc-950 p-3 rounded-xl border border-red-900/60 flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-headphones mr-1"></i> Audio Relaksasi Calming:</span>
+                <button onclick="haptic(); toggleCalmingAudio();" id="audio-toggle-btn" class="bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
+                    ▶ Play Audio
+                </button>
+            </div>
+
             <div class="py-2 flex flex-col items-center justify-center">
                 <div class="w-24 h-24 rounded-full breath-circle border-2 border-red-500 flex flex-col items-center justify-center">
                     <span class="text-[10px] font-black text-white uppercase">Relaksasi 4-7-8</span>
                 </div>
             </div>
-            <button onclick="closePanicModal(); checkInNoFap();" class="w-full bg-emerald-600 text-white font-black py-2.5 rounded-xl text-xs uppercase">
+            <button onclick="haptic(); closePanicModal(); checkInNoFap();" class="w-full bg-emerald-600 text-white font-black py-2.5 rounded-xl text-xs uppercase">
                 ✅ Saya Berhasil Melewati Godaan Ini!
             </button>
         </div>
     </div>
 
     <!-- MODAL EDIT BUDGET -->
-    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Target Budget Kategori</h3>
-                <button onclick="closeBudgetModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeBudgetModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="budget-form" class="space-y-2.5">
                 <div id="budget-inputs-container" class="space-y-2"></div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeBudgetModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeBudgetModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL EDIT PEMASUKAN -->
-    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
+    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Edit Pemasukan</h3>
-                <button onclick="closeIncomeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeIncomeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="income-form" class="space-y-3">
                 <div>
@@ -618,19 +752,19 @@
                     <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
                 </div>
                 <div class="pt-1 flex gap-2">
-                    <button type="button" onclick="closeIncomeModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeIncomeModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CATAT PENGELUARAN -->
-    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
+    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Catat Pengeluaran</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <form id="expense-form" class="space-y-2.5">
@@ -670,19 +804,19 @@
                     </select>
                 </div>
                 <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CHECK-IN SHOLAT -->
-    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Check-in Sholat & Mutabaah</h3>
-                <button onclick="closeSholatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeSholatModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="sholat-form" class="space-y-3">
                 <div>
@@ -691,7 +825,7 @@
                 </div>
 
                 <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib</span>
+                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib (Jamaah = 2x XP)</span>
                     <div class="grid grid-cols-5 gap-1 text-center text-xs">
                         <div><label class="text-[9px] text-slate-400 block">Subuh</label><select id="s-subuh" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
                         <div><label class="text-[9px] text-slate-400 block">Dzuhur</label><select id="s-dzuhur" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
@@ -731,8 +865,8 @@
                 </div>
 
                 <div class="pt-1 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeSholatModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeSholatModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
@@ -747,17 +881,42 @@
         const todayStr = new Date().toISOString().split('T')[0];
         let currentThemeIndex = 0;
         const themes = ['default', 'theme-oled', 'theme-emerald'];
+        let showAllHistory = false;
+        let audioContext = null, audioOsc = null, isAudioPlaying = false;
 
-        /* FITUR REFRESH TANPA INPUT PIN LAGI (MENGGUNAKAN SESSIONSTORAGE) */
-        function checkAppAuth() {
-            const isUnlockedSession = sessionStorage.getItem('app_unlocked_session');
-            if (isUnlockedSession === 'true') {
-                document.getElementById('app-lock-screen').style.display = 'none';
-                document.getElementById('app-main-content').classList.remove('hidden');
+        // 1. HAPTIC FEEDBACK (VIBRASI HP)
+        function haptic() {
+            if ("vibrate" in navigator) { navigator.vibrate(15); }
+        }
+
+        // 2. AUDIO WHITE NOISE / FREKUENSI RELAKSASI CALMING
+        function toggleCalmingAudio() {
+            const btn = document.getElementById('audio-toggle-btn');
+            if (!isAudioPlaying) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioOsc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                audioOsc.type = 'sine';
+                audioOsc.frequency.setValueAtTime(174, audioContext.currentTime); // Solfeggio frequency 174Hz
+                gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                audioOsc.connect(gain);
+                gain.connect(audioContext.destination);
+                audioOsc.start();
+                isAudioPlaying = true;
+                btn.innerText = "⏸ Stop Audio";
             } else {
-                document.getElementById('app-lock-screen').style.display = 'flex';
-                document.getElementById('app-main-content').classList.add('hidden');
+                if (audioOsc) audioOsc.stop();
+                isAudioPlaying = false;
+                btn.innerText = "▶ Play Audio";
             }
+        }
+
+        // 3. SUMMARY COLLAPSE TOGGLE
+        function toggleSummaryCollapse() {
+            const grid = document.getElementById('summary-content-grid');
+            const btn = document.getElementById('summary-toggle-btn');
+            grid.classList.toggle('hidden');
+            btn.innerHTML = grid.classList.contains('hidden') ? '<i class="fa-solid fa-chevron-down"></i>' : '<i class="fa-solid fa-chevron-up"></i>';
         }
 
         function unlockApp() {
@@ -765,8 +924,8 @@
             const currentPin = localStorage.getItem('user_security_pin') || 'ubay';
             if (inputPin === currentPin) {
                 sessionStorage.setItem('app_unlocked_session', 'true');
-                document.getElementById('app-lock-screen').style.display = 'none';
-                document.getElementById('app-main-content').classList.remove('hidden');
+                document.documentElement.classList.remove('app-locked');
+                document.documentElement.classList.add('app-unlocked');
             } else {
                 alert("❌ PIN Keamanan Salah!");
             }
@@ -785,7 +944,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Deadpool Edition`;
+            document.getElementById('html-title-tag').innerText = `${title} - Ultimate Edition`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -812,8 +971,6 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            checkAppAuth();
-
             const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
             applyCustomAppName(savedAppName);
 
@@ -830,6 +987,8 @@
             const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
             switchTab(lastActiveTab);
 
+            initFastingTracker();
+            loadMentalCheck();
             updateGamificationLevel();
             setInterval(updateNoFapTimer, 1000);
             checkPeakUrgeHours();
@@ -893,26 +1052,69 @@
             nofapSec.classList.add('hidden');
             topBanners.classList.add('hidden');
 
-            const inactiveClass = 'py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1';
-            const activeClass = 'py-2 rounded-lg text-xs font-black bg-gradient-to-r from-red-600 to-rose-700 text-white shadow flex items-center justify-center gap-1';
+            const inactiveNav = "flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white";
+            const activeNav = "flex flex-col items-center justify-center space-y-1 text-red-500 font-extrabold";
 
-            document.getElementById('tab-btn-fin').className = inactiveClass;
-            document.getElementById('tab-btn-sholat').className = inactiveClass;
-            document.getElementById('tab-btn-nofap').className = inactiveClass;
+            document.getElementById('nav-btn-fin').className = inactiveNav;
+            document.getElementById('nav-btn-sholat').className = inactiveNav;
+            document.getElementById('nav-btn-nofap').className = inactiveNav;
 
             if (tab === 'finance') {
                 finSec.classList.remove('hidden');
                 topBanners.classList.remove('hidden');
-                document.getElementById('tab-btn-fin').className = activeClass;
+                document.getElementById('nav-btn-fin').className = activeNav;
                 renderApp();
             } else if (tab === 'sholat') {
                 sholatSec.classList.remove('hidden');
-                document.getElementById('tab-btn-sholat').className = activeClass;
+                document.getElementById('nav-btn-sholat').className = activeNav;
                 renderSholatReports();
             } else if (tab === 'nofap') {
                 nofapSec.classList.remove('hidden');
-                document.getElementById('tab-btn-nofap').className = activeClass;
+                document.getElementById('nav-btn-nofap').className = activeNav;
                 renderNoFapModule();
+            }
+        }
+
+        // --- PUASA SUNNAH TRACKER ---
+        function initFastingTracker() {
+            const dayOfWeek = new Date().getDay();
+            const isPuasaRecommended = (dayOfWeek === 1 || dayOfWeek === 4);
+            const savedFasting = localStorage.getItem(`fasting_${todayStr}`);
+
+            const statusEl = document.getElementById('fasting-today-status');
+            const btn = document.getElementById('fasting-btn');
+
+            if (savedFasting === 'done') {
+                statusEl.innerText = "Hari ini: 🎉 Puasa Sunnah Terlaksana!";
+                btn.innerText = "✅ Puasa Terpenuhi";
+            } else {
+                statusEl.innerText = isPuasaRecommended ? "Hari ini: Rekomendasi Puasa Sunnah (Senin/Kamis)" : "Hari ini: Hari Biasa";
+            }
+        }
+
+        function toggleFastingCheckin() {
+            localStorage.setItem(`fasting_${todayStr}`, 'done');
+            initFastingTracker();
+            triggerConfetti();
+            alert("✨ Masya Allah! Status Puasa Sunnah Tersimpan.");
+        }
+
+        // --- JURNAL REFLEKSI MENTAL HARIAN ---
+        function saveMentalCheck() {
+            const data = {
+                energy: document.getElementById('mental-energy').value,
+                focus: document.getElementById('mental-focus').value,
+                mood: document.getElementById('mental-mood').value
+            };
+            localStorage.setItem(`mental_check_${todayStr}`, JSON.stringify(data));
+        }
+
+        function loadMentalCheck() {
+            const saved = JSON.parse(localStorage.getItem(`mental_check_${todayStr}`));
+            if (saved) {
+                document.getElementById('mental-energy').value = saved.energy || "3";
+                document.getElementById('mental-focus').value = saved.focus || "3";
+                document.getElementById('mental-mood').value = saved.mood || "3";
             }
         }
 
@@ -924,7 +1126,12 @@
         };
 
         function openPanicModal() { document.getElementById('nofap-panic-modal').classList.remove('hidden'); }
-        function closePanicModal() { document.getElementById('nofap-panic-modal').classList.add('hidden'); }
+        function closePanicModal() { 
+            if (audioOsc) audioOsc.stop();
+            isAudioPlaying = false;
+            document.getElementById('audio-toggle-btn').innerText = "▶ Play Audio";
+            document.getElementById('nofap-panic-modal').classList.add('hidden'); 
+        }
 
         function checkInNoFap() {
             const existingIdx = nofapData.history.findIndex(x => x.date === todayStr);
@@ -1015,7 +1222,6 @@
 
         let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
 
-        /* MODUL UTANG BISA DI-ADJUST DENGAN SISA BULAN, NOMINAL, & STATUS LUNAS */
         let debtItems = JSON.parse(localStorage.getItem('fin_debt_items')) || [
             { id: 1, name: "Utang Aogi", total: 1300000, monthlyPay: 1300000, remainingMonths: 1, status: "Belum Lunas" },
             { id: 2, name: "Utang Aoga", total: 1100000, monthlyPay: 1100000, remainingMonths: 1, status: "Belum Lunas" }
@@ -1038,7 +1244,11 @@
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
         }
 
-        /* CRUD KELOLA UTANG */
+        function toggleShowAllHistory() {
+            showAllHistory = !showAllHistory;
+            renderApp();
+        }
+
         function openAddDebtModal() {
             document.getElementById('debt-edit-id').value = '';
             document.getElementById('debt-name').value = '';
@@ -1239,7 +1449,7 @@
                 });
             }
 
-            // Render Debt Tracker Sesuai Penyesuaian
+            // Render Debt Tracker
             const debtContainer = document.getElementById('debt-tracker-container');
             debtContainer.innerHTML = '';
             let totalDebtAll = 0;
@@ -1257,11 +1467,11 @@
                             <span>Sisa: <strong>${d.remainingMonths} bln</strong></span>
                         </div>
                         <div class="flex justify-end gap-2 pt-1 border-t border-zinc-900">
-                            <button onclick="toggleDebtStatus(${d.id})" class="text-[10px] font-bold px-2 py-0.5 rounded ${isLunas ? 'bg-amber-950 text-amber-300' : 'bg-emerald-950 text-emerald-300'}">
+                            <button onclick="haptic(); toggleDebtStatus(${d.id});" class="text-[10px] font-bold px-2 py-0.5 rounded ${isLunas ? 'bg-amber-950 text-amber-300' : 'bg-emerald-950 text-emerald-300'}">
                                 ${isLunas ? 'Batal Lunas' : 'Tandai Lunas'}
                             </button>
-                            <button onclick="editDebtItem(${d.id})" class="text-slate-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <button onclick="deleteDebtItem(${d.id})" class="text-slate-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="haptic(); editDebtItem(${d.id});" class="text-slate-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button onclick="haptic(); deleteDebtItem(${d.id});" class="text-slate-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -1289,29 +1499,55 @@
                 `;
             });
 
-            // Render Tabel Riwayat
+            // LOGIKA FILTER BULAN & MAKSIMAL 5 TRANSAKSI
             const historyTable = document.getElementById('history-table');
             historyTable.innerHTML = '';
+
+            const selectedMonth = document.getElementById('month-filter').value;
             const searchQ = document.getElementById('search-input').value.toLowerCase();
-            
+
             let filtered = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reverse();
-            if (searchQ) filtered = filtered.filter(t => t.desc.toLowerCase().includes(searchQ) || t.category.toLowerCase().includes(searchQ));
-            
-            filtered.forEach(t => {
-                historyTable.innerHTML += `
-                    <tr class="hover:bg-zinc-800/40">
-                        <td class="p-2 text-slate-400 font-medium text-[11px]">${t.date.substring(5)}</td>
-                        <td class="p-2 font-semibold text-slate-200 text-xs">
-                            <div>${t.desc}</div>
-                            <span class="text-[9px] text-slate-500">${t.category}</span>
-                        </td>
-                        <td class="p-2 font-bold text-red-400 text-xs">${formatRupiah(t.amount)}</td>
-                        <td class="p-2 text-center">
-                            <button onclick="deleteTransaction(${t.id})" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
+
+            if (selectedMonth !== 'ALL') {
+                filtered = filtered.filter(t => t.date.split('-')[1] === selectedMonth);
+            }
+
+            if (searchQ) {
+                filtered = filtered.filter(t => t.desc.toLowerCase().includes(searchQ) || t.category.toLowerCase().includes(searchQ));
+            }
+
+            const totalCount = filtered.length;
+            const toggleContainer = document.getElementById('history-toggle-container');
+            const toggleBtn = document.getElementById('history-toggle-btn');
+
+            if (totalCount > 5) {
+                toggleContainer.classList.remove('hidden');
+                toggleBtn.innerText = showAllHistory ? "Sembunyikan Transaksi 👆" : `Lihat Semua (${totalCount} Transaksi) 👇`;
+            } else {
+                toggleContainer.classList.add('hidden');
+            }
+
+            const displayList = showAllHistory ? filtered : filtered.slice(0, 5);
+
+            if (displayList.length === 0) {
+                historyTable.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500 italic">Tidak ada transaksi.</td></tr>`;
+            } else {
+                displayList.forEach(t => {
+                    historyTable.innerHTML += `
+                        <tr class="hover:bg-zinc-800/40">
+                            <td class="p-2 text-slate-400 font-medium text-[11px]">${t.date.substring(5)}</td>
+                            <td class="p-2 font-semibold text-slate-200 text-xs">
+                                <div>${t.desc}</div>
+                                <span class="text-[9px] text-slate-500">${t.category}</span>
+                            </td>
+                            <td class="p-2 font-bold text-red-400 text-xs">${formatRupiah(t.amount)}</td>
+                            <td class="p-2 text-center">
+                                <button onclick="haptic(); deleteTransaction(${t.id});" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
 
             renderCharts(categoryTotals);
             updateGamificationLevel();
@@ -1352,7 +1588,7 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // --- SHOLAT MODULE (DENGAN PENANGANAN ERROR LOADING FIXED) ---
+        // --- SHOLAT MODULE ---
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
             { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000" }
         ];
@@ -1417,7 +1653,6 @@
             };
         }
 
-        /* FIXED RENDER SHOLAT SUPAYA GAK LOADING STUCK */
         function renderSholatReports() {
             try {
                 const todayRec = sholats.find(x => x.date === todayStr);
@@ -1450,7 +1685,7 @@
                 else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
                 else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
 
-                // Render Heatmap 30 Hari
+                // Heatmap 30 Hari
                 const heatmapEl = document.getElementById('prayer-heatmap');
                 heatmapEl.innerHTML = '';
                 for (let i = 29; i >= 0; i--) {
@@ -1530,8 +1765,16 @@
             reader.readAsText(file);
         }
 
+        // GAMIFIKASI DENGAN BONUS 2X XP SHOLAT JAMAAH
         function updateGamificationLevel() {
-            let totalXP = (sholats.length * 15) + (transactions.length * 2) + 30;
+            let totalXP = 0;
+            sholats.forEach(s => {
+                ['subuh','dzuhur','ashar','maghrib','isya'].forEach(w => {
+                    if (s[w] === 'Jamaah') totalXP += 20; // 2x Bonus XP
+                    else if (s[w] === 'Munfarid') totalXP += 10;
+                });
+            });
+            totalXP += (transactions.length * 2) + 30;
             let level = Math.floor(totalXP / 100) + 1;
             document.getElementById('rank-badge').innerText = `Lvl ${level}`;
         }
