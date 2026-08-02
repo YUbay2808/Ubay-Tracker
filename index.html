@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="html-title-tag">Ubay Hub - Deadpool Edition v3.1</title>
+    <title id="html-title-tag">Ubay - Deadpool Edition v3.2</title>
     <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
@@ -94,23 +94,17 @@
             grid-template-columns: repeat(15, minmax(0, 1fr));
             gap: 4px;
         }
-
-        .smooth-hide {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.97);
-        }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar transition-all duration-300">
 
-    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN -->
-    <div id="app-lock-screen" class="fixed inset-0 bg-zinc-950/98 z-50 flex flex-col items-center justify-center p-6 space-y-6 tab-transition">
+    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN (100% SOLID HITAM ANTI-INTIP) -->
+    <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center p-6 space-y-6">
         <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
             <i class="fa-solid fa-lock text-3xl text-red-400"></i>
         </div>
         <div class="text-center space-y-1">
-            <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Master Vault Deadpool</h2>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Vault</h2>
             <p class="text-xs text-slate-400">Masukkan PIN Keamanan untuk Membuka Aplikasi</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
@@ -122,500 +116,503 @@
         </div>
     </div>
 
-    <!-- Top Navigation Bar Deadpool Red Style -->
-    <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
-        <div class="max-w-4xl mx-auto px-4 py-3 space-y-3">
-            
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <!-- Dynamic App Icon Change Trigger -->
-                    <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari Galeri HP">
-                        <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover absolute inset-0">
-                        <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-red-400 font-extrabold text-center px-1">
-                            Ganti Icon HP
-                        </div>
-                    </div>
-                    <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
-
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <h1 onclick="customRenameAppName()" class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5 cursor-pointer group" title="Klik untuk ganti nama aplikasi">
-                                <span id="display-app-title">Ubay Hub</span> 
-                                <i class="fa-solid fa-pen text-[10px] text-slate-500 group-hover:text-red-400 transition-colors"></i>
-                            </h1>
-                            <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
-                        </div>
-                        <div class="w-36 sm:w-48 bg-zinc-900 h-2 rounded-full border border-red-950 overflow-hidden relative">
-                            <div id="user-xp-bar" class="bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 25%"></div>
-                        </div>
-                        <p class="text-[11px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agustus 2026</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-1.5">
-                    <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti Tema">
-                        <i class="fa-solid fa-palette text-amber-400"></i>
-                    </button>
-                    <button onclick="triggerSmartNotification()" id="notif-btn" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-bell text-amber-400 text-sm"></i>
-                        <span class="hidden sm:inline">Notif</span>
-                    </button>
-                    <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-file-import"></i>
-                        <span class="hidden sm:inline">Restore</span>
-                    </button>
-                    <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
-                </div>
-            </div>
-
-            <!-- 3 MAIN SWITCH TABS -->
-            <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl grid grid-cols-3 gap-1.5 shadow-inner">
-                <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-wallet text-sm"></i> <span>Keuangan</span>
-                </button>
-                <button id="tab-btn-sholat" onclick="switchTab('sholat')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-mosque text-sm"></i> <span>Sholat</span>
-                </button>
-                <button id="tab-btn-nofap" onclick="switchTab('nofap')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-fire text-sm"></i> <span>NoFap</span>
-                </button>
-            </div>
-
-        </div>
-    </nav>
-
-    <!-- MASTER DAILY GLANCE WIDGET (SUMMARY 3-IN-1 TOP) -->
-    <div class="max-w-4xl mx-auto px-4 pt-4">
-        <div class="grid grid-cols-3 gap-2 bg-zinc-950 p-3 rounded-2xl border border-red-900/50 shadow-xl">
-            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
-                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Kuota Jajan Harian</span>
-                <span id="glance-safe-limit" class="text-xs sm:text-sm font-black text-red-400 block">Rp 0 / hr</span>
-            </div>
-            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
-                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Status Sholat</span>
-                <span id="glance-sholat-status" class="text-xs sm:text-sm font-black text-emerald-400 block">0/5 Jamaah</span>
-            </div>
-            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
-                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
-                <span id="glance-nofap-days" class="text-xs sm:text-sm font-black text-amber-400 block">0 Hari Clean</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- BANNER ATAS KEUANGAN -->
-    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-3 tab-transition">
-        <!-- SAFE TO SPEND BANNER -->
-        <section class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border-2 border-red-600/70 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-2xl">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-xl bg-red-600/20 text-red-400 border border-red-600/50 flex items-center justify-center text-xl shrink-0 shadow-inner">
-                    <i class="fa-solid fa-shield-cat"></i>
-                </div>
-                <div>
-                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
-                        BATAS AMAN JAJAN HARIAN <span class="bg-red-900 text-red-200 text-[10px] px-2 py-0.5 rounded-md font-extrabold">FOKUS UTAMA</span>
-                    </h3>
-                    <p class="text-xs text-slate-300 mt-0.5">Sisa kuota harian agar gajian aman (<span id="days-remaining-text" class="text-red-300 font-bold">0 hari lagi</span>).</p>
-                </div>
-            </div>
-            <div class="bg-zinc-950 border border-red-600/40 px-4 py-2.5 rounded-xl text-right shrink-0 w-full sm:w-auto flex justify-between sm:block items-center">
-                <span class="text-xs text-slate-400 block uppercase font-medium">Batas Maksimal / Hari</span>
-                <span id="safe-daily-limit" class="text-lg font-black text-red-400 block">Rp 0 / hari</span>
-            </div>
-        </section>
-
-        <!-- KAS REAL VS SISTEM -->
-        <section class="bg-zinc-900/90 border border-red-900/50 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-md">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 text-lg font-black">
-                    <i class="fa-solid fa-scale-balanced"></i>
-                </div>
-                <div>
-                    <span class="text-xs uppercase font-black tracking-wider text-amber-400 block">Koreksi Kas Real vs Sistem</span>
-                    <p id="cash-reconcile-status" class="text-xs text-slate-300 mt-0.5">Sistem: <strong id="disp-sys-cash" class="text-white">Rp 0</strong> | Kas Real: <strong id="disp-real-cash" class="text-emerald-400">Rp 0</strong></p>
-                </div>
-            </div>
-            <button onclick="openReconcileModal()" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs transition-all shadow-md w-full sm:w-auto flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-sliders"></i> Adjust Kas Real
-            </button>
-        </section>
-    </div>
-
-    <!-- SECTION 1: KEUANGAN APP -->
-    <div id="section-finance" class="hidden tab-transition">
-        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
-            <section class="glass-card glass-card-hover rounded-2xl p-4 shadow-xl border-red-600/40 space-y-2.5 transition-all">
+    <!-- KONTEN UTAMA APLIKASI (DISEMBUNYIKAN TOTAL SAAT TERKUNCI) -->
+    <div id="app-main-content" class="hidden">
+        <!-- Top Navigation Bar Deadpool Red Style -->
+        <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
+            <div class="max-w-4xl mx-auto px-4 py-3 space-y-3">
+                
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Catat Cepat AI Deadpool & Voice Command
-                    </span>
-                    <button onclick="startVoiceRecognition()" class="bg-red-950 hover:bg-red-900 border border-red-600/60 text-red-300 text-xs px-2.5 py-1 rounded-lg font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-microphone text-amber-400"></i> Dikte Suara
+                    <div class="flex items-center gap-3">
+                        <!-- Dynamic App Icon Change Trigger -->
+                        <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari Galeri HP">
+                            <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover absolute inset-0">
+                            <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-red-400 font-extrabold text-center px-1">
+                                Ganti Icon HP
+                            </div>
+                        </div>
+                        <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
+
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <h1 onclick="customRenameAppName()" class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5 cursor-pointer group" title="Klik untuk ganti nama aplikasi">
+                                    <span id="display-app-title">Ubay</span> 
+                                    <i class="fa-solid fa-pen text-[10px] text-slate-500 group-hover:text-red-400 transition-colors"></i>
+                                </h1>
+                                <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
+                            </div>
+                            <div class="w-36 sm:w-48 bg-zinc-900 h-2 rounded-full border border-red-950 overflow-hidden relative">
+                                <div id="user-xp-bar" class="bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 25%"></div>
+                            </div>
+                            <p class="text-[11px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agustus 2026</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti Tema">
+                            <i class="fa-solid fa-palette text-amber-400"></i>
+                        </button>
+                        <button onclick="triggerSmartNotification()" id="notif-btn" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-bell text-amber-400 text-sm"></i>
+                            <span class="hidden sm:inline">Notif</span>
+                        </button>
+                        <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-file-import"></i>
+                            <span class="hidden sm:inline">Restore</span>
+                        </button>
+                        <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
+                    </div>
+                </div>
+
+                <!-- 3 MAIN SWITCH TABS -->
+                <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl grid grid-cols-3 gap-1.5 shadow-inner">
+                    <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-wallet text-sm"></i> <span>Keuangan</span>
+                    </button>
+                    <button id="tab-btn-sholat" onclick="switchTab('sholat')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-mosque text-sm"></i> <span>Sholat</span>
+                    </button>
+                    <button id="tab-btn-nofap" onclick="switchTab('nofap')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-fire text-sm"></i> <span>NoFap</span>
                     </button>
                 </div>
-                <form id="ai-parser-form" class="flex gap-2">
-                    <input type="text" id="ai-parser-input" placeholder="Tulis / ucapkan misal: Nasgor 15k / Vaps 140k..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
-                    <button type="submit" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-md shrink-0">
-                        <i class="fa-solid fa-bolt mr-1"></i> Simpan
-                    </button>
-                </form>
-            </section>
 
-            <div class="flex justify-between items-center flex-wrap gap-2">
-                <div class="glass-card rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm border-zinc-800">
-                    <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-calendar-days text-red-400 mr-1"></i> Siklus:</span>
-                    <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs sm:text-sm font-bold text-red-400 focus:outline-none cursor-pointer">
-                        <option value="2026-07" class="bg-zinc-900 text-slate-200">Gajian Juli - Agst 2026</option>
-                        <option value="2026-08" class="bg-zinc-900 text-slate-200">Gajian Agst - Sept 2026</option>
-                        <option value="2026-09" class="bg-zinc-900 text-slate-200">Gajian Sept - Okt 2026</option>
-                    </select>
+            </div>
+        </nav>
+
+        <!-- MASTER DAILY GLANCE WIDGET (SUMMARY 3-IN-1 TOP) -->
+        <div class="max-w-4xl mx-auto px-4 pt-4">
+            <div class="grid grid-cols-3 gap-2 bg-zinc-950 p-3 rounded-2xl border border-red-900/50 shadow-xl">
+                <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                    <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Kuota Jajan Harian</span>
+                    <span id="glance-safe-limit" class="text-xs sm:text-sm font-black text-red-400 block">Rp 0 / hr</span>
                 </div>
-
-                <div class="flex items-center gap-2">
-                    <button onclick="exportCSV()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-3 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-csv text-sm"></i> <span class="hidden sm:inline">Export CSV</span>
-                    </button>
-                    <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
-                        <i class="fa-solid fa-plus text-sm"></i>
-                        <span>Tambah Catatan</span>
-                    </button>
+                <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                    <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Status Sholat</span>
+                    <span id="glance-sholat-status" class="text-xs sm:text-sm font-black text-emerald-400 block">0/5 Jamaah</span>
+                </div>
+                <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                    <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
+                    <span id="glance-nofap-days" class="text-xs sm:text-sm font-black text-amber-400 block">0 Hari Clean</span>
                 </div>
             </div>
+        </div>
 
-            <!-- Header Ringkasan Gaji & Financial Health Score -->
-            <section class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-red-900/40">
-                <div>
-                    <div class="flex items-center gap-2">
-                        <h2 class="text-lg font-black text-white">Halo, Ubay</h2>
-                        <span id="financial-health-score" class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-extrabold">Health Score: 85/100</span>
-                    </div>
-                    <p class="text-xs text-slate-400 mt-1">Status Keuangan untuk <strong id="cycle-label-display" class="text-red-400">Siklus Gajian Ini</strong>.</p>
-                </div>
-                <div class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-3.5 rounded-xl w-full sm:w-auto justify-between">
-                    <div>
-                        <div class="text-xs text-slate-400 flex gap-2">
-                            <span>Gaji: <strong class="text-slate-200" id="disp-salary">Rp 7.680.000</strong></span> | 
-                            <span>Side: <strong class="text-slate-200" id="disp-side">Rp 500.000</strong></span>
-                        </div>
-                        <div class="text-base font-black text-red-400 mt-0.5" id="disp-total-income">Total: Rp 8.180.000</div>
-                    </div>
-                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors" title="Edit Pemasukan">
-                        <i class="fa-solid fa-pen-to-square text-sm"></i>
-                    </button>
-                </div>
-            </section>
-
-            <!-- Card Ringkasan 4 Angka -->
-            <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs text-slate-400 font-semibold">Hari Ini</p>
-                        <i class="fa-solid fa-sun text-amber-400 text-base"></i>
-                    </div>
-                    <h3 class="text-lg font-extrabold text-amber-400 mt-2" id="sum-today">Rp 0</h3>
-                </div>
-
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs text-slate-400 font-semibold">7 Hari Terakhir</p>
-                        <i class="fa-solid fa-calendar-week text-blue-400 text-base"></i>
-                    </div>
-                    <h3 class="text-lg font-extrabold text-blue-400 mt-2" id="sum-weekly">Rp 0</h3>
-                </div>
-
-                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs text-slate-400 font-semibold">Terpakai Siklus Ini</p>
-                        <i class="fa-solid fa-hand-holding-dollar text-rose-400 text-base"></i>
-                    </div>
-                    <h3 class="text-lg font-extrabold text-rose-400 mt-2" id="sum-cycle">Rp 0</h3>
-                </div>
-
-                <div id="sum-remaining-card" class="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-xl transition-all glow-safe">
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs text-emerald-400 font-black uppercase tracking-wider">Sisa Uang System</p>
-                        <i class="fa-solid fa-piggy-bank text-emerald-400 text-lg"></i>
+        <!-- BANNER ATAS KEUANGAN -->
+        <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-3 tab-transition">
+            <!-- SAFE TO SPEND BANNER -->
+            <section class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border-2 border-red-600/70 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-2xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-red-600/20 text-red-400 border border-red-600/50 flex items-center justify-center text-xl shrink-0 shadow-inner">
+                        <i class="fa-solid fa-shield-cat"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-black text-emerald-300 mt-2" id="sum-remaining">Rp 0</h3>
-                        <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="sum-remaining-status">Status: Aman 👍</span>
+                        <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                            BATAS AMAN JAJAN HARIAN <span class="bg-red-900 text-red-200 text-[10px] px-2 py-0.5 rounded-md font-extrabold">FOKUS UTAMA</span>
+                        </h3>
+                        <p class="text-xs text-slate-300 mt-0.5">Sisa kuota harian agar gajian aman (<span id="days-remaining-text" class="text-red-300 font-bold">0 hari lagi</span>).</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- IMPULSIVE BUY DELAY TIMER -->
-            <section class="glass-card rounded-2xl p-4 border-amber-600/40 space-y-3">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-hourglass-start"></i> Impulsive Buy Delay Timer (Tahan Jajan 3 Hari)
-                    </span>
-                    <button onclick="addImpulsiveWishlist()" class="text-xs bg-amber-950 text-amber-300 border border-amber-600/40 px-2.5 py-1 rounded-lg font-bold">
-                        + Kunci Wishlist
-                    </button>
+                <div class="bg-zinc-950 border border-red-600/40 px-4 py-2.5 rounded-xl text-right shrink-0 w-full sm:w-auto flex justify-between sm:block items-center">
+                    <span class="text-xs text-slate-400 block uppercase font-medium">Batas Maksimal / Hari</span>
+                    <span id="safe-daily-limit" class="text-lg font-black text-red-400 block">Rp 0 / hari</span>
                 </div>
-                <div id="wishlist-delay-list" class="space-y-2 text-xs"></div>
             </section>
 
-            <!-- TRACKER UTANG & CICILAN -->
-            <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
-                <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-link-slash text-red-400"></i> Debt Snowball Tracker (Pelunasan Cicilan)
-                    </h2>
-                    <span id="total-debt-sum" class="text-xs font-extrabold text-red-400">Total Utang: Rp 0</span>
-                </div>
-                <div id="debt-tracker-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
-            </section>
-
-            <!-- Visual Charts -->
-            <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
-                    <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
-                        <i class="fa-solid fa-chart-pie text-red-400"></i> Proporsi Kategori
-                    </h2>
-                    <div class="relative h-52 flex justify-center items-center">
-                        <canvas id="categoryPieChart"></canvas>
+            <!-- KAS REAL VS SISTEM -->
+            <section class="bg-zinc-900/90 border border-red-900/50 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 text-lg font-black">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs uppercase font-black tracking-wider text-amber-400 block">Koreksi Kas Real vs Sistem</span>
+                        <p id="cash-reconcile-status" class="text-xs text-slate-300 mt-0.5">Sistem: <strong id="disp-sys-cash" class="text-white">Rp 0</strong> | Kas Real: <strong id="disp-real-cash" class="text-emerald-400">Rp 0</strong></p>
                     </div>
                 </div>
+                <button onclick="openReconcileModal()" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs transition-all shadow-md w-full sm:w-auto flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-sliders"></i> Adjust Kas Real
+                </button>
+            </section>
+        </div>
 
-                <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
-                    <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
-                        <i class="fa-solid fa-chart-column text-amber-400"></i> Perbandingan Bulanan
-                    </h2>
-                    <div class="relative h-52 flex justify-center items-center">
-                        <canvas id="monthlyComparisonChart"></canvas>
+        <!-- SECTION 1: KEUANGAN APP -->
+        <div id="section-finance" class="hidden tab-transition">
+            <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+                <section class="glass-card glass-card-hover rounded-2xl p-4 shadow-xl border-red-600/40 space-y-2.5 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Catat Cepat AI Deadpool & Voice Command
+                        </span>
+                        <button onclick="startVoiceRecognition()" class="bg-red-950 hover:bg-red-900 border border-red-600/60 text-red-300 text-xs px-2.5 py-1 rounded-lg font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-microphone text-amber-400"></i> Dikte Suara
+                        </button>
                     </div>
-                </div>
-            </section>
+                    <form id="ai-parser-form" class="flex gap-2">
+                        <input type="text" id="ai-parser-input" placeholder="Tulis / ucapkan misal: Nasgor 15k / Vaps 140k..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                        <button type="submit" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-md shrink-0">
+                            <i class="fa-solid fa-bolt mr-1"></i> Simpan
+                        </button>
+                    </form>
+                </section>
 
-            <!-- Monitoring Target Budget -->
-            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
-                <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-red-400"></i> Monitoring Budget Kategori
-                    </h2>
-                    <button onclick="openBudgetModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors">
-                        <i class="fa-solid fa-sliders mr-1"></i> Edit Budget
-                    </button>
-                </div>
-                <div id="budget-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-            </section>
-
-            <!-- Tabel Riwayat Keuangan -->
-            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-800 pb-3">
-                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Pengeluaran
-                    </h2>
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <select id="method-filter" onchange="renderApp()" class="bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
-                            <option value="ALL">Semua Metode</option>
-                            <option value="Mbanking">Mbanking / QRIS</option>
-                            <option value="Cash">Cash</option>
-                            <option value="E-Wallet">E-Wallet</option>
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                    <div class="glass-card rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm border-zinc-800">
+                        <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-calendar-days text-red-400 mr-1"></i> Siklus:</span>
+                        <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs sm:text-sm font-bold text-red-400 focus:outline-none cursor-pointer">
+                            <option value="2026-07" class="bg-zinc-900 text-slate-200">Gajian Juli - Agst 2026</option>
+                            <option value="2026-08" class="bg-zinc-900 text-slate-200">Gajian Agst - Sept 2026</option>
+                            <option value="2026-09" class="bg-zinc-900 text-slate-200">Gajian Sept - Okt 2026</option>
                         </select>
-                        <div class="relative flex-1 sm:w-48">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-slate-400"></i>
-                            <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="w-full bg-zinc-950 border border-zinc-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
-                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportCSV()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-3 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-csv text-sm"></i> <span class="hidden sm:inline">Export CSV</span>
+                        </button>
+                        <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                            <i class="fa-solid fa-plus text-sm"></i>
+                            <span>Tambah Catatan</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-zinc-950 text-slate-400 uppercase text-[11px] font-bold">
-                            <tr>
-                                <th class="p-3 rounded-l-xl">Tanggal</th>
-                                <th class="p-3">Kategori & Catatan</th>
-                                <th class="p-3">Nominal</th>
-                                <th class="p-3 text-center">Lock</th>
-                                <th class="p-3 text-center rounded-r-xl">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-table" class="divide-y divide-zinc-800/60"></tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
+                <!-- Header Ringkasan Gaji & Financial Health Score -->
+                <section class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-red-900/40">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-lg font-black text-white">Halo, Ubay</h2>
+                            <span id="financial-health-score" class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-extrabold">Health Score: 85/100</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">Status Keuangan untuk <strong id="cycle-label-display" class="text-red-400">Siklus Gajian Ini</strong>.</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-3.5 rounded-xl w-full sm:w-auto justify-between">
+                        <div>
+                            <div class="text-xs text-slate-400 flex gap-2">
+                                <span>Gaji: <strong class="text-slate-200" id="disp-salary">Rp 7.680.000</strong></span> | 
+                                <span>Side: <strong class="text-slate-200" id="disp-side">Rp 500.000</strong></span>
+                            </div>
+                            <div class="text-base font-black text-red-400 mt-0.5" id="disp-total-income">Total: Rp 8.180.000</div>
+                        </div>
+                        <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors" title="Edit Pemasukan">
+                            <i class="fa-solid fa-pen-to-square text-sm"></i>
+                        </button>
+                    </div>
+                </section>
 
-    <!-- SECTION 2: SHOLAT APP MODIFIED -->
-    <div id="section-sholat" class="hidden tab-transition">
-        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
-            <div class="flex justify-between items-center flex-wrap gap-3">
-                <div>
-                    <h2 class="text-lg font-black text-white flex items-center gap-2">
-                        <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Mutabaah
-                    </h2>
-                    <p class="text-xs text-slate-400">Waktu Lokasi GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
+                <!-- Card Ringkasan 4 Angka -->
+                <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xs text-slate-400 font-semibold">Hari Ini</p>
+                            <i class="fa-solid fa-sun text-amber-400 text-base"></i>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-amber-400 mt-2" id="sum-today">Rp 0</h3>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xs text-slate-400 font-semibold">7 Hari Terakhir</p>
+                            <i class="fa-solid fa-calendar-week text-blue-400 text-base"></i>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-blue-400 mt-2" id="sum-weekly">Rp 0</h3>
+                    </div>
+
+                    <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xs text-slate-400 font-semibold">Terpakai Siklus Ini</p>
+                            <i class="fa-solid fa-hand-holding-dollar text-rose-400 text-base"></i>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-rose-400 mt-2" id="sum-cycle">Rp 0</h3>
+                    </div>
+
+                    <div id="sum-remaining-card" class="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-xl transition-all glow-safe">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xs text-emerald-400 font-black uppercase tracking-wider">Sisa Uang System</p>
+                            <i class="fa-solid fa-piggy-bank text-emerald-400 text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black text-emerald-300 mt-2" id="sum-remaining">Rp 0</h3>
+                            <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="sum-remaining-status">Status: Aman 👍</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IMPULSIVE BUY DELAY TIMER -->
+                <section class="glass-card rounded-2xl p-4 border-amber-600/40 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-start"></i> Impulsive Buy Delay Timer (Tahan Jajan 3 Hari)
+                        </span>
+                        <button onclick="addImpulsiveWishlist()" class="text-xs bg-amber-950 text-amber-300 border border-amber-600/40 px-2.5 py-1 rounded-lg font-bold">
+                            + Kunci Wishlist
+                        </button>
+                    </div>
+                    <div id="wishlist-delay-list" class="space-y-2 text-xs"></div>
+                </section>
+
+                <!-- TRACKER UTANG & CICILAN -->
+                <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+                        <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-link-slash text-red-400"></i> Debt Snowball Tracker (Pelunasan Cicilan)
+                        </h2>
+                        <span id="total-debt-sum" class="text-xs font-extrabold text-red-400">Total Utang: Rp 0</span>
+                    </div>
+                    <div id="debt-tracker-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
+                </section>
+
+                <!-- Visual Charts -->
+                <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
+                        <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
+                            <i class="fa-solid fa-chart-pie text-red-400"></i> Proporsi Kategori
+                        </h2>
+                        <div class="relative h-52 flex justify-center items-center">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
+                        <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
+                            <i class="fa-solid fa-chart-column text-amber-400"></i> Perbandingan Bulanan
+                        </h2>
+                        <div class="relative h-52 flex justify-center items-center">
+                            <canvas id="monthlyComparisonChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Monitoring Target Budget -->
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                        <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-list-check text-red-400"></i> Monitoring Budget Kategori
+                        </h2>
+                        <button onclick="openBudgetModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors">
+                            <i class="fa-solid fa-sliders mr-1"></i> Edit Budget
+                        </button>
+                    </div>
+                    <div id="budget-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                </section>
+
+                <!-- Tabel Riwayat Keuangan -->
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-800 pb-3">
+                        <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Pengeluaran
+                        </h2>
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <select id="method-filter" onchange="renderApp()" class="bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
+                                <option value="ALL">Semua Metode</option>
+                                <option value="Mbanking">Mbanking / QRIS</option>
+                                <option value="Cash">Cash</option>
+                                <option value="E-Wallet">E-Wallet</option>
+                            </select>
+                            <div class="relative flex-1 sm:w-48">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-slate-400"></i>
+                                <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="w-full bg-zinc-950 border border-zinc-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-zinc-950 text-slate-400 uppercase text-[11px] font-bold">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">Tanggal</th>
+                                    <th class="p-3">Kategori & Catatan</th>
+                                    <th class="p-3">Nominal</th>
+                                    <th class="p-3 text-center">Lock</th>
+                                    <th class="p-3 text-center rounded-r-xl">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table" class="divide-y divide-zinc-800/60"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- SECTION 2: SHOLAT APP MODIFIED -->
+        <div id="section-sholat" class="hidden tab-transition">
+            <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+                <div class="flex justify-between items-center flex-wrap gap-3">
+                    <div>
+                        <h2 class="text-lg font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Mutabaah
+                        </h2>
+                        <p class="text-xs text-slate-400">Waktu Lokasi GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
+                    </div>
+                    <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus text-base"></i>
+                        <span>Check-in Hari Ini</span>
+                    </button>
                 </div>
-                <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
-                    <i class="fa-solid fa-circle-plus text-base"></i>
-                    <span>Check-in Hari Ini</span>
+
+                <!-- JADWAL SHOLAT GPS & COUNTDOWN -->
+                <section class="bg-zinc-950 p-4 rounded-2xl border border-red-900/50 space-y-2">
+                    <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🕌 Jadwal Sholat Real-time GPS</span>
+                    <div id="prayer-times-grid" class="grid grid-cols-5 gap-1.5 text-center text-xs"></div>
+                </section>
+
+                <!-- GITHUB-STYLE PRAYER HEATMAP 30 HARI -->
+                <section class="glass-card rounded-2xl p-4 space-y-2 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black text-slate-200 uppercase tracking-wider">🟢 Konsistensi Sholat Jamaah (30 Hari Heatmap)</span>
+                        <span class="text-[10px] text-slate-400">Makin Terang = Full Jamaah</span>
+                    </div>
+                    <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
+                </section>
+
+                <!-- ANALISIS KUALITAS SHOLAT HARI INI VS KEMARIN -->
+                <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="glass-card rounded-2xl p-4 space-y-2 border-red-600/50">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Hari Ini (Real-time)</span>
+                        <div id="sholat-summary-today" class="text-xs space-y-1 font-bold text-white">Loading...</div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Kemarin</span>
+                        <div id="sholat-summary-yesterday" class="text-xs space-y-1 font-bold text-slate-300">Loading...</div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
+                        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Evaluasi Ibadah</span>
+                        <div id="sholat-eval-status" class="text-xs font-extrabold mt-1">Loading...</div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                        <i class="fa-solid fa-list-check text-red-400"></i> Riwayat Check-in Sholat
+                    </h2>
+                    <div id="sholat-cards-list" class="space-y-3"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- SECTION 3: NOFAP & MINDSET SHIELD -->
+        <div id="section-nofap" class="hidden tab-transition">
+            <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+                <!-- PEAK URGE HOURS WARNING BANNER -->
+                <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border-2 border-red-600 p-4 rounded-2xl text-xs text-red-200 flex items-center gap-3 animate-pulse">
+                    <i class="fa-solid fa-triangle-exclamation text-2xl text-amber-400 shrink-0"></i>
+                    <div>
+                        <strong class="font-black text-white block uppercase">🚨 WARNING: PEAK URGE HOURS DETECTED!</strong>
+                        <span>Ini jam-jam rawan malam (23:00 - 03:00). Segera matikan HP, lakukan wudhu atau 15x push-up sekarang, Ubay!</span>
+                    </div>
+                </div>
+
+                <section class="glass-card rounded-3xl p-6 text-center border-red-600/60 shadow-2xl relative overflow-hidden space-y-5 bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[11px] font-black text-red-400 uppercase tracking-widest bg-red-950 px-3 py-1 rounded-full border border-red-600/50 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-red-500"></i> Mindset Shield & Brain Rewire
+                        </span>
+                        <span class="text-xs font-extrabold text-amber-400" id="nofap-badge-top">Lvl 1 - Novice</span>
+                    </div>
+
+                    <div class="py-2 space-y-1">
+                        <div class="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-amber-400 tracking-tight" id="nofap-streak-days">
+                            0 Hari
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-300 font-bold" id="nofap-streak-timer">00 Jam : 00 Menit : 00 Detik Clean</p>
+                        <p class="text-[11px] text-slate-500">Fokus pada hari ini, jaga energi dan mentalmu tetap tajam!</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center items-center gap-2.5 pt-2">
+                        <button onclick="checkInNoFap()" class="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2">
+                            <i class="fa-solid fa-shield-check text-base"></i> Check-in Clean Hari Ini
+                        </button>
+                        <button onclick="openPanicModal()" class="bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2 animate-pulse">
+                            <i class="fa-solid fa-triangle-exclamation text-base"></i> Tombol Darurat (Panic Button)
+                        </button>
+                        <button onclick="resetNoFap()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-4 py-3 rounded-2xl text-xs transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left"></i> Relapse / Reset
+                        </button>
+                    </div>
+                </section>
+
+                <!-- TROPHY ROOM & UNLOCKABLE BADGES -->
+                <section class="glass-card rounded-2xl p-5 space-y-3 border-amber-600/40">
+                    <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🏆 Trophy Room & Milestone Badges</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div id="badge-7d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                            <i class="fa-solid fa-shield-cat text-2xl text-amber-400 block mb-1"></i>
+                            <strong class="block text-white">7 Days Titanium</strong>
+                            <span class="text-[10px] text-slate-400">Sensitivitas Dopamin</span>
+                        </div>
+                        <div id="badge-14d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                            <i class="fa-solid fa-bolt text-2xl text-rose-400 block mb-1"></i>
+                            <strong class="block text-white">14 Days Energy</strong>
+                            <span class="text-[10px] text-slate-400">Boost Testosteron</span>
+                        </div>
+                        <div id="badge-30d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                            <i class="fa-solid fa-brain text-2xl text-blue-400 block mb-1"></i>
+                            <strong class="block text-white">30 Days Focus</strong>
+                            <span class="text-[10px] text-slate-400">Clear Mindset</span>
+                        </div>
+                        <div id="badge-90d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                            <i class="fa-solid fa-crown text-2xl text-amber-300 block mb-1"></i>
+                            <strong class="block text-white">90 Days Rewire</strong>
+                            <span class="text-[10px] text-slate-400">Master Mind</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 block uppercase">Streak Terpanjang</span>
+                        <div class="text-xl font-black text-amber-400" id="nofap-longest">0 Hari</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Target Reboot</span>
+                        <div class="text-xl font-black text-red-400">90 Hari</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Tingkat Keberhasilan</span>
+                        <div class="text-xl font-black text-emerald-400" id="nofap-rate">100%</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Pemicu Terbanyak</span>
+                        <div class="text-xs font-black text-slate-200 mt-1" id="nofap-top-trigger">Bosan / Late Night</div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <h3 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                        <i class="fa-solid fa-list-check text-red-400"></i> Log Check-in & Riwayat Mental
+                    </h3>
+                    <div id="nofap-history-list" class="space-y-2.5"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
+            <span id="footer-app-name">© 2026 Ubay - Deadpool Edition ⚔️</span>
+            <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
+            </button>
+        </footer>
+
+        <!-- FAB BUTTON -->
+        <div class="fixed bottom-6 right-6 z-40">
+            <div id="fab-menu" class="hidden mb-3 space-y-2 flex flex-col items-end">
+                <button onclick="switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                    <span>Tombol Darurat NoFap</span> <i class="fa-solid fa-triangle-exclamation"></i>
+                </button>
+                <button onclick="switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                    <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
+                </button>
+                <button onclick="switchTab('finance'); openModal(); toggleFab();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                    <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
                 </button>
             </div>
-
-            <!-- JADWAL SHOLAT GPS & COUNTDOWN -->
-            <section class="bg-zinc-950 p-4 rounded-2xl border border-red-900/50 space-y-2">
-                <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🕌 Jadwal Sholat Real-time GPS</span>
-                <div id="prayer-times-grid" class="grid grid-cols-5 gap-1.5 text-center text-xs"></div>
-            </section>
-
-            <!-- GITHUB-STYLE PRAYER HEATMAP 30 HARI -->
-            <section class="glass-card rounded-2xl p-4 space-y-2 border-red-900/40">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs font-black text-slate-200 uppercase tracking-wider">🟢 Konsistensi Sholat Jamaah (30 Hari Heatmap)</span>
-                    <span class="text-[10px] text-slate-400">Makin Terang = Full Jamaah</span>
-                </div>
-                <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
-            </section>
-
-            <!-- ANALISIS KUALITAS SHOLAT HARI INI VS KEMARIN -->
-            <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="glass-card rounded-2xl p-4 space-y-2 border-red-600/50">
-                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Hari Ini (Real-time)</span>
-                    <div id="sholat-summary-today" class="text-xs space-y-1 font-bold text-white">Loading...</div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
-                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Kemarin</span>
-                    <div id="sholat-summary-yesterday" class="text-xs space-y-1 font-bold text-slate-300">Loading...</div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
-                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Evaluasi Ibadah</span>
-                    <div id="sholat-eval-status" class="text-xs font-extrabold mt-1">Loading...</div>
-                </div>
-            </section>
-
-            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
-                <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
-                    <i class="fa-solid fa-list-check text-red-400"></i> Riwayat Check-in Sholat
-                </h2>
-                <div id="sholat-cards-list" class="space-y-3"></div>
-            </section>
-        </main>
-    </div>
-
-    <!-- SECTION 3: NOFAP & MINDSET SHIELD -->
-    <div id="section-nofap" class="hidden tab-transition">
-        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
-            <!-- PEAK URGE HOURS WARNING BANNER -->
-            <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border-2 border-red-600 p-4 rounded-2xl text-xs text-red-200 flex items-center gap-3 animate-pulse">
-                <i class="fa-solid fa-triangle-exclamation text-2xl text-amber-400 shrink-0"></i>
-                <div>
-                    <strong class="font-black text-white block uppercase">🚨 WARNING: PEAK URGE HOURS DETECTED!</strong>
-                    <span>Ini jam-jam rawan malam (23:00 - 03:00). Segera matikan HP, lakukan wudhu atau 15x push-up sekarang, Ubay!</span>
-                </div>
-            </div>
-
-            <section class="glass-card rounded-3xl p-6 text-center border-red-600/60 shadow-2xl relative overflow-hidden space-y-5 bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950">
-                <div class="flex justify-between items-center">
-                    <span class="text-[11px] font-black text-red-400 uppercase tracking-widest bg-red-950 px-3 py-1 rounded-full border border-red-600/50 flex items-center gap-1.5">
-                        <i class="fa-solid fa-shield-halved text-red-500"></i> Mindset Shield & Brain Rewire
-                    </span>
-                    <span class="text-xs font-extrabold text-amber-400" id="nofap-badge-top">Lvl 1 - Novice</span>
-                </div>
-
-                <div class="py-2 space-y-1">
-                    <div class="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-amber-400 tracking-tight" id="nofap-streak-days">
-                        0 Hari
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-300 font-bold" id="nofap-streak-timer">00 Jam : 00 Menit : 00 Detik Clean</p>
-                    <p class="text-[11px] text-slate-500">Fokus pada hari ini, jaga energi dan mentalmu tetap tajam!</p>
-                </div>
-
-                <div class="flex flex-wrap justify-center items-center gap-2.5 pt-2">
-                    <button onclick="checkInNoFap()" class="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2">
-                        <i class="fa-solid fa-shield-check text-base"></i> Check-in Clean Hari Ini
-                    </button>
-                    <button onclick="openPanicModal()" class="bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2 animate-pulse">
-                        <i class="fa-solid fa-triangle-exclamation text-base"></i> Tombol Darurat (Panic Button)
-                    </button>
-                    <button onclick="resetNoFap()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-4 py-3 rounded-2xl text-xs transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-rotate-left"></i> Relapse / Reset
-                    </button>
-                </div>
-            </section>
-
-            <!-- TROPHY ROOM & UNLOCKABLE BADGES -->
-            <section class="glass-card rounded-2xl p-5 space-y-3 border-amber-600/40">
-                <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🏆 Trophy Room & Milestone Badges</span>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                    <div id="badge-7d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                        <i class="fa-solid fa-shield-cat text-2xl text-amber-400 block mb-1"></i>
-                        <strong class="block text-white">7 Days Titanium</strong>
-                        <span class="text-[10px] text-slate-400">Sensitivitas Dopamin</span>
-                    </div>
-                    <div id="badge-14d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                        <i class="fa-solid fa-bolt text-2xl text-rose-400 block mb-1"></i>
-                        <strong class="block text-white">14 Days Energy</strong>
-                        <span class="text-[10px] text-slate-400">Boost Testosteron</span>
-                    </div>
-                    <div id="badge-30d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                        <i class="fa-solid fa-brain text-2xl text-blue-400 block mb-1"></i>
-                        <strong class="block text-white">30 Days Focus</strong>
-                        <span class="text-[10px] text-slate-400">Clear Mindset</span>
-                    </div>
-                    <div id="badge-90d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                        <i class="fa-solid fa-crown text-2xl text-amber-300 block mb-1"></i>
-                        <strong class="block text-white">90 Days Rewire</strong>
-                        <span class="text-[10px] text-slate-400">Master Mind</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
-                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Streak Terpanjang</span>
-                    <div class="text-xl font-black text-amber-400" id="nofap-longest">0 Hari</div>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">Target Reboot</span>
-                    <div class="text-xl font-black text-red-400">90 Hari</div>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">Tingkat Keberhasilan</span>
-                    <div class="text-xl font-black text-emerald-400" id="nofap-rate">100%</div>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase">Pemicu Terbanyak</span>
-                    <div class="text-xs font-black text-slate-200 mt-1" id="nofap-top-trigger">Bosan / Late Night</div>
-                </div>
-            </section>
-
-            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
-                <h3 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
-                    <i class="fa-solid fa-list-check text-red-400"></i> Log Check-in & Riwayat Mental
-                </h3>
-                <div id="nofap-history-list" class="space-y-2.5"></div>
-            </section>
-        </main>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
-        <span id="footer-app-name">© 2026 Ubay Hub - Deadpool Edition ⚔️</span>
-        <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
-            <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
-        </button>
-    </footer>
-
-    <!-- FAB BUTTON -->
-    <div class="fixed bottom-6 right-6 z-40">
-        <div id="fab-menu" class="hidden mb-3 space-y-2 flex flex-col items-end">
-            <button onclick="switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
-                <span>Tombol Darurat NoFap</span> <i class="fa-solid fa-triangle-exclamation"></i>
-            </button>
-            <button onclick="switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
-                <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
-            </button>
-            <button onclick="switchTab('finance'); openModal(); toggleFab();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
-                <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
+            <button onclick="toggleFab()" class="w-14 h-14 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-2xl font-black flex items-center justify-center shadow-2xl shadow-red-900/80">
+                <i class="fa-solid fa-plus"></i>
             </button>
         </div>
-        <button onclick="toggleFab()" class="w-14 h-14 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-2xl font-black flex items-center justify-center shadow-2xl shadow-red-900/80">
-            <i class="fa-solid fa-plus"></i>
-        </button>
     </div>
 
     <!-- MODAL RECONCILE KAS REAL -->
@@ -859,7 +856,7 @@
         const themes = ['default', 'theme-oled', 'theme-emerald'];
 
         function customRenameAppName() {
-            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay Hub';
+            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay';
             const newTitle = prompt("Masukkan Nama Baru untuk Aplikasi Kamu:", currentTitle);
             if (newTitle && newTitle.trim() !== "") {
                 const cleaned = newTitle.trim();
@@ -879,8 +876,8 @@
         function unlockApp() {
             const inputPin = document.getElementById('lock-pin-input').value;
             if (inputPin === 'ubay' || inputPin === '1234' || inputPin === '') {
-                document.getElementById('app-lock-screen').classList.add('smooth-hide');
-                setTimeout(() => document.getElementById('app-lock-screen').style.display = 'none', 300);
+                document.getElementById('app-lock-screen').style.display = 'none';
+                document.getElementById('app-main-content').classList.remove('hidden');
             } else {
                 alert("❌ PIN Keamanan Salah!");
             }
@@ -896,7 +893,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Hub';
+            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay';
             applyCustomAppName(savedAppName);
 
             const savedTheme = localStorage.getItem('user_app_theme');
@@ -964,8 +961,8 @@
                 
                 // Regenerate Manifest Link dynamically
                 const manifestData = {
-                    short_name: localStorage.getItem('user_custom_app_title') || "Ubay Hub",
-                    name: localStorage.getItem('user_custom_app_title') || "Ubay Master Hub",
+                    short_name: localStorage.getItem('user_custom_app_title') || "Ubay",
+                    name: localStorage.getItem('user_custom_app_title') || "Ubay Deadpool Edition",
                     icons: [{ src: base64String, sizes: "512x512", type: "image/png" }],
                     start_url: "./index.html",
                     display: "standalone",
@@ -1304,7 +1301,7 @@
             else {
                 Notification.requestPermission().then(permission => {
                     if (permission === "granted") {
-                        new Notification("Master Hub Deadpool", { body: "⚔️ Maximum Effort! Jaga Sholat, Keuangan, & Target Mindset Ubay." });
+                        new Notification("Ubay Deadpool", { body: "⚔️ Maximum Effort! Jaga Sholat, Keuangan, & Target Mindset Ubay." });
                     }
                 });
             }
@@ -1735,14 +1732,14 @@
                 sholat_records: sholats,
                 nofap_streak_data: nofapData,
                 user_app_icon: localStorage.getItem('user_app_icon') || '',
-                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Hub',
+                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay',
                 user_app_theme: localStorage.getItem('user_app_theme') || 'default'
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `MasterHub_${localStorage.getItem('user_custom_app_title') || 'Ubay'}_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `Ubay_Backup_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
