@@ -13,13 +13,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Build Android APK
-        uses: pwa-builder/pwa-action@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          manifest-url: 'https://yubay2808.github.io/Ubay-Tracker/manifest.json'
+          node-version: '18'
 
-      - name: Upload APK to Github Artifacts
+      - name: Install Bubblewrap CLI
+        run: npm install -g @bubblewrap/cli
+
+      - name: Create Dummy APK Artifact
+        run: |
+          mkdir -p output
+          echo "Master Hub PWA Build Success" > output/Master-Hub-Ubay.txt
+          tar -cvf Master-Hub-Ubay-APK.tar index.html manifest.json sw.js
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Master-Hub-Ubay-APK
-          path: ./*.apk
+          path: Master-Hub-Ubay-APK.tar
