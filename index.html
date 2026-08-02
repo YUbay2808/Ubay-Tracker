@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Hub - Ubay (Deadpool Edition)</title>
-    <!-- PWA Manifest & Theme -->
+    <title>Master Hub - Ubay (Deadpool Maximum Effort)</title>
+    <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
-    <link rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
+    <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
+    <link id="app-apple-icon" rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +27,6 @@
             background-image: 
                 radial-gradient(circle at top right, rgba(220, 38, 38, 0.22), transparent 50%), 
                 radial-gradient(circle at bottom left, rgba(153, 27, 27, 0.2), transparent 50%);
-            touch-action: pan-y;
         }
         .glass-card { 
             background: linear-gradient(145deg, rgba(24, 15, 18, 0.95), rgba(15, 23, 42, 0.9)); 
@@ -58,7 +58,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 5, 8, 0.8); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(185, 28, 28, 0.8); border-radius: 10px; }
 
-        /* Animation Breathing Circle */
         .breath-circle {
             animation: breatheAnimation 19s infinite ease-in-out;
         }
@@ -78,19 +77,19 @@
             
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div onclick="document.getElementById('profile-upload-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti foto profil">
-                        <img id="nav-profile-img" src="" alt="Ubay Profile" class="w-full h-full object-cover absolute inset-0 hidden">
-                        <span id="nav-profile-initial">⚔️</span>
-                        <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs text-red-400">
-                            <i class="fa-solid fa-camera"></i>
+                    <!-- Dynamic App Icon Change Trigger -->
+                    <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari HP">
+                        <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover absolute inset-0">
+                        <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-red-400 font-extrabold text-center px-1">
+                            Ganti Icon
                         </div>
                     </div>
-                    <input type="file" id="profile-upload-input" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(event)">
+                    <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
 
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
                             <h1 class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5">
-                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc Edition</span>
+                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc Hub</span>
                             </h1>
                             <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
                         </div>
@@ -114,7 +113,7 @@
                 </div>
             </div>
 
-            <!-- 3 MAIN SWITCH TABS -->
+            <!-- 3 MAIN SWITCH TABS (Swipe Disabled) -->
             <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl grid grid-cols-3 gap-1.5 shadow-inner">
                 <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-wallet text-sm"></i> <span>Keuangan</span>
@@ -130,38 +129,44 @@
         </div>
     </nav>
 
-    <!-- SWIPE INSTRUCTION HINT FOR MOBILE -->
-    <div class="max-w-4xl mx-auto px-4 pt-2 text-right">
-        <span class="text-[10px] font-bold text-slate-500 italic"><i class="fa-solid fa-hand-pointer text-red-400 mr-1"></i> Tips: Swipe / Usap layar ke kanan/kiri untuk pindah modul</span>
-    </div>
-
     <!-- BANNER ATAS KEUANGAN -->
-    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-2 space-y-3">
-        <div class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border border-red-600/50 rounded-2xl p-4 flex items-center justify-between shadow-xl">
+    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-4 space-y-3">
+        
+        <!-- SAFE TO SPEND BANNER (DI-POSISIKAN DI ATAS UTAMA) -->
+        <section class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border-2 border-red-600/70 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-2xl">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-500 border border-red-600/40 flex items-center justify-center shrink-0 text-xl shadow-inner font-black">
-                    ⚔️
+                <div class="w-11 h-11 rounded-xl bg-red-600/20 text-red-400 border border-red-600/50 flex items-center justify-center text-xl shrink-0 shadow-inner">
+                    <i class="fa-solid fa-shield-cat"></i>
                 </div>
                 <div>
-                    <span class="text-xs uppercase font-black tracking-wider text-red-400 block">Maximum Effort Status</span>
-                    <span id="top-banner-date" class="text-sm font-bold text-white">Minggu, 2 Agustus 2026</span>
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                        BATAS AMAN JAJAN HARIAN <span class="bg-red-900 text-red-200 text-[10px] px-2 py-0.5 rounded-md font-extrabold">FOKUS UTAMA</span>
+                    </h3>
+                    <p class="text-xs text-slate-300 mt-0.5">Sisa kuota harian agar gajian aman (<span id="days-remaining-text" class="text-red-300 font-bold">0 hari lagi</span>).</p>
                 </div>
             </div>
-            <div class="text-right">
-                <span class="text-xs text-slate-400 block font-medium">Siklus Aktif</span>
-                <span class="text-xs font-extrabold text-red-300 bg-red-950 px-2.5 py-1 rounded-lg border border-red-600/40">Gajian Agst</span>
+            <div class="bg-zinc-950 border border-red-600/40 px-4 py-2.5 rounded-xl text-right shrink-0 w-full sm:w-auto flex justify-between sm:block items-center">
+                <span class="text-xs text-slate-400 block uppercase font-medium">Batas Maksimal / Hari</span>
+                <span id="safe-daily-limit" class="text-lg font-black text-red-400 block">Rp 0 / hari</span>
             </div>
-        </div>
+        </section>
 
-        <div class="bg-zinc-900/90 border border-red-900/40 rounded-2xl p-4 flex items-center gap-3 shadow-md">
-            <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-600/30 flex items-center justify-center shrink-0 text-lg font-black">
-                <i class="fa-solid fa-mask"></i>
+        <!-- KAS REAL VS SISTEM & TOMBOL ADJUSTMENT -->
+        <section class="bg-zinc-900/90 border border-red-900/50 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 text-lg font-black">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div>
+                    <span class="text-xs uppercase font-black tracking-wider text-amber-400 block">Koreksi Kas Real vs Sistem</span>
+                    <p id="cash-reconcile-status" class="text-xs text-slate-300 mt-0.5">Sistem: <strong id="disp-sys-cash" class="text-white">Rp 0</strong> | Kas Real: <strong id="disp-real-cash" class="text-emerald-400">Rp 0</strong></p>
+                </div>
             </div>
-            <div class="flex-1">
-                <span class="text-xs uppercase font-black tracking-wider text-red-400 block">Deadpool Daily Mindset</span>
-                <p id="daily-quote-text" class="text-xs sm:text-sm text-slate-200 italic mt-0.5">"With great power comes great irresponsibility... Tetap disiplin & fokus pada goal harianmu, Ubay!" — Wade Wilson</p>
-            </div>
-        </div>
+            <button onclick="openReconcileModal()" class="bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 text-white font-extrabold px-3.5 py-2 rounded-xl text-xs transition-all shadow-md w-full sm:w-auto flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-sliders"></i> Adjust Kas Real
+            </button>
+        </section>
+
     </div>
 
     <!-- SECTION 1: KEUANGAN APP -->
@@ -253,59 +258,13 @@
 
                 <div id="sum-remaining-card" class="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-xl transition-all glow-safe">
                     <div class="flex justify-between items-center">
-                        <p class="text-xs text-emerald-400 font-black uppercase tracking-wider">Sisa Uang Aktif</p>
+                        <p class="text-xs text-emerald-400 font-black uppercase tracking-wider">Sisa Uang System</p>
                         <i class="fa-solid fa-piggy-bank text-emerald-400 text-lg"></i>
                     </div>
                     <div>
                         <h3 class="text-xl font-black text-emerald-300 mt-2" id="sum-remaining">Rp 0</h3>
                         <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="sum-remaining-status">Status: Aman 👍</span>
                     </div>
-                </div>
-            </section>
-
-            <!-- Evaluasi Hemat vs Boros -->
-            <section class="bg-gradient-to-br from-red-950/80 via-zinc-900 to-zinc-950 border border-red-600/40 rounded-2xl p-5 space-y-3 shadow-xl">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-sm"></i> Audit Hemat vs Boros
-                    </h3>
-                    <span class="bg-red-950 text-red-300 border border-red-600/40 text-xs px-2.5 py-0.5 rounded-full font-bold">Real-time</span>
-                </div>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
-                        <span class="text-xs text-slate-400 block uppercase font-medium">Hari Ini vs Kemarin</span>
-                        <div id="eval-day-status" class="text-xs font-bold mt-1">Loading...</div>
-                    </div>
-                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
-                        <span class="text-xs text-slate-400 block uppercase font-medium">7 Hari Ini vs 7 Hari Lalu</span>
-                        <div id="eval-week-status" class="text-xs font-bold mt-1">Loading...</div>
-                    </div>
-                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
-                        <span class="text-xs text-slate-400 block uppercase font-medium">30 Hari Ini vs 30 Hari Lalu</span>
-                        <div id="eval-month-status" class="text-xs font-bold mt-1">Loading...</div>
-                    </div>
-                </div>
-
-                <div id="ai-wrapped-content" class="bg-red-950/40 border border-red-600/30 p-3.5 rounded-xl text-xs text-red-200 leading-relaxed">
-                    Menganalisis pola pengeluaran kamu...
-                </div>
-            </section>
-
-            <!-- Safe to Spend Banner -->
-            <section class="bg-gradient-to-r from-red-950/90 via-zinc-900 to-zinc-950 border border-red-600/40 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-600/30 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-shield-cat"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-xs font-black text-red-400 uppercase tracking-wider">Batas Aman Jajan Harian</h3>
-                        <p class="text-xs text-slate-300 mt-0.5">Sisa kuota harian agar uang gajian cukup (<span id="days-remaining-text" class="text-red-300 font-bold">0 hari lagi</span>).</p>
-                    </div>
-                </div>
-                <div class="bg-zinc-950 border border-red-600/30 px-4 py-2 rounded-xl text-right shrink-0 w-full sm:w-auto">
-                    <span class="text-xs text-slate-400 block uppercase font-medium">Batas Maksimal / Hari</span>
-                    <span id="safe-daily-limit" class="text-base font-black text-red-400 block">Rp 0 / hari</span>
                 </div>
             </section>
 
@@ -334,7 +293,7 @@
             <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
                 <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
                     <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-red-400"></i> Monitoring Budget
+                        <i class="fa-solid fa-list-check text-red-400"></i> Monitoring Budget Kategori
                     </h2>
                     <button onclick="openBudgetModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors">
                         <i class="fa-solid fa-sliders mr-1"></i> Edit Budget
@@ -381,7 +340,7 @@
         </main>
     </div>
 
-    <!-- SECTION 2: SHOLAT APP -->
+    <!-- SECTION 2: SHOLAT APP MODIFIED -->
     <div id="section-sholat" class="hidden">
         <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
             <div class="flex justify-between items-center flex-wrap gap-3">
@@ -389,7 +348,7 @@
                     <h2 class="text-lg font-black text-white flex items-center gap-2">
                         <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Sunnah
                     </h2>
-                    <p class="text-xs text-slate-400">Pantau konsistensi ibadah harianmu!</p>
+                    <p class="text-xs text-slate-400">Pantau perbandingan disiplin ibadahmu setiap hari!</p>
                 </div>
                 <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
                     <i class="fa-solid fa-circle-plus text-base"></i>
@@ -397,18 +356,21 @@
                 </button>
             </div>
 
+            <!-- ANALISIS KUALITAS SHOLAT HARI INI VS KEMARIN -->
             <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Hari Ini vs Kemarin</p>
-                    <div id="eval-sholat-day" class="text-xs text-slate-200 space-y-1">0 dari 5 Sholat Wajib</div>
+                <div class="glass-card rounded-2xl p-4 space-y-2 border-red-600/50">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Hari Ini (Real-time)</span>
+                    <div id="sholat-summary-today" class="text-xs space-y-1 font-bold text-white">Loading...</div>
                 </div>
-                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">7 Hari Ini vs 7 Hari Lalu</p>
-                    <div id="eval-sholat-week" class="text-xs text-slate-200 space-y-1">Konsisten Terjaga</div>
+
+                <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Kemarin</span>
+                    <div id="sholat-summary-yesterday" class="text-xs space-y-1 font-bold text-slate-300">Loading...</div>
                 </div>
-                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
-                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">30 Hari Ini vs 30 Hari Lalu</p>
-                    <div id="eval-sholat-month" class="text-xs text-slate-200 space-y-1">Disiplin Bulanan</div>
+
+                <div class="glass-card rounded-2xl p-4 space-y-2 border-zinc-800">
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider block">Evaluasi Ibadah</span>
+                    <div id="sholat-eval-status" class="text-xs font-extrabold mt-1">Loading...</div>
                 </div>
             </section>
 
@@ -539,6 +501,31 @@
         </button>
     </div>
 
+    <!-- MODAL RECONCILE KAS REAL -->
+    <div id="reconcile-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-amber-500/50 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-black text-white flex items-center gap-2">
+                    <i class="fa-solid fa-scale-balanced text-amber-400"></i> Adjustment Kas Real vs Sistem
+                </h3>
+                <button onclick="closeReconcileModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <p class="text-xs text-slate-300">Masukkan total uang fisik / dompet real kamu saat ini. Selisih minus akan <strong>otomatis masuk ke pos "Pengeluaran Tidak Tercatat"</strong>.</p>
+            
+            <form id="reconcile-form" onsubmit="handleReconcileSubmit(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Total Sisa Uang Real Saat Ini (Rp)</label>
+                    <input type="number" id="input-real-cash" required placeholder="Misal: 900000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-amber-500 font-bold">
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeReconcileModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-2.5 rounded-xl text-xs">Proses Adjustment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL PANIC BUTTON NOFAP -->
     <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-5 text-center relative max-h-[90vh] overflow-y-auto">
@@ -652,6 +639,7 @@
                         <option value="Tabungan / Dana Darurat">Tabungan / Dana Darurat</option>
                         <option value="Investasi / Asuransi">Investasi / Asuransi</option>
                         <option value="Belanja Pribadi & Lain-Lain">Belanja Pribadi & Lain-Lain</option>
+                        <option value="Pengeluaran Tidak Tercatat">Pengeluaran Tidak Tercatat 🚨</option>
                         <option value="Hiburan, Hangout & Self-Reward">Hiburan, Hangout & Self-Reward</option>
                     </select>
                 </div>
@@ -679,6 +667,7 @@
         </div>
     </div>
 
+    <!-- MODAL CHECK-IN SHOLAT DENGAN INPUT TAHAJUD MANUAL & DHUHA 12 RAKAAT -->
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
         <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
@@ -708,30 +697,27 @@
                     <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sholat Sunnah</span>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <div>
-                            <label class="text-xs text-slate-300 block mb-1">Sholat Dhuha</label>
+                            <label class="text-xs text-slate-300 block mb-1">Sholat Dhuha (Max 12 Rakaat)</label>
                             <select id="sunnah-dhuha" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white">
                                 <option value="0">❌ Tidak (0 Rakaat)</option>
                                 <option value="2">✨ 2 Rakaat</option>
                                 <option value="4">✨ 4 Rakaat</option>
                                 <option value="6">✨ 6 Rakaat</option>
                                 <option value="8">✨ 8 Rakaat</option>
+                                <option value="10">✨ 10 Rakaat</option>
+                                <option value="12">👑 12 Rakaat (Maksimal)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud</label>
-                            <select id="sunnah-tahajud" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white">
-                                <option value="0">❌ Tidak (0 Rakaat)</option>
-                                <option value="2">🌙 2 Rakaat + Witir</option>
-                                <option value="4">🌙 4 Rakaat + Witir</option>
-                                <option value="6">🌙 6 Rakaat + Witir</option>
-                            </select>
+                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud (Isi Manual Rakaat)</label>
+                            <input type="number" id="sunnah-tahajud" placeholder="Jumlah Rakaat (Misal: 4, 8, 11)" min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500 font-bold">
                         </div>
                     </div>
                 </div>
 
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
                     <button type="button" onclick="closeSholatModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan Check-in</button>
                 </div>
             </form>
         </div>
@@ -745,47 +731,12 @@
 
         const todayStr = new Date().toISOString().split('T')[0];
 
-        // --- SWIPE GESTURE ENGINE BETWEEN TABS ---
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const tabsList = ['finance', 'sholat', 'nofap'];
-
-        document.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        document.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipeNavigation();
-        }, { passive: true });
-
-        function handleSwipeNavigation() {
-            const threshold = 70; // min distance for swipe
-            const currentTab = localStorage.getItem('master_hub_active_tab') || 'finance';
-            const currentIndex = tabsList.indexOf(currentTab);
-
-            if (touchEndX < touchStartX - threshold) {
-                // Swiped Left -> Move to Next Tab
-                if (currentIndex < tabsList.length - 1) {
-                    switchTab(tabsList[currentIndex + 1]);
-                }
-            }
-            if (touchEndX > touchStartX + threshold) {
-                // Swiped Right -> Move to Previous Tab
-                if (currentIndex > 0) {
-                    switchTab(tabsList[currentIndex - 1]);
-                }
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            const savedPhoto = localStorage.getItem('user_profile_photo');
-            if (savedPhoto) {
-                const imgEl = document.getElementById('nav-profile-img');
-                const initialEl = document.getElementById('nav-profile-initial');
-                imgEl.src = savedPhoto;
-                imgEl.classList.remove('hidden');
-                initialEl.classList.add('hidden');
+            const savedIcon = localStorage.getItem('user_app_icon');
+            if (savedIcon) {
+                document.getElementById('nav-app-icon-img').src = savedIcon;
+                document.getElementById('app-favicon').href = savedIcon;
+                document.getElementById('app-apple-icon').href = savedIcon;
             }
 
             const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
@@ -801,37 +752,21 @@
             }
         }
 
-        function handleProfilePhotoUpload(event) {
+        function handleAppIconUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64String = e.target.result;
-                localStorage.setItem('user_profile_photo', base64String);
-                const imgEl = document.getElementById('nav-profile-img');
-                const initialEl = document.getElementById('nav-profile-initial');
-                imgEl.src = base64String;
-                imgEl.classList.remove('hidden');
-                initialEl.classList.add('hidden');
+                localStorage.setItem('user_app_icon', base64String);
+                document.getElementById('nav-app-icon-img').src = base64String;
+                document.getElementById('app-favicon').href = base64String;
+                document.getElementById('app-apple-icon').href = base64String;
                 triggerConfetti();
-                alert("✨ Foto profil Deadpool diperbarui!");
+                alert("✨ Icon / Logo aplikasi berhasil diperbarui!");
             };
             reader.readAsDataURL(file);
         }
-
-        const quotesList = [
-            "\"With great power comes great irresponsibility... Tetap disiplin & fokus pada goal harianmu, Ubay!\" — Wade Wilson",
-            "\"Maximum effort, Ubay! Disiplin bukan soal suasana hati, tapi soal bikin target harianmu bertekuk lutut.\"",
-            "\"Fokus konsistensi pada sholat, keuangan, dan mindset yang kuat!\""
-        ];
-
-        const todayObj = new Date();
-        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const formattedDateStr = todayObj.toLocaleDateString('id-ID', optionsDate);
-        
-        document.getElementById('current-date-header').innerText = formattedDateStr;
-        document.getElementById('top-banner-date').innerText = formattedDateStr;
-        document.getElementById('daily-quote-text').innerText = quotesList[todayObj.getDate() % quotesList.length];
 
         function toggleFab() { document.getElementById('fab-menu').classList.toggle('hidden'); }
 
@@ -1006,6 +941,7 @@
             "Tabungan / Dana Darurat": { budget: 2000000, type: "Tabungan & Investasi" },
             "Investasi / Asuransi": { budget: 0, type: "Tabungan & Investasi" },
             "Belanja Pribadi & Lain-Lain": { budget: 0, type: "Gaya Hidup" },
+            "Pengeluaran Tidak Tercatat": { budget: 0, type: "Lainnya" },
             "Hiburan, Hangout & Self-Reward": { budget: 0, type: "Gaya Hidup" }
         };
 
@@ -1036,6 +972,8 @@
         let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || masterExcelData;
         transactions.forEach(t => { if (t.locked === undefined) t.locked = t.date !== todayStr; });
 
+        let realCashValue = parseFloat(localStorage.getItem('fin_real_cash')) || 0;
+
         let pieChartInstance = null;
         let comparisonChartInstance = null;
 
@@ -1047,6 +985,54 @@
         function closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
         function openIncomeModal() { document.getElementById('income-modal-backdrop').classList.remove('hidden'); document.getElementById('input-salary').value = incomeData.salary; document.getElementById('input-side').value = incomeData.side; }
         function closeIncomeModal() { document.getElementById('income-modal-backdrop').classList.add('hidden'); }
+
+        function openReconcileModal() {
+            const totalIncome = incomeData.salary + incomeData.side;
+            const selectedCycle = document.getElementById('cycle-selector').value;
+            let startDateStr = "2026-07-25", endDateStr = "2026-08-24";
+            if (selectedCycle === "2026-08") { startDateStr = "2026-08-25"; endDateStr = "2026-09-24"; }
+            let cycleTotal = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reduce((acc, curr) => acc + curr.amount, 0);
+            let systemCash = totalIncome - cycleTotal;
+
+            document.getElementById('input-real-cash').value = realCashValue > 0 ? realCashValue : systemCash;
+            document.getElementById('reconcile-modal-backdrop').classList.remove('hidden');
+        }
+        function closeReconcileModal() { document.getElementById('reconcile-modal-backdrop').classList.add('hidden'); }
+
+        function handleReconcileSubmit(event) {
+            event.preventDefault();
+            const enteredReal = parseFloat(document.getElementById('input-real-cash').value) || 0;
+            const totalIncome = incomeData.salary + incomeData.side;
+            
+            const selectedCycle = document.getElementById('cycle-selector').value;
+            let startDateStr = "2026-07-25", endDateStr = "2026-08-24";
+            if (selectedCycle === "2026-08") { startDateStr = "2026-08-25"; endDateStr = "2026-09-24"; }
+            
+            let cycleTotal = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reduce((acc, curr) => acc + curr.amount, 0);
+            let systemCash = totalIncome - cycleTotal;
+
+            if (enteredReal < systemCash) {
+                const diffUnrecorded = systemCash - enteredReal;
+                transactions.push({
+                    id: Date.now(),
+                    date: todayStr,
+                    category: "Pengeluaran Tidak Tercatat",
+                    desc: `Adjustment Uang Hilang / Unrecorded Cash`,
+                    amount: diffUnrecorded,
+                    method: "Cash",
+                    locked: false
+                });
+                localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+                alert(`🚨 Ditemukan selisih ${formatRupiah(diffUnrecorded)}! Otomatis dimasukkan ke pos "Pengeluaran Tidak Tercatat".`);
+            } else {
+                alert(`✅ Kas Real telah diperbarui senilai ${formatRupiah(enteredReal)}.`);
+            }
+
+            realCashValue = enteredReal;
+            localStorage.setItem('fin_real_cash', realCashValue);
+            closeReconcileModal();
+            renderApp();
+        }
 
         function openBudgetModal() {
             const container = document.getElementById('budget-inputs-container');
@@ -1161,6 +1147,9 @@
 
             const remainingBalance = totalIncome - cycleTotal;
 
+            document.getElementById('disp-sys-cash').innerText = formatRupiah(remainingBalance);
+            document.getElementById('disp-real-cash').innerText = formatRupiah(realCashValue > 0 ? realCashValue : remainingBalance);
+
             document.getElementById('sum-today').innerText = formatRupiah(todayTotal);
             document.getElementById('sum-weekly').innerText = formatRupiah(weeklyTotal);
             document.getElementById('sum-cycle').innerText = formatRupiah(cycleTotal);
@@ -1179,31 +1168,6 @@
             } else {
                 remainingCardEl.className += "glow-danger";
                 remainingStatusEl.innerHTML = `<span class="text-red-400 font-bold">Status: Defisit / Overbudget 🚨</span>`;
-            }
-
-            const dayStatusEl = document.getElementById('eval-day-status');
-            if (todayTotal < yesterdayTotal) dayStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)} vs Kmrn: ${formatRupiah(yesterdayTotal)}</span>`;
-            else if (todayTotal > yesterdayTotal) dayStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)} vs Kmrn: ${formatRupiah(yesterdayTotal)}</span>`;
-            else dayStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)}</span>`;
-
-            const weekStatusEl = document.getElementById('eval-week-status');
-            if (weeklyTotal < prevWeeklyTotal) weekStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)} vs MgLalu: ${formatRupiah(prevWeeklyTotal)}</span>`;
-            else if (weeklyTotal > prevWeeklyTotal) weekStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)} vs MgLalu: ${formatRupiah(prevWeeklyTotal)}</span>`;
-            else weekStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)}</span>`;
-
-            const monthStatusEl = document.getElementById('eval-month-status');
-            if (total30Days < prev30Days) monthStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)} vs BlnLalu: ${formatRupiah(prev30Days)}</span>`;
-            else if (total30Days > prev30Days) monthStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)} vs BlnLalu: ${formatRupiah(prev30Days)}</span>`;
-            else monthStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)}</span>`;
-
-            let maxCategory = "", maxAmount = 0;
-            Object.keys(categoryTotals).forEach(cat => { if (categoryTotals[cat] > maxAmount) { maxAmount = categoryTotals[cat]; maxCategory = cat; } });
-
-            const wrappedEl = document.getElementById('ai-wrapped-content');
-            if (maxAmount > 0) {
-                wrappedEl.innerHTML = `⚔️ <strong>Deadpool Audit:</strong> Sisa dompet kamu saat ini adalah <strong>${formatRupiah(remainingBalance)}</strong>. Pengeluaran paling rakus ada di pos <strong>"${maxCategory}"</strong> yaitu sebesar <strong>${formatRupiah(maxAmount)}</strong>!`;
-            } else {
-                wrappedEl.innerHTML = `⚔️ <strong>Deadpool Audit:</strong> Pengeluaranmu masih bersih dan aman!`;
             }
 
             const diffTime = endCycleDate - now;
@@ -1334,10 +1298,10 @@
             document.body.removeChild(link);
         }
 
-        // --- SHOLAT ---
+        // --- SHOLAT ENHANCED ---
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
-            { date: "2026-07-31", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Jamaah", maghrib: "Munfarid", isya: "Munfarid", dhuha: "2", tahajud: "0", locked: true },
-            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "2", locked: false }
+            { date: "2026-07-31", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Jamaah", maghrib: "Munfarid", isya: "Munfarid", dhuha: "2", tahajud: "2", locked: true },
+            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", locked: false }
         ];
 
         function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; loadSholatByDate(); }
@@ -1348,7 +1312,7 @@
             const h = sholats.find(x => x.date === dStr) || {};
             ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => document.getElementById(`s-${s}`).value = h[s] || "Pending");
             document.getElementById('sunnah-dhuha').value = h.dhuha || "0";
-            document.getElementById('sunnah-tahajud').value = h.tahajud || "0";
+            document.getElementById('sunnah-tahajud').value = h.tahajud || "";
         }
 
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
@@ -1362,7 +1326,7 @@
             });
 
             existing.dhuha = document.getElementById('sunnah-dhuha').value;
-            existing.tahajud = document.getElementById('sunnah-tahajud').value;
+            existing.tahajud = document.getElementById('sunnah-tahajud').value || "0";
 
             const idx = sholats.findIndex(h => h.date === dStr);
             if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
@@ -1375,7 +1339,55 @@
             alert("✅ Check-in sholat tersimpan!");
         });
 
+        function getSholatStats(record) {
+            if (!record) return { jamaah: 0, munfarid: 0, tidak: 0, totalWajib: 0, dhuha: 0, tahajud: 0 };
+            const wajib = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
+            let jamaah = 0, munfarid = 0, tidak = 0;
+            wajib.forEach(w => {
+                if (record[w] === 'Jamaah') jamaah++;
+                else if (record[w] === 'Munfarid') munfarid++;
+                else if (record[w] === 'Tidak') tidak++;
+            });
+            return {
+                jamaah, munfarid, tidak,
+                totalWajib: jamaah + munfarid,
+                dhuha: parseInt(record.dhuha) || 0,
+                tahajud: parseInt(record.tahajud) || 0
+            };
+        }
+
         function renderSholatReports() {
+            const todayRec = sholats.find(x => x.date === todayStr);
+            
+            const nowD = new Date();
+            const yestD = new Date(); yestD.setDate(nowD.getDate() - 1);
+            const yestStr = yestD.toISOString().split('T')[0];
+            const yestRec = sholats.find(x => x.date === yestStr);
+
+            const stToday = getSholatStats(todayRec);
+            const stYest = getSholatStats(yestRec);
+
+            document.getElementById('sholat-summary-today').innerHTML = `
+                <div class="text-emerald-400">🕌 Jamaah: ${stToday.jamaah} Sholat</div>
+                <div class="text-blue-400">🏠 Sendiri: ${stToday.munfarid} Sholat</div>
+                <div class="text-amber-400">⭐ Dhuha: ${stToday.dhuha}rk | Tahajud: ${stToday.tahajud}rk</div>
+            `;
+
+            document.getElementById('sholat-summary-yesterday').innerHTML = `
+                <div>🕌 Jamaah: ${stYest.jamaah} Sholat</div>
+                <div>🏠 Sendiri: ${stYest.munfarid} Sholat</div>
+                <div>⭐ Dhuha: ${stYest.dhuha}rk | Tahajud: ${stYest.tahajud}rk</div>
+            `;
+
+            const evalEl = document.getElementById('sholat-eval-status');
+            if (stToday.jamaah > stYest.jamaah) {
+                evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK!</span><br><span class="text-slate-300 font-medium text-[11px] block mt-1">Sholat Jamaah naik (+${stToday.jamaah - stYest.jamaah}) dibanding kemarin! Pertahankan, Ubay!</span>`;
+            } else if (stToday.jamaah < stYest.jamaah) {
+                evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN!</span><br><span class="text-slate-300 font-medium text-[11px] block mt-1">Sholat Jamaah berkurang dari kemarin. Kejar di waktu sisanya!</span>`;
+            } else {
+                evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL</span><br><span class="text-slate-300 font-medium text-[11px] block mt-1">Kedisiplinan jamaah sama dengan kemarin. Tingkatkan lagi!</span>`;
+            }
+
             const cardsList = document.getElementById('sholat-cards-list'); 
             cardsList.innerHTML = '';
             sholats.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -1388,7 +1400,7 @@
                                 <i class="fa-solid fa-calendar-day text-red-400"></i> ${h.date}
                             </span>
                             <span class="text-xs text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded-lg border border-red-600/40">
-                                ⭐ Sunnah: ${(parseInt(h.dhuha)||0)+(parseInt(h.tahajud)||0)}rk
+                                ⭐ Dhuha: ${h.dhuha || 0}rk | Tahajud: ${h.tahajud || 0}rk
                             </span>
                         </div>
                         <div class="grid grid-cols-5 gap-1 text-center text-xs">
@@ -1404,9 +1416,10 @@
                 fin_income: incomeData,
                 fin_budgets: budgetCategories,
                 fin_transactions: transactions,
+                fin_real_cash: realCashValue,
                 sholat_records: sholats,
                 nofap_streak_data: nofapData,
-                user_profile_photo: localStorage.getItem('user_profile_photo') || ''
+                user_app_icon: localStorage.getItem('user_app_icon') || ''
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1429,7 +1442,8 @@
                     if (imported.nofap_streak_data) localStorage.setItem('nofap_streak_data', JSON.stringify(imported.nofap_streak_data));
                     if (imported.fin_income) localStorage.setItem('fin_income', JSON.stringify(imported.fin_income));
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
-                    if (imported.user_profile_photo) localStorage.setItem('user_profile_photo', imported.user_profile_photo);
+                    if (imported.fin_real_cash) localStorage.setItem('fin_real_cash', imported.fin_real_cash);
+                    if (imported.user_app_icon) localStorage.setItem('user_app_icon', imported.user_app_icon);
                     alert("📥 Data berhasil dipulihkan total!");
                     location.reload();
                 } catch(err) {
