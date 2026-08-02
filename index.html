@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Hub - Ubay (Deadpool Maximum Effort Edition)</title>
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#090506">
+    <link rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #090506; 
+            background-image: 
+                radial-gradient(circle at top right, rgba(220, 38, 38, 0.22), transparent 50%), 
+                radial-gradient(circle at bottom left, rgba(153, 27, 27, 0.2), transparent 50%);
+            touch-action: pan-y;
+        }
+        .glass-card { 
+            background: linear-gradient(145deg, rgba(24, 15, 18, 0.95), rgba(15, 23, 42, 0.9)); 
+            border: 1px solid rgba(220, 38, 38, 0.35); 
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8); 
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(239, 68, 68, 0.7);
+            box-shadow: 0 10px 30px -5px rgba(220, 38, 38, 0.35);
+        }
+        .glow-safe {
+            border-color: rgba(34, 197, 94, 0.8) !important;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.35) !important;
+        }
+        .glow-warning {
+            border-color: rgba(245, 158, 11, 0.8) !important;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.35) !important;
+        }
+        .glow-danger {
+            border-color: rgba(220, 38, 38, 0.9) !important;
+            box-shadow: 0 0 25px rgba(220, 38, 38, 0.6) !important;
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: rgba(220, 38, 38, 0.9); box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); }
+            50% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 10px rgba(220, 38, 38, 0.2); }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 5, 8, 0.8); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(185, 28, 28, 0.8); border-radius: 10px; }
+
+        /* Animation Breathing Circle */
+        .breath-circle {
+            animation: breatheAnimation 19s infinite ease-in-out;
+        }
+        @keyframes breatheAnimation {
+            0%, 100% { transform: scale(1); background-color: rgba(220, 38, 38, 0.2); }
+            21% { transform: scale(1.5); background-color: rgba(34, 197, 94, 0.4); }
+            58% { transform: scale(1.5); background-color: rgba(245, 158, 11, 0.4); }
+            100% { transform: scale(1); background-color: rgba(59, 130, 246, 0.3); }
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
+
+    <!-- Top Navigation Bar Deadpool Red Style -->
+    <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
+        <div class="max-w-4xl mx-auto px-4 py-3 space-y-3">
+            
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div onclick="document.getElementById('profile-upload-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti foto profil">
+                        <img id="nav-profile-img" src="" alt="Ubay Profile" class="w-full h-full object-cover absolute inset-0 hidden">
+                        <span id="nav-profile-initial">⚔️</span>
+                        <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs text-red-400">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                    </div>
+                    <input type="file" id="profile-upload-input" accept="image/*" class="hidden" onchange="handleProfilePhotoUpload(event)">
+
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5">
+                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc Edition</span>
+                            </h1>
+                            <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
+                        </div>
+                        <div class="w-36 sm:w-48 bg-zinc-900 h-2 rounded-full border border-red-950 overflow-hidden relative" title="Progress Level XP">
+                            <div id="user-xp-bar" class="bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 25%"></div>
+                        </div>
+                        <p class="text-[11px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agustus 2026</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="triggerSmartNotification()" id="notif-btn" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-bell text-amber-400 text-sm"></i>
+                        <span class="hidden sm:inline">Notif</span>
+                    </button>
+                    <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm" title="Restore JSON Data">
+                        <i class="fa-solid fa-file-import"></i>
+                        <span class="hidden sm:inline">Restore</span>
+                    </button>
+                    <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
+                </div>
+            </div>
+
+            <!-- 5 MAIN SWITCH TABS -->
+            <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl grid grid-cols-5 gap-1 shadow-inner">
+                <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-wallet text-xs"></i> <span class="hidden sm:inline">Keuangan</span>
+                </button>
+                <button id="tab-btn-sholat" onclick="switchTab('sholat')" class="py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-mosque text-xs"></i> <span class="hidden sm:inline">Sholat</span>
+                </button>
+                <button id="tab-btn-bulking" onclick="switchTab('bulking')" class="py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-calculator text-xs"></i> <span class="hidden sm:inline">Bulking</span>
+                </button>
+                <button id="tab-btn-nofap" onclick="switchTab('nofap')" class="py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-fire text-xs"></i> <span class="hidden sm:inline">NoFap</span>
+                </button>
+                <button id="tab-btn-tracker" onclick="switchTab('tracker')" class="py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-calendar-check text-xs"></i> <span class="hidden sm:inline">Tracker</span>
+                </button>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- SWIPE INSTRUCTION HINT FOR MOBILE -->
+    <div class="max-w-4xl mx-auto px-4 pt-2 text-right">
+        <span class="text-[10px] font-bold text-slate-500 italic"><i class="fa-solid fa-hand-pointer text-red-400 mr-1"></i> Tips: Swipe / Usap layar ke kanan/kiri untuk pindah modul</span>
+    </div>
+
+    <!-- BANNER ATAS KEUANGAN -->
+    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-2 space-y-3">
+        <div class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border border-red-600/50 rounded-2xl p-4 flex items-center justify-between shadow-xl">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-500 border border-red-600/40 flex items-center justify-center shrink-0 text-xl shadow-inner font-black">
+                    ⚔️
+                </div>
+                <div>
+                    <span class="text-xs uppercase font-black tracking-wider text-red-400 block">Maximum Effort Status</span>
+                    <span id="top-banner-date" class="text-sm font-bold text-white">Minggu, 2 Agustus 2026</span>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-slate-400 block font-medium">Siklus Aktif</span>
+                <span class="text-xs font-extrabold text-red-300 bg-red-950 px-2.5 py-1 rounded-lg border border-red-600/40">Gajian Agst</span>
+            </div>
+        </div>
+
+        <div class="bg-zinc-900/90 border border-red-900/40 rounded-2xl p-4 flex items-center gap-3 shadow-md">
+            <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-600/30 flex items-center justify-center shrink-0 text-lg font-black">
+                <i class="fa-solid fa-mask"></i>
+            </div>
+            <div class="flex-1">
+                <span class="text-xs uppercase font-black tracking-wider text-red-400 block">Deadpool Daily Mindset</span>
+                <p id="daily-quote-text" class="text-xs sm:text-sm text-slate-200 italic mt-0.5">"With great power comes great irresponsibility... now eat your Dada Ayam and hit those chest presses, Ubay!" — Wade Wilson</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: KEUANGAN APP -->
+    <div id="section-finance" class="hidden">
+        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <section class="glass-card glass-card-hover rounded-2xl p-4 shadow-xl border-red-600/40 space-y-2.5 transition-all">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Catat Cepat AI Deadpool
+                    </span>
+                    <span class="text-xs text-slate-400">Contoh: Bensin 26rb</span>
+                </div>
+                <form id="ai-parser-form" class="flex gap-2">
+                    <input type="text" id="ai-parser-input" placeholder="Tulis misal: Nasgor 15k / Vaps 140k..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                    <button type="submit" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-md shrink-0">
+                        <i class="fa-solid fa-bolt mr-1"></i> Simpan
+                    </button>
+                </form>
+            </section>
+
+            <div class="flex justify-between items-center flex-wrap gap-2">
+                <div class="glass-card rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm border-zinc-800">
+                    <span class="text-xs text-slate-400 font-medium"><i class="fa-solid fa-calendar-days text-red-400 mr-1"></i> Siklus:</span>
+                    <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs sm:text-sm font-bold text-red-400 focus:outline-none cursor-pointer">
+                        <option value="2026-07" class="bg-zinc-900 text-slate-200">Gajian Juli - Agst 2026</option>
+                        <option value="2026-08" class="bg-zinc-900 text-slate-200">Gajian Agst - Sept 2026</option>
+                        <option value="2026-09" class="bg-zinc-900 text-slate-200">Gajian Sept - Okt 2026</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="exportCSV()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-3 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5" title="Export CSV">
+                        <i class="fa-solid fa-file-csv text-sm"></i> <span class="hidden sm:inline">Export CSV</span>
+                    </button>
+                    <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Tambah Catatan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Header Ringkasan Gaji -->
+            <section class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-red-900/40">
+                <div>
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        Halo, Ubay <span class="text-xs bg-red-600 px-2 py-0.5 rounded text-white font-bold">Tax Boss</span>
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Status Keuangan untuk <strong id="cycle-label-display" class="text-red-400">Siklus Gajian Ini</strong>.</p>
+                </div>
+                <div class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-3.5 rounded-xl w-full sm:w-auto justify-between">
+                    <div>
+                        <div class="text-xs text-slate-400 flex gap-2">
+                            <span>Gaji: <strong class="text-slate-200" id="disp-salary">Rp 7.680.000</strong></span> | 
+                            <span>Side: <strong class="text-slate-200" id="disp-side">Rp 500.000</strong></span>
+                        </div>
+                        <div class="text-base font-black text-red-400 mt-0.5" id="disp-total-income">Total: Rp 8.180.000</div>
+                    </div>
+                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors" title="Edit Pemasukan">
+                        <i class="fa-solid fa-pen-to-square text-sm"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Card Ringkasan 4 Angka -->
+            <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs text-slate-400 font-semibold">Hari Ini</p>
+                        <i class="fa-solid fa-sun text-amber-400 text-base"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-amber-400 mt-2" id="sum-today">Rp 0</h3>
+                </div>
+
+                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs text-slate-400 font-semibold">7 Hari Terakhir</p>
+                        <i class="fa-solid fa-calendar-week text-blue-400 text-base"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-blue-400 mt-2" id="sum-weekly">Rp 0</h3>
+                </div>
+
+                <div class="glass-card glass-card-hover rounded-2xl p-4 flex flex-col justify-between shadow-md transition-all">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs text-slate-400 font-semibold">Terpakai Siklus Ini</p>
+                        <i class="fa-solid fa-hand-holding-dollar text-rose-400 text-base"></i>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-rose-400 mt-2" id="sum-cycle">Rp 0</h3>
+                </div>
+
+                <div id="sum-remaining-card" class="glass-card rounded-2xl p-4 flex flex-col justify-between shadow-xl transition-all glow-safe">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs text-emerald-400 font-black uppercase tracking-wider">Sisa Uang Aktif</p>
+                        <i class="fa-solid fa-piggy-bank text-emerald-400 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-emerald-300 mt-2" id="sum-remaining">Rp 0</h3>
+                        <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="sum-remaining-status">Status: Aman 👍</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Evaluasi Hemat vs Boros -->
+            <section class="bg-gradient-to-br from-red-950/80 via-zinc-900 to-zinc-950 border border-red-600/40 rounded-2xl p-5 space-y-3 shadow-xl">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-sm"></i> Audit Hemat vs Boros
+                    </h3>
+                    <span class="bg-red-950 text-red-300 border border-red-600/40 text-xs px-2.5 py-0.5 rounded-full font-bold">Real-time</span>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
+                        <span class="text-xs text-slate-400 block uppercase font-medium">Hari Ini vs Kemarin</span>
+                        <div id="eval-day-status" class="text-xs font-bold mt-1">Loading...</div>
+                    </div>
+                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
+                        <span class="text-xs text-slate-400 block uppercase font-medium">7 Hari Ini vs 7 Hari Lalu</span>
+                        <div id="eval-week-status" class="text-xs font-bold mt-1">Loading...</div>
+                    </div>
+                    <div class="bg-zinc-950/80 border border-zinc-800 p-3 rounded-xl">
+                        <span class="text-xs text-slate-400 block uppercase font-medium">30 Hari Ini vs 30 Hari Lalu</span>
+                        <div id="eval-month-status" class="text-xs font-bold mt-1">Loading...</div>
+                    </div>
+                </div>
+
+                <div id="ai-wrapped-content" class="bg-red-950/40 border border-red-600/30 p-3.5 rounded-xl text-xs text-red-200 leading-relaxed">
+                    Menganalisis pola pengeluaran kamu...
+                </div>
+            </section>
+
+            <!-- Safe to Spend Banner -->
+            <section class="bg-gradient-to-r from-red-950/90 via-zinc-900 to-zinc-950 border border-red-600/40 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-400 border border-red-600/30 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-black text-red-400 uppercase tracking-wider">Batas Aman Jajan Harian</h3>
+                        <p class="text-xs text-slate-300 mt-0.5">Sisa kuota harian agar uang gajian cukup (<span id="days-remaining-text" class="text-red-300 font-bold">0 hari lagi</span>).</p>
+                    </div>
+                </div>
+                <div class="bg-zinc-950 border border-red-600/30 px-4 py-2 rounded-xl text-right shrink-0 w-full sm:w-auto">
+                    <span class="text-xs text-slate-400 block uppercase font-medium">Batas Maksimal / Hari</span>
+                    <span id="safe-daily-limit" class="text-base font-black text-red-400 block">Rp 0 / hari</span>
+                </div>
+            </section>
+
+            <!-- Visual Charts -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
+                    <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
+                        <i class="fa-solid fa-chart-pie text-red-400"></i> Proporsi Kategori
+                    </h2>
+                    <div class="relative h-52 flex justify-center items-center">
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-4 space-y-3 border-red-900/40">
+                    <h2 class="text-xs font-bold text-slate-200 flex items-center gap-2 uppercase tracking-wider">
+                        <i class="fa-solid fa-chart-column text-amber-400"></i> Perbandingan Bulanan
+                    </h2>
+                    <div class="relative h-52 flex justify-center items-center">
+                        <canvas id="monthlyComparisonChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monitoring Target Budget -->
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-red-400"></i> Monitoring Budget
+                    </h2>
+                    <button onclick="openBudgetModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 px-3 py-1.5 rounded-xl text-xs font-bold transition-colors">
+                        <i class="fa-solid fa-sliders mr-1"></i> Edit Budget
+                    </button>
+                </div>
+                <div id="budget-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+            </section>
+
+            <!-- Tabel Riwayat Keuangan -->
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-800 pb-3">
+                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Pengeluaran
+                    </h2>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <select id="method-filter" onchange="renderApp()" class="bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
+                            <option value="ALL">Semua Metode</option>
+                            <option value="Mbanking">Mbanking / QRIS</option>
+                            <option value="Cash">Cash</option>
+                            <option value="E-Wallet">E-Wallet</option>
+                        </select>
+                        <div class="relative flex-1 sm:w-48">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-xs text-slate-400"></i>
+                            <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="w-full bg-zinc-950 border border-zinc-700 rounded-xl pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-zinc-950 text-slate-400 uppercase text-[11px] font-bold">
+                            <tr>
+                                <th class="p-3 rounded-l-xl">Tanggal</th>
+                                <th class="p-3">Kategori & Catatan</th>
+                                <th class="p-3">Nominal</th>
+                                <th class="p-3 text-center">Lock</th>
+                                <th class="p-3 text-center rounded-r-xl">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table" class="divide-y divide-zinc-800/60"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SECTION 2: SHOLAT APP -->
+    <div id="section-sholat" class="hidden">
+        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <div class="flex justify-between items-center flex-wrap gap-3">
+                <div>
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Sunnah
+                    </h2>
+                    <p class="text-xs text-slate-400">Setiap kali kamu check-in di sini, angkanya otomatis ditarik ke Dashboard!</p>
+                </div>
+                <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-circle-plus text-base"></i>
+                    <span>Check-in Hari Ini</span>
+                </button>
+            </div>
+
+            <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Hari Ini vs Kemarin</p>
+                    <div id="eval-sholat-day" class="text-xs text-slate-200 space-y-1">0 dari 5 Sholat Wajib</div>
+                </div>
+                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">7 Hari Ini vs 7 Hari Lalu</p>
+                    <div id="eval-sholat-week" class="text-xs text-slate-200 space-y-1">Konsisten Terjaga</div>
+                </div>
+                <div class="glass-card glass-card-hover rounded-2xl p-4 space-y-2 transition-all border-red-900/40">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">30 Hari Ini vs 30 Hari Lalu</p>
+                    <div id="eval-sholat-month" class="text-xs text-slate-200 space-y-1">Disiplin Bulanan</div>
+                </div>
+            </section>
+
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                    <i class="fa-solid fa-list-check text-red-400"></i> Riwayat Check-in Sholat
+                </h2>
+                <div id="sholat-cards-list" class="space-y-3"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SECTION 3: BULKING KALKULATOR MAKRO WITH SEARCH & CUSTOM FOOD ADDER -->
+    <div id="section-bulking" class="hidden">
+        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-red-500"></i> Kalkulator Bulking & Search Menu
+                    </h2>
+                    <p class="text-xs text-red-400 font-bold mt-0.5">💪 Cari makanan apa saja, racik Karbo, Lauk & Sayur, atau tambah menu baru!</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openCustomFoodModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-black px-3.5 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus-circle"></i> <span>+ Tambah Menu Custom</span>
+                    </button>
+                    <input type="date" id="bulking-date-picker" onchange="renderBulkingCalculator()" class="bg-zinc-900 border border-red-900/60 rounded-xl px-3 py-2 text-xs font-black text-red-400 text-center focus:outline-none focus:border-red-500">
+                </div>
+            </div>
+
+            <!-- WEIGHT TRACKER -->
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-600/50 shadow-2xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-zinc-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <div class="w-9 h-9 rounded-xl bg-red-600/20 text-red-500 flex items-center justify-center text-base shrink-0 font-black">
+                            ⚖️
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-black text-red-400 uppercase tracking-wider">Tracker Berat Badan Mingguan</h3>
+                            <span class="text-[11px] text-slate-400">Pantau grafik kenaikan massa otot tubuh (Awal: 68.0 kg)</span>
+                        </div>
+                    </div>
+                    
+                    <form id="weight-input-form" onsubmit="saveWeightRecord(event)" class="flex items-center gap-2 w-full sm:w-auto">
+                        <input type="number" step="0.1" id="input-weight-val" placeholder="Berat (kg)" required class="w-28 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs font-bold text-red-300 focus:outline-none focus:border-red-500">
+                        <button type="submit" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-black px-3.5 py-2 rounded-xl text-xs transition-all shadow-md shrink-0">
+                            <i class="fa-solid fa-plus mr-1"></i> Catat
+                        </button>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1">
+                        <span class="text-[11px] font-bold text-slate-400 block uppercase">Berat Badan Saat Ini</span>
+                        <div class="text-2xl font-black text-red-400" id="disp-current-weight">68.0 kg</div>
+                        <span class="text-[10px] text-slate-500" id="disp-last-weight-date">Update: 2 Agst 2026</span>
+                    </div>
+
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1">
+                        <span class="text-[11px] font-bold text-slate-400 block uppercase">Perubahan (Delta)</span>
+                        <div class="text-xl font-extrabold text-white" id="disp-weight-delta">0.0 kg</div>
+                        <span class="text-[10px] text-slate-400" id="disp-weight-status">Awal Program</span>
+                    </div>
+
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1">
+                        <span class="text-[11px] font-bold text-slate-400 block uppercase">Target Kenaikan Ideal</span>
+                        <div class="text-xl font-extrabold text-amber-400">+0.2 s/d +0.5 kg</div>
+                        <span class="text-[10px] text-slate-500">Per Minggu (*Lean Bulk*)</span>
+                    </div>
+                </div>
+
+                <div id="weight-smart-advice-banner" class="bg-red-950/60 border border-red-600/40 p-4 rounded-xl text-xs text-red-200 leading-relaxed space-y-1">
+                    Menganalisis tren berat badanmu...
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-chart-area text-red-400"></i> Grafik Perjalanan Berat Badan (kg)
+                    </h4>
+                    <div class="relative h-44 w-full bg-zinc-950/60 p-2 rounded-xl border border-zinc-800">
+                        <canvas id="weightTrendChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MAKRO SUMMARY -->
+            <section class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                <div class="glass-card p-3 rounded-2xl border border-zinc-800 space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Estimasi Biaya</span>
+                    <div class="text-sm font-black text-emerald-400" id="calc-total-cost">Rp 0</div>
+                </div>
+                <div class="glass-card p-3 rounded-2xl border border-zinc-800 space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Total Kalori</span>
+                    <div class="text-sm font-black text-amber-400" id="calc-total-cal">0 kkal</div>
+                </div>
+                <div class="glass-card p-3 rounded-2xl border border-zinc-800 space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Total Protein</span>
+                    <div class="text-sm font-black text-blue-400" id="calc-total-p">0 g</div>
+                </div>
+                <div class="glass-card p-3 rounded-2xl border border-zinc-800 space-y-0.5">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Total Karbo</span>
+                    <div class="text-sm font-black text-purple-400" id="calc-total-c">0 g</div>
+                </div>
+                <div class="glass-card p-3 rounded-2xl border border-zinc-800 space-y-0.5 col-span-2 sm:col-span-1">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Total Lemak</span>
+                    <div class="text-sm font-black text-rose-400" id="calc-total-f">0 g</div>
+                </div>
+            </section>
+
+            <!-- SEARCHABLE MEAL BUILDER CONTAINER -->
+            <section class="glass-card rounded-2xl p-5 space-y-5 border-red-600/40">
+                <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-magnifying-glass"></i> Racik & Cari Makanan Sesukamu
+                    </h3>
+                    <span class="text-[11px] text-slate-400">Gunakan kotak pencarian di tiap kolom!</span>
+                </div>
+                <div id="bulking-calculator-container" class="space-y-4"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SECTION 4: NOFAP & MINDSET SHIELD -->
+    <div id="section-nofap" class="hidden">
+        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <section class="glass-card rounded-3xl p-6 text-center border-red-600/60 shadow-2xl relative overflow-hidden space-y-5 bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950">
+                <div class="flex justify-between items-center">
+                    <span class="text-[11px] font-black text-red-400 uppercase tracking-widest bg-red-950 px-3 py-1 rounded-full border border-red-600/50 flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-red-500"></i> Mindset Shield & Brain Rewire
+                    </span>
+                    <span class="text-xs font-extrabold text-amber-400" id="nofap-badge-top">Lvl 1 - Novice</span>
+                </div>
+
+                <div class="py-2 space-y-1">
+                    <div class="text-6xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-amber-400 tracking-tight" id="nofap-streak-days">
+                        0 Hari
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 font-bold" id="nofap-streak-timer">00 Jam : 00 Menit : 00 Detik Clean</p>
+                    <p class="text-[11px] text-slate-500">Fokus pada hari ini, jaga energi dan mentalmu tetap tajam!</p>
+                </div>
+
+                <div class="flex flex-wrap justify-center items-center gap-2.5 pt-2">
+                    <button onclick="checkInNoFap()" class="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2">
+                        <i class="fa-solid fa-shield-check text-base"></i> Check-in Clean Hari Ini
+                    </button>
+                    <button onclick="openPanicModal()" class="bg-gradient-to-r from-amber-600 to-red-600 hover:from-amber-500 text-white font-black px-5 py-3 rounded-2xl text-xs sm:text-sm transition-all shadow-xl flex items-center gap-2 animate-pulse">
+                        <i class="fa-solid fa-triangle-exclamation text-base"></i> Tombol Darurat (Panic Button)
+                    </button>
+                    <button onclick="resetNoFap()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-4 py-3 rounded-2xl text-xs transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate-left"></i> Relapse / Reset
+                    </button>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 block uppercase">Streak Terpanjang</span>
+                    <div class="text-xl font-black text-amber-400" id="nofap-longest">0 Hari</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Target Reboot</span>
+                    <div class="text-xl font-black text-red-400">90 Hari</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Tingkat Keberhasilan</span>
+                    <div class="text-xl font-black text-emerald-400" id="nofap-rate">100%</div>
+                </div>
+                <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Pemicu Terbanyak</span>
+                    <div class="text-xs font-black text-slate-200 mt-1" id="nofap-top-trigger">Bosan / Late Night</div>
+                </div>
+            </section>
+
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot"></i> Roadmap 90-Day Brain Rewire
+                    </h3>
+                    <span class="text-xs font-black text-slate-300" id="nofap-roadmap-pct">0% Progress</span>
+                </div>
+
+                <div class="w-full bg-zinc-950 h-3.5 rounded-full border border-zinc-800 overflow-hidden relative">
+                    <div id="nofap-roadmap-bar" class="bg-gradient-to-r from-red-600 via-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-7">
+                        <span class="font-black text-slate-200 block">🌱 Day 7</span>
+                        <span class="text-[10px] text-slate-400 block">Sensitivitas Dopamin Pulih</span>
+                    </div>
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-14">
+                        <span class="font-black text-slate-200 block">⚡ Day 14</span>
+                        <span class="text-[10px] text-slate-400 block">Testosteron & Energi Naik</span>
+                    </div>
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-30">
+                        <span class="font-black text-slate-200 block">🔥 Day 30</span>
+                        <span class="text-[10px] text-slate-400 block">Kejelasan Mental / Laser Focus</span>
+                    </div>
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-90">
+                        <span class="font-black text-slate-200 block">👑 Day 90</span>
+                        <span class="text-[10px] text-slate-400 block">Full Brain Rewire Master</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                <h3 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                    <i class="fa-solid fa-list-check text-red-400"></i> Log Check-in & Riwayat Mental
+                </h3>
+                <div id="nofap-history-list" class="space-y-2.5"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SECTION 5: MASTER TRACKER 1 TAHUN -->
+    <div id="section-tracker" class="hidden">
+        <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                    <h2 class="text-lg font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-red-400"></i> Master Tracker 1 Tahun
+                    </h2>
+                    <p class="text-xs text-red-400 font-bold mt-0.5">⚡ Presisi 100% Sesuai Excel Master</p>
+                </div>
+                <button onclick="resetTrackerToExcelMaster()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-rotate-left"></i> Reset ke Excel Master
+                </button>
+            </div>
+
+            <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl flex items-center gap-1.5 shadow-lg">
+                <button onclick="switchTrackerSheet('dash')" id="sheet-btn-dash" class="flex-1 py-2.5 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-chart-pie"></i> <span>1. Dashboard</span>
+                </button>
+                <button onclick="switchTrackerSheet('logs')" id="sheet-btn-logs" class="flex-1 py-2.5 rounded-xl text-xs font-black transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-list-ul"></i> <span>2. Aktivitas Harian</span>
+                </button>
+                <button onclick="switchTrackerSheet('eval')" id="sheet-btn-eval" class="flex-1 py-2.5 rounded-xl text-xs font-black transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>3. Saran Dinamis</span>
+                </button>
+            </div>
+
+            <!-- SHEET 1: EXECUTIVE DASHBOARD -->
+            <div id="tracker-sheet-dash" class="space-y-5">
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center justify-between border-b border-zinc-800 pb-3">
+                        <span class="flex items-center gap-2"><i class="fa-solid fa-bullseye"></i> Summary Key Targets (1 Tahun)</span>
+                        <span class="text-[10px] text-red-300 bg-red-950 px-2 py-0.5 rounded-md font-bold">Auto-Sync</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-zinc-950 p-4 rounded-2xl border border-red-600/40 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-300 block uppercase">Spiritual (Qur'an & Sholat)</span>
+                                <span class="text-[9px] bg-red-950 text-red-400 px-1.5 py-0.5 rounded font-bold">Auto-Pull</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-2xl font-black text-white" id="target-spir-count">0 / 365</div>
+                                    <span class="text-xs text-red-400 font-bold" id="target-spir-rate">0% Selesai</span>
+                                </div>
+                                <i class="fa-solid fa-book-quran text-3xl text-red-500/30"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 space-y-2">
+                            <span class="text-xs font-bold text-slate-400 block uppercase">Self-Dev (PPAk & English)</span>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-2xl font-black text-white" id="target-self-count">0 / 365</div>
+                                    <span class="text-xs text-blue-400 font-bold" id="target-self-rate">0% Selesai</span>
+                                </div>
+                                <i class="fa-solid fa-graduation-cap text-3xl text-blue-500/30"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 space-y-2">
+                            <span class="text-xs font-bold text-slate-400 block uppercase">Fitness (Gym 4x / Mg)</span>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-2xl font-black text-white" id="target-gym-count">0 / 208</div>
+                                    <span class="text-xs text-amber-400 font-bold" id="target-gym-rate">0% Selesai</span>
+                                </div>
+                                <i class="fa-solid fa-dumbbell text-3xl text-amber-500/30"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-grip-vertical"></i> Heatmap Activity Grid 365 Hari
+                        </h3>
+                        <div class="flex items-center gap-1.5 text-[10px] text-slate-400">
+                            <span>Kurang</span>
+                            <span class="w-2.5 h-2.5 rounded bg-zinc-900 border border-zinc-800 inline-block"></span>
+                            <span class="w-2.5 h-2.5 rounded bg-red-950 inline-block"></span>
+                            <span class="w-2.5 h-2.5 rounded bg-red-700 inline-block"></span>
+                            <span class="w-2.5 h-2.5 rounded bg-red-500 inline-block shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                            <span>Aktif</span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto pt-1 pb-2">
+                        <div id="heatmap-grid" class="grid grid-rows-7 grid-flow-col gap-1.5 min-w-[640px]"></div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                        <i class="fa-solid fa-table-cells"></i> Rekapitulasi Berjenjang Bulanan
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-zinc-950 text-slate-400 uppercase font-bold text-[11px]">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">Bulan</th>
+                                    <th class="p-3 text-center">Spiritual</th>
+                                    <th class="p-3 text-center">Self-Dev</th>
+                                    <th class="p-3 text-center">Gym</th>
+                                    <th class="p-3 text-center rounded-r-xl">Score (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthly-report-table" class="divide-y divide-zinc-800/60"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SHEET 2: DAILY FOCUS TRACKER -->
+            <div id="tracker-sheet-logs" class="hidden space-y-4">
+                <section class="glass-card rounded-2xl p-5 space-y-5 border-red-900/40">
+                    <div class="bg-zinc-950 p-3 rounded-2xl border border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <button onclick="changeTrackerDate(-1)" class="bg-zinc-800 hover:bg-zinc-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition-all border border-zinc-700">
+                                <i class="fa-solid fa-chevron-left"></i> Kemarin
+                            </button>
+                            <input type="date" id="tracker-date-picker" onchange="renderTrackerLogs()" class="bg-zinc-900 border border-zinc-700 rounded-xl px-3 py-2 text-xs font-black text-red-400 text-center focus:outline-none focus:border-red-500 flex-1 sm:w-auto">
+                            <button onclick="changeTrackerDate(1)" class="bg-zinc-800 hover:bg-zinc-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-bold transition-all border border-zinc-700">
+                                Besok <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <button onclick="setTrackerDateToday()" class="bg-red-950 text-red-300 border border-red-600/40 px-3.5 py-2 rounded-xl text-xs font-extrabold hover:bg-red-900 transition-all w-full sm:w-auto">
+                            <i class="fa-solid fa-calendar-day mr-1"></i> Hari Ini
+                        </button>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-red-950/70 via-zinc-900 to-zinc-950 p-4 rounded-2xl border border-red-600/30 flex justify-between items-center">
+                        <div>
+                            <span class="text-xs uppercase font-black text-red-400 block tracking-wider" id="daily-focus-title">Target Hari Ini</span>
+                            <span class="text-xs text-slate-400 font-medium" id="daily-completion-count">0 / 0 Aktivitas Selesai</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-2xl font-black text-red-400" id="daily-completion-pct">0%</span>
+                        </div>
+                    </div>
+
+                    <div id="tracker-cards-container" class="space-y-2.5"></div>
+                </section>
+            </div>
+
+            <!-- SHEET 3: SARAN & EVALUASI DINAMIS -->
+            <div id="tracker-sheet-eval" class="hidden space-y-4">
+                <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Evaluasi & Saran Harian Otomatis
+                    </h3>
+                    <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 space-y-2">
+                        <span class="text-xs font-bold text-slate-400 block uppercase">Real-Time Feedback:</span>
+                        <p id="eval-daily-dynamic-text" class="text-sm text-red-300 leading-relaxed font-semibold">Menganalisis progress Anda...</p>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
+                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
+                        <i class="fa-solid fa-chart-line"></i> Rekomendasi Bulanan (Berbasis Formula)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-zinc-950 text-slate-400 uppercase font-bold text-[11px]">
+                                <tr>
+                                    <th class="p-3 rounded-l-xl">Periode</th>
+                                    <th class="p-3 text-center">Rate (%)</th>
+                                    <th class="p-3 rounded-r-xl">Saran & Rekomendasi Otomatis</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800/60">
+                                <tr class="hover:bg-zinc-800/40">
+                                    <td class="p-3 font-bold text-white">Agustus 2026</td>
+                                    <td class="p-3 text-center text-red-400 font-bold" id="eval-aug-rate">0%</td>
+                                    <td class="p-3 text-red-300 font-medium">Pertahankan konsistensi bangun jam 05:00 & Sholat 5 Waktu!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
+        <span>© 2026 Master Hub Ubay - Deadpool Edition ⚔️</span>
+        <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+            <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
+        </button>
+    </footer>
+
+    <!-- FAB BUTTON -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <div id="fab-menu" class="hidden mb-3 space-y-2 flex flex-col items-end">
+            <button onclick="switchTab('bulking'); openCustomFoodModal(); toggleFab();" class="bg-red-700 hover:bg-red-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                <span>+ Tambah Menu Custom</span> <i class="fa-solid fa-plus-circle"></i>
+            </button>
+            <button onclick="switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                <span>Tombol Darurat NoFap</span> <i class="fa-solid fa-triangle-exclamation"></i>
+            </button>
+            <button onclick="switchTab('tracker'); toggleFab();" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                <span>Master Tracker</span> <i class="fa-solid fa-calendar-check"></i>
+            </button>
+            <button onclick="switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
+            </button>
+            <button onclick="switchTab('finance'); openModal(); toggleFab();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-xl flex items-center gap-2">
+                <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
+            </button>
+        </div>
+        <button onclick="toggleFab()" class="w-14 h-14 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-2xl font-black flex items-center justify-center shadow-2xl shadow-red-900/80">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- MODAL ADD CUSTOM FOOD (BULKING) -->
+    <div id="custom-food-modal" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-red-600/50 w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-black text-white flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-red-400"></i> Tambah Makanan Custom Baru
+                </h3>
+                <button onclick="closeCustomFoodModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="custom-food-form" onsubmit="saveCustomFood(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Kategori Makanan</label>
+                    <select id="cf-type" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-red-500">
+                        <option value="carb">1. Karbohidrat (Nasi, Roti, Ubi, Mie, Kwetiau)</option>
+                        <option value="protein">2. Lauk / Protein (Ayam, Daging, Ikan, Telur, Tahu)</option>
+                        <option value="extra">3. Extra / Sayur / Fat (Sayur, Susu, Keju, Shake)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nama Makanan & Porsi</label>
+                    <input type="text" id="cf-name" placeholder="Misal: Mie Ayam Porsi Jumbo" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Estimasi Kalori (kkal)</label>
+                        <input type="number" id="cf-cal" placeholder="350" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Estimasi Protein (gram)</label>
+                        <input type="number" step="0.1" id="cf-p" placeholder="25" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Estimasi Karbo (gram)</label>
+                        <input type="number" step="0.1" id="cf-c" placeholder="45" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold text-slate-400 mb-1">Estimasi Biaya (Rp)</label>
+                        <input type="number" id="cf-cost" placeholder="15000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    </div>
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeCustomFoodModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan ke Database</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PANIC BUTTON NOFAP -->
+    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-5 text-center relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closePanicModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+
+            <div class="space-y-1">
+                <span class="text-xs font-black text-amber-400 uppercase tracking-widest bg-amber-950/80 px-3 py-1 rounded-full border border-amber-600/40">
+                    🚨 Deadpool Emergency Urge Rescue
+                </span>
+                <h3 class="text-xl font-black text-white mt-2">Tahan Impulsnya, Ubay! ⚔️</h3>
+                <p class="text-xs text-slate-300 italic">"Pikiran cuma trik sementara. Rasakan dorongannya tanpa menuruti kemauannya!"</p>
+            </div>
+
+            <div class="py-4 flex flex-col items-center justify-center">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full breath-circle border-4 border-red-500/80 flex flex-col items-center justify-center transition-all shadow-2xl">
+                    <span class="text-xs font-black text-white uppercase tracking-wider">Tarik - Tahan - Hembus</span>
+                    <span class="text-[10px] text-slate-200 mt-1 font-bold">Relaksasi Otak</span>
+                </div>
+            </div>
+
+            <div class="bg-zinc-950 p-4 rounded-2xl border border-red-900/60 space-y-2 text-left">
+                <span class="text-xs font-bold text-red-400 uppercase block">💪 Tantangan Alihkan Fokus Cepat:</span>
+                <ul class="text-xs text-slate-200 space-y-1.5 list-disc list-inside font-semibold">
+                    <li><strong>Push-up 15x SEKARANG JUGA</strong> untuk mengalirkan darah ke otot!</li>
+                    <li>Ambil air wudhu & basuh wajah dengan air dingin.</li>
+                    <li>Buka aplikasi lagu / minum air putih 1 gelas tinggi.</li>
+                </ul>
+            </div>
+
+            <button onclick="closePanicModal(); checkInNoFap();" class="w-full bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider shadow-lg">
+                ✅ Saya Berhasil Melewati Godaan Ini!
+            </button>
+        </div>
+    </div>
+
+    <!-- MODALS KEUANGAN & SHOLAT -->
+    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-red-400"></i> Target Budget Kategori
+                </h3>
+                <button onclick="closeBudgetModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="budget-form" class="space-y-3">
+                <div id="budget-inputs-container" class="space-y-3"></div>
+                <div class="pt-3 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="closeBudgetModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-red-400"></i> Edit Pemasukan
+                </h3>
+                <button onclick="closeIncomeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="income-form" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Gaji Pokok / Utama (Rp)</label>
+                    <input type="number" id="input-salary" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Bonus / Side Income (Rp)</label>
+                    <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeIncomeModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-red-400"></i> Catat Pengeluaran
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-1.5">
+                <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">⚡ Quick Tap:</span>
+                <div class="flex flex-wrap gap-1.5">
+                    <button type="button" onclick="quickFill('Bensin / Transportasi / Tol', 'Bensin', 26000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">⛽ Bensin Rp26k</button>
+                    <button type="button" onclick="quickFill('Makan & Belanja Dapur Harian', 'Nasi Goreng', 15000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">🍛 Nasgor Rp15k</button>
+                    <button type="button" onclick="quickFill('Belanja Pribadi & Lain-Lain', 'Vaps / Rokok', 140000)" class="bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-red-400 px-3 py-1.5 rounded-xl text-xs font-semibold">💨 Vaps Rp140k</button>
+                </div>
+            </div>
+
+            <form id="expense-form" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal</label>
+                    <input type="date" id="exp-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Pos Pengeluaran</label>
+                    <select id="exp-category" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                        <option value="Makan & Belanja Dapur Harian">Makan & Belanja Dapur Harian</option>
+                        <option value="Bensin / Transportasi / Tol">Bensin / Transportasi / Tol</option>
+                        <option value="Listrik, Air, Wifi & Pulsa">Listrik, Air, Wifi & Pulsa</option>
+                        <option value="Orang Tua / Keluarga">Orang Tua / Keluarga</option>
+                        <option value="Cicilan Utang & Kewajiban Bulanan">Cicilan Utang & Kewajiban Bulanan</option>
+                        <option value="Tabungan / Dana Darurat">Tabungan / Dana Darurat</option>
+                        <option value="Investasi / Asuransi">Investasi / Asuransi</option>
+                        <option value="Belanja Pribadi & Lain-Lain">Belanja Pribadi & Lain-Lain</option>
+                        <option value="Hiburan, Hangout & Self-Reward">Hiburan, Hangout & Self-Reward</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Deskripsi / Catatan</label>
+                    <input type="text" id="exp-desc" placeholder="Misal: Beli Bensin, Nasi Goreng" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Nominal (Rp)</label>
+                    <input type="number" id="exp-amount" placeholder="0" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Metode Bayar</label>
+                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                        <option value="Mbanking">Mbanking / QRIS</option>
+                        <option value="Cash">Cash</option>
+                        <option value="E-Wallet">E-Wallet</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="closeModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Sunnah
+                </h3>
+                <button onclick="closeSholatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="sholat-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Tanggal Check-in</label>
+                    <input type="date" id="input-sholat-date" required onchange="loadSholatByDate()" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                </div>
+
+                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-2">
+                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-2 text-xs">
+                        <div><label class="text-xs text-slate-400 block mb-1">Subuh</label><select id="s-subuh" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
+                        <div><label class="text-xs text-slate-400 block mb-1">Dzuhur</label><select id="s-dzuhur" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
+                        <div><label class="text-xs text-slate-400 block mb-1">Ashar</label><select id="s-ashar" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
+                        <div><label class="text-xs text-slate-400 block mb-1">Maghrib</label><select id="s-maghrib" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
+                        <div><label class="text-xs text-slate-400 block mb-1">Isya</label><select id="s-isya" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2 text-white"><option value="Pending">⏳ Belum</option><option value="Jamaah">🕌 Jamaah</option><option value="Munfarid">🏠 Sendiri</option><option value="Tidak">❌ Tidak</option></select></div>
+                    </div>
+                </div>
+
+                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-3">
+                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sholat Sunnah</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div>
+                            <label class="text-xs text-slate-300 block mb-1">Sholat Dhuha</label>
+                            <select id="sunnah-dhuha" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white">
+                                <option value="0">❌ Tidak (0 Rakaat)</option>
+                                <option value="2">✨ 2 Rakaat</option>
+                                <option value="4">✨ 4 Rakaat</option>
+                                <option value="6">✨ 6 Rakaat</option>
+                                <option value="8">✨ 8 Rakaat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud</label>
+                            <select id="sunnah-tahajud" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white">
+                                <option value="0">❌ Tidak (0 Rakaat)</option>
+                                <option value="2">🌙 2 Rakaat + Witir</option>
+                                <option value="4">🌙 4 Rakaat + Witir</option>
+                                <option value="6">🌙 6 Rakaat + Witir</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="closeSholatModal()" class="w-1/2 bg-zinc-800 font-bold py-2.5 rounded-xl text-xs">Batal</button>
+                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2.5 rounded-xl text-xs">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Utama Application -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('PWA SW err:', err));
+        }
+
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        // --- SWIPE GESTURE ENGINE BETWEEN TABS ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const tabsList = ['finance', 'sholat', 'bulking', 'nofap', 'tracker'];
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipeNavigation();
+        }, { passive: true });
+
+        function handleSwipeNavigation() {
+            const threshold = 70; // min distance for swipe
+            const currentTab = localStorage.getItem('master_hub_active_tab') || 'finance';
+            const currentIndex = tabsList.indexOf(currentTab);
+
+            if (touchEndX < touchStartX - threshold) {
+                // Swiped Left -> Move to Next Tab
+                if (currentIndex < tabsList.length - 1) {
+                    switchTab(tabsList[currentIndex + 1]);
+                }
+            }
+            if (touchEndX > touchStartX + threshold) {
+                // Swiped Right -> Move to Previous Tab
+                if (currentIndex > 0) {
+                    switchTab(tabsList[currentIndex - 1]);
+                }
+            }
+        }
+
+        const EXCEL_SCHEDULE_TEMPLATES = {
+            "Senin": [
+                { time: "05:00 - 05:30", desc: "Bangun Jam 05:00, Sholat Subuh & Tilawah Qur'an (15m) + Hafalan (15m)", category: "Spiritual (Qur'an)" },
+                { time: "05:30 - 06:30", desc: "Mandi, Sarapan & Persiapan Berangkat Kerja", category: "Morning Prep" },
+                { time: "06:30 - 08:00", desc: "Perjalanan ke Kantor / Commute (Passive Listening English)", category: "Commute / English" },
+                { time: "08:00 - 18:00", desc: "Jam Kerja Profesional (Tax Supervisor / Finance)", category: "Working Hours" },
+                { time: "18:00 - 19:30", desc: "Perjalanan Pulang ke Rumah & Bersih-bersih", category: "Commute Home & Rest" },
+                { time: "19:30 - 20:15", desc: "Belajar Akuntansi Lanjutan / PPAk (Teori & Kasus Perpajakan)", category: "Advanced Accounting" },
+                { time: "20:15 - 20:45", desc: "Bahasa Inggris: Reading / Writing / Speaking Practice", category: "English Practice" },
+                { time: "20:45 - 21:00", desc: "1% Better Evening Reflection: Jurnal Evaluasi Harian & 3 Hal Positif", category: "Daily Reflection (1%)" },
+                { time: "21:00 - 22:00", desc: "Waktu Santai / Istirahat / Tidur Tepat Waktu", category: "Relaxation" }
+            ],
+            "Selasa": [
+                { time: "05:00 - 05:30", desc: "Bangun Jam 05:00, Sholat Subuh & Tilawah Qur'an (15m) + Hafalan (15m)", category: "Spiritual (Qur'an)" },
+                { time: "05:30 - 06:30", desc: "Mandi, Sarapan & Persiapan Berangkat Kerja", category: "Morning Prep" },
+                { time: "06:30 - 08:00", desc: "Perjalanan ke Kantor / Commute (Passive Listening English)", category: "Commute / English" },
+                { time: "08:00 - 18:00", desc: "Jam Kerja Profesional (Tax Supervisor / Finance)", category: "Working Hours" },
+                { time: "18:00 - 19:30", desc: "Perjalanan Pulang & Transit ke Gym", category: "Commute" },
+                { time: "19:30 - 21:00", desc: "GYM SESI: Latihan Beban / Upper-Lower Body", category: "Gym Sesi" },
+                { time: "21:00 - 21:15", desc: "1% Better Evening Reflection (Journaling)", category: "Daily Reflection (1%)" },
+                { time: "21:15 - 22:00", desc: "Mandi, Makan Malam & Istirahat", category: "Recovery" }
+            ],
+            "Rabu": [
+                { time: "05:00 - 05:30", desc: "Bangun Jam 05:00, Sholat Subuh & Tilawah Qur'an (15m) + Hafalan (15m)", category: "Spiritual (Qur'an)" },
+                { time: "05:30 - 06:30", desc: "Mandi, Sarapan & Persiapan Berangkat Kerja", category: "Morning Prep" },
+                { time: "06:30 - 08:00", desc: "Perjalanan ke Kantor / Commute (Passive Listening English)", category: "Commute / English" },
+                { time: "08:00 - 18:00", desc: "Jam Kerja Profesional (Tax Supervisor / Finance)", category: "Working Hours" },
+                { time: "18:00 - 19:30", desc: "Perjalanan Pulang ke Rumah & Bersih-bersih", category: "Commute Home & Rest" },
+                { time: "19:30 - 20:15", desc: "Belajar Akuntansi Lanjutan / PPAk (Teori & Kasus Perpajakan)", category: "Advanced Accounting" },
+                { time: "20:15 - 20:45", desc: "Bahasa Inggris: Reading / Writing / Speaking Practice", category: "English Practice" },
+                { time: "20:45 - 21:00", desc: "1% Better Evening Reflection: Jurnal Evaluasi Harian & 3 Hal Positif", category: "Daily Reflection (1%)" },
+                { time: "21:00 - 22:00", desc: "Waktu Santai / Istirahat / Tidur Tepat Waktu", category: "Relaxation" }
+            ],
+            "Kamis": [
+                { time: "05:00 - 05:30", desc: "Bangun Jam 05:00, Sholat Subuh & Tilawah Qur'an (15m) + Hafalan (15m)", category: "Spiritual (Qur'an)" },
+                { time: "05:30 - 06:30", desc: "Mandi, Sarapan & Persiapan Berangkat Kerja", category: "Morning Prep" },
+                { time: "06:30 - 08:00", desc: "Perjalanan ke Kantor / Commute (Passive Listening English)", category: "Commute / English" },
+                { time: "08:00 - 18:00", desc: "Jam Kerja Profesional (Tax Supervisor / Finance)", category: "Working Hours" },
+                { time: "18:00 - 19:30", desc: "Perjalanan Pulang & Transit ke Gym", category: "Commute" },
+                { time: "19:30 - 21:00", desc: "GYM SESI: Latihan Beban / Upper-Lower Body", category: "Gym Sesi" },
+                { time: "21:00 - 21:15", desc: "1% Better Evening Reflection (Journaling)", category: "Daily Reflection (1%)" },
+                { time: "21:15 - 22:00", desc: "Mandi, Makan Malam & Istirahat", category: "Recovery" }
+            ],
+            "Jumat": [
+                { time: "05:00 - 05:30", desc: "Bangun Jam 05:00, Sholat Subuh & Tilawah Qur'an (15m) + Hafalan (15m)", category: "Spiritual (Qur'an)" },
+                { time: "05:30 - 06:30", desc: "Mandi, Sarapan & Persiapan Berangkat Kerja", category: "Morning Prep" },
+                { time: "06:30 - 08:00", desc: "Perjalanan ke Kantor / Commute (Passive Listening English)", category: "Commute / English" },
+                { time: "08:00 - 18:00", desc: "Jam Kerja Profesional (Tax Supervisor / Finance)", category: "Working Hours" },
+                { time: "18:00 - 19:30", desc: "Perjalanan Pulang ke Rumah & Bersih-bersih", category: "Commute Home & Rest" },
+                { time: "19:30 - 20:15", desc: "Belajar Akuntansi Lanjutan / PPAk (Teori & Kasus Perpajakan)", category: "Advanced Accounting" },
+                { time: "20:15 - 20:45", desc: "Bahasa Inggris: Reading / Writing / Speaking Practice", category: "English Practice" },
+                { time: "20:45 - 21:00", desc: "1% Better Evening Reflection: Jurnal Evaluasi Harian & 3 Hal Positif", category: "Daily Reflection (1%)" },
+                { time: "21:00 - 22:00", desc: "Waktu Santai / Istirahat / Tidur Tepat Waktu", category: "Relaxation" }
+            ],
+            "Sabtu": [
+                { time: "06:00 - 06:45", desc: "Bangun Pagi, Tilawah Qur'an & Hafalan Santai", category: "Spiritual (Qur'an)" },
+                { time: "07:00 - 09:00", desc: "GYM: Gym Sesi 3 (Pull)", category: "Gym Sesi" },
+                { time: "09:30 - 11:30", desc: "Review Vocabulary English & Catatan Akuntansi Lanjutan", category: "Weekly Self-Review" },
+                { time: "12:00 - 21:00", desc: "Waktu Bebas / Sosialisasi / Hobi / Istirahat Total", category: "Free Time / Rest" },
+                { time: "21:00 - 21:15", desc: "1% Better Evening Reflection (Journaling)", category: "Daily Reflection (1%)" }
+            ],
+            "Minggu": [
+                { time: "06:00 - 06:45", desc: "Bangun Pagi, Tilawah Qur'an & Hafalan Santai", category: "Spiritual (Qur'an)" },
+                { time: "07:00 - 09:00", desc: "GYM: Gym Sesi 4 (Cardio/Core)", category: "Gym Sesi" },
+                { time: "09:30 - 10:30", desc: "Belajar Akuntansi Lanjutan / PPAk (Studi Kasus)", category: "Advanced Accounting" },
+                { time: "10:30 - 11:15", desc: "Bahasa Inggris: Free Practice (Reading/Listening)", category: "English Practice" },
+                { time: "11:15 - 16:30", desc: "Istirahat, Sholat Dzuhur & Quality Time Keluarga", category: "Family & Rest" },
+                { time: "16:30 - 18:00", desc: "Evaluasi Mingguan (Weekly Review) & Persiapan Kerja Besok Senin", category: "Career & Weekly Review" },
+                { time: "18:00 - 20:30", desc: "Sholat Maghrib, Makan Malam, Tilawah Tambahan & Santai", category: "Spiritual & Dinner" },
+                { time: "20:30 - 20:45", desc: "1% Better Evening Reflection (Journaling)", category: "Daily Reflection (1%)" },
+                { time: "20:45 - 21:00", desc: "Wind Down & Sleep Prep", category: "Sleep Prep" }
+            ]
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedPhoto = localStorage.getItem('user_profile_photo');
+            if (savedPhoto) {
+                const imgEl = document.getElementById('nav-profile-img');
+                const initialEl = document.getElementById('nav-profile-initial');
+                imgEl.src = savedPhoto;
+                imgEl.classList.remove('hidden');
+                initialEl.classList.add('hidden');
+            }
+
+            const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
+            switchTab(lastActiveTab);
+
+            document.getElementById('tracker-date-picker').value = todayStr;
+            document.getElementById('bulking-date-picker').value = todayStr;
+            renderHeatmapGrid();
+            updateGamificationLevel();
+            setInterval(updateNoFapTimer, 1000);
+        });
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+            }
+        }
+
+        function handleProfilePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                localStorage.setItem('user_profile_photo', base64String);
+                const imgEl = document.getElementById('nav-profile-img');
+                const initialEl = document.getElementById('nav-profile-initial');
+                imgEl.src = base64String;
+                imgEl.classList.remove('hidden');
+                initialEl.classList.add('hidden');
+                triggerConfetti();
+                alert("✨ Foto profil Deadpool diperbarui!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        const quotesList = [
+            "\"With great power comes great irresponsibility... now eat your Dada Ayam and hit those chest presses, Ubay!\" — Wade Wilson",
+            "\"Maximum effort, Ubay! Disiplin bukan soal suasana hati, tapi soal bikin target harianmu bertekuk lutut.\"",
+            "\"Chimichanga itu enak, tapi protein tinggi + latihan beban rutin yang bikin badan kamu kekar presisi!\""
+        ];
+
+        const todayObj = new Date();
+        const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDateStr = todayObj.toLocaleDateString('id-ID', optionsDate);
+        
+        document.getElementById('current-date-header').innerText = formattedDateStr;
+        document.getElementById('top-banner-date').innerText = formattedDateStr;
+        document.getElementById('daily-quote-text').innerText = quotesList[todayObj.getDate() % quotesList.length];
+
+        function toggleFab() { document.getElementById('fab-menu').classList.toggle('hidden'); }
+
+        function switchTab(tab) {
+            localStorage.setItem('master_hub_active_tab', tab);
+
+            const finSec = document.getElementById('section-finance');
+            const sholatSec = document.getElementById('section-sholat');
+            const bulkingSec = document.getElementById('section-bulking');
+            const nofapSec = document.getElementById('section-nofap');
+            const trackerSec = document.getElementById('section-tracker');
+            
+            const btnFin = document.getElementById('tab-btn-fin');
+            const btnSholat = document.getElementById('tab-btn-sholat');
+            const btnBulking = document.getElementById('tab-btn-bulking');
+            const btnNofap = document.getElementById('tab-btn-nofap');
+            const btnTracker = document.getElementById('tab-btn-tracker');
+            const topBanners = document.getElementById('finance-top-banners');
+
+            finSec.classList.add('hidden');
+            sholatSec.classList.add('hidden');
+            bulkingSec.classList.add('hidden');
+            nofapSec.classList.add('hidden');
+            trackerSec.classList.add('hidden');
+            topBanners.classList.add('hidden');
+
+            const inactiveClass = 'py-2 rounded-xl text-[10px] sm:text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1';
+            btnFin.className = inactiveClass;
+            btnSholat.className = inactiveClass;
+            btnBulking.className = inactiveClass;
+            btnNofap.className = inactiveClass;
+            btnTracker.className = inactiveClass;
+
+            const activeClass = 'py-2 rounded-xl text-[10px] sm:text-xs font-black transition-all bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md flex items-center justify-center gap-1';
+
+            if (tab === 'finance') {
+                finSec.classList.remove('hidden');
+                topBanners.classList.remove('hidden');
+                btnFin.className = activeClass;
+                renderApp();
+            } else if (tab === 'sholat') {
+                sholatSec.classList.remove('hidden');
+                btnSholat.className = activeClass;
+                renderSholatReports();
+            } else if (tab === 'bulking') {
+                bulkingSec.classList.remove('hidden');
+                btnBulking.className = activeClass;
+                renderBulkingCalculator();
+            } else if (tab === 'nofap') {
+                nofapSec.classList.remove('hidden');
+                btnNofap.className = activeClass;
+                renderNoFapModule();
+            } else if (tab === 'tracker') {
+                trackerSec.classList.remove('hidden');
+                btnTracker.className = activeClass;
+                renderMasterTracker();
+            }
+        }
+
+        function switchTrackerSheet(sheet) {
+            const sheetDash = document.getElementById('tracker-sheet-dash');
+            const sheetLogs = document.getElementById('tracker-sheet-logs');
+            const sheetEval = document.getElementById('tracker-sheet-eval');
+
+            const btnDash = document.getElementById('sheet-btn-dash');
+            const btnLogs = document.getElementById('sheet-btn-logs');
+            const btnEval = document.getElementById('sheet-btn-eval');
+
+            sheetDash.classList.add('hidden');
+            sheetLogs.classList.add('hidden');
+            sheetEval.classList.add('hidden');
+
+            const inactiveBtn = 'flex-1 py-2.5 rounded-xl text-xs font-black transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5';
+            btnDash.className = inactiveBtn;
+            btnLogs.className = inactiveBtn;
+            btnEval.className = inactiveBtn;
+
+            const activeBtn = 'flex-1 py-2.5 rounded-xl text-xs font-black transition-all bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md flex items-center justify-center gap-1.5';
+
+            if (sheet === 'dash') {
+                sheetDash.classList.remove('hidden');
+                btnDash.className = activeBtn;
+                renderMasterTracker();
+            } else if (sheet === 'logs') {
+                sheetLogs.classList.remove('hidden');
+                btnLogs.className = activeBtn;
+                renderTrackerLogs();
+            } else if (sheet === 'eval') {
+                sheetEval.classList.remove('hidden');
+                btnEval.className = activeBtn;
+                renderTrackerEval();
+            }
+        }
+
+        // --- EXPANDED FOOD DATABASE & CUSTOM FOOD ADDER ---
+        const initialCarbDb = [
+            { id: "c_none", name: "❌ Tanpa Karbo (0g)", cal: 0, p: 0, c: 0, f: 0, cost: 0 },
+            { id: "c_nasi_1", name: "🍚 Nasi Putih (1 Porsi / 150g)", cal: 200, p: 4, c: 45, f: 0.5, cost: 3000 },
+            { id: "c_nasi_15", name: "🍚 Nasi Putih (1.5 Porsi / 225g)", cal: 300, p: 6, c: 68, f: 0.8, cost: 4500 },
+            { id: "c_nasi_2", name: "🍚 Nasi Putih (2 Porsi / 300g)", cal: 400, p: 8, c: 90, f: 1, cost: 6000 },
+            { id: "c_nasgor_1", name: "🍛 Nasi Goreng Spesial (1 Porsi)", cal: 450, p: 12, c: 55, f: 18, cost: 15000 },
+            { id: "c_oat_1", name: "🥣 Oatmeal (1 Mangkok / 50g)", cal: 190, p: 7, c: 34, f: 3.5, cost: 5000 },
+            { id: "c_roti_2", name: "🍞 Roti Gandum (2 Lembar)", cal: 160, p: 8, c: 28, f: 2, cost: 4000 },
+            { id: "c_ubi_1", name: "🍠 Ubi Rebus (150g)", cal: 130, p: 2, c: 30, f: 0.2, cost: 3500 },
+            { id: "c_kentang_1", name: "🥔 Kentang Rebus (200g)", cal: 170, p: 4, c: 38, f: 0.2, cost: 5000 },
+            { id: "c_mie_1", name: "🍜 Mie Goreng / Rebus (1 Porsi)", cal: 380, p: 8, c: 52, f: 14, cost: 8000 },
+            { id: "c_kwetiau_1", name: "🥢 Kwetiau Goreng (1 Porsi)", cal: 420, p: 10, c: 58, f: 16, cost: 15000 }
+        ];
+
+        const initialProteinDb = [
+            { id: "p_none", name: "❌ Tanpa Lauk / Protein", cal: 0, p: 0, c: 0, f: 0, cost: 0 },
+            { id: "p_ayam_100", name: "🍗 Dada Ayam Rebus/Tumis (100g)", cal: 165, p: 31, c: 0, f: 3.6, cost: 9000 },
+            { id: "p_ayam_150", name: "🍗 Dada Ayam Rebus/Tumis (150g)", cal: 247, p: 46, c: 0, f: 5.4, cost: 13500 },
+            { id: "p_ayam_bakar", name: "🍗 Ayam Bakar Dada/Paha (1 Pcs)", cal: 260, p: 30, c: 4, f: 12, cost: 14000 },
+            { id: "p_telur_2", name: "🥚 Telur Rebus/Orak-Arik (2 Butir)", cal: 155, p: 13, c: 1, f: 11, cost: 5000 },
+            { id: "p_telur_3", name: "🥚 Telur Rebus/Orak-Arik (3 Butir)", cal: 232, p: 19.5, c: 1.5, f: 16.5, cost: 7500 },
+            { id: "p_telur_ceplok", name: "🍳 Telur Ceplok / Dadar (2 Butir)", cal: 210, p: 13, c: 1, f: 16, cost: 5000 },
+            { id: "p_sapi_100", name: "🥩 Daging Sapi Tumis (100g)", cal: 250, p: 26, c: 0, f: 15, cost: 16000 },
+            { id: "p_rendang_1", name: "🥩 Daging Rendang Sapi (1 Potong)", cal: 280, p: 22, c: 5, f: 18, cost: 18000 },
+            { id: "p_ikan_150", name: "🐟 Ikan Tongkol/Kembung (150g)", cal: 210, p: 36, c: 0, f: 7, cost: 10000 },
+            { id: "p_lele_goreng", name: "🐟 Ikan Lele Goreng (1 Ekor)", cal: 240, p: 24, c: 2, f: 14, cost: 10000 },
+            { id: "p_tahu_3", name: "🧆 Tahu & Tempe (3 Pcs)", cal: 180, p: 14, c: 10, f: 10, cost: 4000 }
+        ];
+
+        const initialExtraDb = [
+            { id: "e_none", name: "❌ Tanpa Tambahan Sayur/Fat", cal: 0, p: 0, c: 0, f: 0, cost: 0 },
+            { id: "e_sayur_1", name: "🥗 Sayur Sop / Tumis Kangkung / Lalapan", cal: 50, p: 2, c: 8, f: 1, cost: 3000 },
+            { id: "e_selai_2", name: "🥜 Selai Kacang (2 Sendok Makan)", cal: 190, p: 8, c: 7, f: 16, cost: 3000 },
+            { id: "e_susu_1", name: "🥛 Susu Full Cream (1 Gelas / 250ml)", cal: 150, p: 8, c: 12, f: 8, cost: 5000 },
+            { id: "e_whey_1", name: "🥤 Whey Protein (1 Scoop)", cal: 120, p: 24, c: 2, f: 1.5, cost: 12000 },
+            { id: "e_keju_1", name: "🧀 Keju Slice / Parut (30g)", cal: 110, p: 6, c: 1, f: 9, cost: 4000 },
+            { id: "e_alpukat_1", name: "🥑 Alpukat Segar (1 Buah / 100g)", cal: 160, p: 2, c: 8, f: 15, cost: 8000 }
+        ];
+
+        let carbDb = JSON.parse(localStorage.getItem('custom_carb_db')) || initialCarbDb;
+        let proteinDb = JSON.parse(localStorage.getItem('custom_prot_db')) || initialProteinDb;
+        let extraDb = JSON.parse(localStorage.getItem('custom_extra_db')) || initialExtraDb;
+
+        function openCustomFoodModal() { document.getElementById('custom-food-modal').classList.remove('hidden'); }
+        function closeCustomFoodModal() { document.getElementById('custom-food-modal').classList.add('hidden'); }
+
+        function saveCustomFood(event) {
+            event.preventDefault();
+            const type = document.getElementById('cf-type').value;
+            const name = document.getElementById('cf-name').value.trim();
+            const cal = parseFloat(document.getElementById('cf-cal').value) || 0;
+            const p = parseFloat(document.getElementById('cf-p').value) || 0;
+            const c = parseFloat(document.getElementById('cf-c').value) || 0;
+            const cost = parseFloat(document.getElementById('cf-cost').value) || 0;
+
+            const newObj = {
+                id: `custom_${Date.now()}`,
+                name: `⭐ ${name}`,
+                cal, p, c, f: Math.round(cal * 0.03), cost
+            };
+
+            if (type === 'carb') {
+                carbDb.push(newObj);
+                localStorage.setItem('custom_carb_db', JSON.stringify(carbDb));
+            } else if (type === 'protein') {
+                proteinDb.push(newObj);
+                localStorage.setItem('custom_prot_db', JSON.stringify(proteinDb));
+            } else {
+                extraDb.push(newObj);
+                localStorage.setItem('custom_extra_db', JSON.stringify(extraDb));
+            }
+
+            closeCustomFoodModal();
+            triggerConfetti();
+            renderBulkingCalculator();
+            alert(`✅ Menu "${name}" berhasil ditambahkan ke database!`);
+        }
+
+        // --- BULKING & KALKULATOR MAKRO UNPACKAGED ---
+        let weightRecords = JSON.parse(localStorage.getItem('weight_records')) || [
+            { date: "2026-08-02", weight: 68.0, note: "Awal Bulking Ubay" }
+        ];
+
+        let bulkingCustomMeals = JSON.parse(localStorage.getItem('bulking_custom_meals')) || {};
+        let weightChartInstance = null;
+
+        function saveWeightRecord(event) {
+            event.preventDefault();
+            const wVal = parseFloat(document.getElementById('input-weight-val').value);
+            if (!wVal) return;
+
+            const existingIdx = weightRecords.findIndex(w => w.date === todayStr);
+            if (existingIdx >= 0) {
+                weightRecords[existingIdx].weight = wVal;
+            } else {
+                weightRecords.push({ date: todayStr, weight: wVal, note: "Pencatatan Rutin Ubay" });
+            }
+
+            weightRecords.sort((a, b) => new Date(a.date) - new Date(b.date));
+            localStorage.setItem('weight_records', JSON.stringify(weightRecords));
+            document.getElementById('input-weight-val').value = '';
+            triggerConfetti();
+            renderBulkingCalculator();
+            alert("✅ Berat badan berhasil dicatat!");
+        }
+
+        function renderBulkingCalculator() {
+            if (weightRecords.length > 0) {
+                const latestObj = weightRecords[weightRecords.length - 1];
+                document.getElementById('disp-current-weight').innerText = `${latestObj.weight.toFixed(1)} kg`;
+                document.getElementById('disp-last-weight-date').innerText = `Update: ${latestObj.date}`;
+
+                const firstObj = weightRecords[0];
+                const delta = (latestObj.weight - firstObj.weight).toFixed(1);
+                
+                const deltaEl = document.getElementById('disp-weight-delta');
+                const statusEl = document.getElementById('disp-weight-status');
+
+                if (delta > 0) {
+                    deltaEl.innerHTML = `<span class="text-emerald-400">+${delta} kg 🟢</span>`;
+                    statusEl.innerText = "Naik dari Awal";
+                } else if (delta < 0) {
+                    deltaEl.innerHTML = `<span class="text-red-400">${delta} kg 🔴</span>`;
+                    statusEl.innerText = "Turun dari Awal";
+                } else {
+                    deltaEl.innerHTML = `<span class="text-amber-400">0.0 kg 🟡</span>`;
+                    statusEl.innerText = "Stabil (Sama)";
+                }
+            }
+
+            renderWeightChart();
+
+            const dateVal = document.getElementById('bulking-date-picker').value || todayStr;
+            const container = document.getElementById('bulking-calculator-container');
+            container.innerHTML = '';
+
+            if (!bulkingCustomMeals[dateVal]) {
+                bulkingCustomMeals[dateVal] = {
+                    sarapan: { c: "c_nasi_1", p: "p_telur_2", e: "e_none" },
+                    siang: { c: "c_nasi_15", p: "p_ayam_150", e: "e_sayur_1" },
+                    cemilan: { c: "c_ubi_1", p: "p_none", e: "e_selai_2" },
+                    malam: { c: "c_nasi_15", p: "p_ayam_100", e: "e_sayur_1" }
+                };
+            }
+
+            let dayMeals = bulkingCustomMeals[dateVal];
+            let totCost = 0, totCal = 0, totP = 0, totC = 0, totF = 0;
+
+            const mealSlots = [
+                { key: 'sarapan', label: '☀️ Sarapan Pagi' },
+                { key: 'siang', label: '🍛 Makan Siang' },
+                { key: 'cemilan', label: '🍌 Cemilan / Pre-Workout' },
+                { key: 'malam', label: '🌙 Makan Malam (Post-Workout)' }
+            ];
+
+            mealSlots.forEach(slot => {
+                const slotSel = dayMeals[slot.key] || { c: "c_none", p: "p_none", e: "e_none" };
+                const carbObj = carbDb.find(x => x.id === slotSel.c) || carbDb[0];
+                const protObj = proteinDb.find(x => x.id === slotSel.p) || proteinDb[0];
+                const extraObj = extraDb.find(x => x.id === slotSel.e) || extraDb[0];
+
+                const slotCal = carbObj.cal + protObj.cal + extraObj.cal;
+                const slotP = carbObj.p + protObj.p + extraObj.p;
+                const slotC = carbObj.c + protObj.c + extraObj.c;
+                const slotF = carbObj.f + protObj.f + extraObj.f;
+                const slotCost = carbObj.cost + protObj.cost + extraObj.cost;
+
+                totCal += slotCal; totP += slotP; totC += slotC; totF += slotF; totCost += slotCost;
+
+                container.innerHTML += `
+                    <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 space-y-3">
+                        <div class="flex justify-between items-center flex-wrap gap-2">
+                            <span class="text-xs font-black text-red-400 uppercase tracking-wider">${slot.label}</span>
+                            <div class="flex items-center gap-1.5 text-[11px] font-bold">
+                                <span class="bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded border border-amber-500/20">${slotCal} kkal</span>
+                                <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20">${slotP}g P</span>
+                                <span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded border border-purple-500/20">${slotC}g K</span>
+                                <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">Rp${slotCost.toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">1. Karbohidrat</label>
+                                <input type="text" placeholder="🔍 Cari Karbo..." onkeyup="filterMealDropdown('${slot.key}_c_sel', this.value)" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-red-500 mb-1">
+                                <select id="${slot.key}_c_sel" onchange="updateCustomMeal('${dateVal}', '${slot.key}', 'c', this.value)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-red-500">
+                                    ${carbDb.map(x => `<option value="${x.id}" ${x.id === slotSel.c ? 'selected' : ''}>${x.name}</option>`).join('')}
+                                </select>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">2. Lauk / Protein</label>
+                                <input type="text" placeholder="🔍 Cari Lauk..." onkeyup="filterMealDropdown('${slot.key}_p_sel', this.value)" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-red-500 mb-1">
+                                <select id="${slot.key}_p_sel" onchange="updateCustomMeal('${dateVal}', '${slot.key}', 'p', this.value)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-red-500">
+                                    ${proteinDb.map(x => `<option value="${x.id}" ${x.id === slotSel.p ? 'selected' : ''}>${x.name}</option>`).join('')}
+                                </select>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase">3. Extra / Sayur / Fat</label>
+                                <input type="text" placeholder="🔍 Cari Sayur/Extra..." onkeyup="filterMealDropdown('${slot.key}_e_sel', this.value)" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-red-500 mb-1">
+                                <select id="${slot.key}_e_sel" onchange="updateCustomMeal('${dateVal}', '${slot.key}', 'e', this.value)" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl p-2.5 text-white font-bold focus:outline-none focus:border-red-500">
+                                    ${extraDb.map(x => `<option value="${x.id}" ${x.id === slotSel.e ? 'selected' : ''}>${x.name}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('calc-total-cost').innerText = `Rp ${totCost.toLocaleString('id-ID')}`;
+            document.getElementById('calc-total-cal').innerText = `${totCal} kkal`;
+            document.getElementById('calc-total-p').innerText = `${totP.toFixed(1)} g`;
+            document.getElementById('calc-total-c').innerText = `${totC.toFixed(1)} g`;
+            document.getElementById('calc-total-f').innerText = `${totF.toFixed(1)} g`;
+        }
+
+        function filterMealDropdown(selectId, query) {
+            const selectEl = document.getElementById(selectId);
+            if (!selectEl) return;
+            const q = query.toLowerCase();
+            for (let i = 0; i < selectEl.options.length; i++) {
+                const opt = selectEl.options[i];
+                const text = opt.text.toLowerCase();
+                if (text.includes(q)) {
+                    opt.style.display = "";
+                } else {
+                    opt.style.display = "none";
+                }
+            }
+        }
+
+        function updateCustomMeal(dateStr, slotKey, itemType, itemId) {
+            if (!bulkingCustomMeals[dateStr]) bulkingCustomMeals[dateStr] = {};
+            if (!bulkingCustomMeals[dateStr][slotKey]) bulkingCustomMeals[dateStr][slotKey] = { c: "c_none", p: "p_none", e: "e_none" };
+            bulkingCustomMeals[dateStr][slotKey][itemType] = itemId;
+            localStorage.setItem('bulking_custom_meals', JSON.stringify(bulkingCustomMeals));
+            renderBulkingCalculator();
+        }
+
+        function renderWeightChart() {
+            const ctx = document.getElementById('weightTrendChart')?.getContext('2d');
+            if (!ctx) return;
+            if (weightChartInstance) weightChartInstance.destroy();
+
+            const labels = weightRecords.map(r => r.date);
+            const data = weightRecords.map(r => r.weight);
+
+            weightChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Berat Badan (kg)',
+                        data: data,
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#ef4444',
+                        pointBorderColor: '#090506',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#27272a' } },
+                        y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#27272a' } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // --- NOFAP MODULE ---
+        let nofapData = JSON.parse(localStorage.getItem('nofap_streak_data')) || {
+            startDate: new Date().toISOString(),
+            longestStreakDays: 1,
+            history: [{ date: todayStr, status: "Clean", note: "Check-in Awal" }]
+        };
+
+        function openPanicModal() { document.getElementById('nofap-panic-modal').classList.remove('hidden'); }
+        function closePanicModal() { document.getElementById('nofap-panic-modal').classList.add('hidden'); }
+
+        function checkInNoFap() {
+            const existingIdx = nofapData.history.findIndex(x => x.date === todayStr);
+            if (existingIdx >= 0) {
+                nofapData.history[existingIdx].status = "Clean";
+            } else {
+                nofapData.history.push({ date: todayStr, status: "Clean", note: "Clean Day Check-in" });
+            }
+            localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            triggerConfetti();
+            renderNoFapModule();
+            alert("🔥 Check-in Clean tersimpan!");
+        }
+
+        function resetNoFap() {
+            if (confirm("⚠️ Kamu yakin mau reset streak NoFap?")) {
+                const reason = prompt("Apa pemicu godaan tadi?") || "Tidak disebutkan";
+                nofapData.history.push({ date: todayStr, status: "Reset", note: `Pemicu: ${reason}` });
+                nofapData.startDate = new Date().toISOString();
+                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+                renderNoFapModule();
+                alert("💪 Streak direset. Bangkit lagi, Ubay!");
+            }
+        }
+
+        function updateNoFapTimer() {
+            const start = new Date(nofapData.startDate);
+            const now = new Date();
+            const diffMs = now - start;
+
+            if (diffMs < 0) return;
+
+            const diffSecs = Math.floor(diffMs / 1000);
+            const days = Math.floor(diffSecs / (3600 * 24));
+            const hours = Math.floor((diffSecs % (3600 * 24)) / 3600);
+            const minutes = Math.floor((diffSecs % 3600) / 60);
+            const seconds = diffSecs % 60;
+
+            const daysEl = document.getElementById('nofap-streak-days');
+            const timerEl = document.getElementById('nofap-streak-timer');
+
+            if (daysEl) daysEl.innerText = `${days} Hari`;
+            if (timerEl) timerEl.innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit : ${String(seconds).padStart(2, '0')} Detik Clean`;
+
+            if (days > nofapData.longestStreakDays) {
+                nofapData.longestStreakDays = days;
+                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            }
+        }
+
+        function renderNoFapModule() {
+            updateNoFapTimer();
+
+            const start = new Date(nofapData.startDate);
+            const daysClean = Math.floor((new Date() - start) / (1000 * 60 * 60 * 24));
+
+            document.getElementById('nofap-longest').innerText = `${nofapData.longestStreakDays || daysClean} Hari`;
+
+            let badgeName = "Lvl 1 - Novice Mind";
+            if (daysClean >= 90) badgeName = "Lvl 5 - Deadpool Mind Master 👑";
+            else if (daysClean >= 30) badgeName = "Lvl 4 - Iron Will Merc ⚔️";
+            else if (daysClean >= 14) badgeName = "Lvl 3 - Mindset Warrior 🔥";
+            else if (daysClean >= 7) badgeName = "Lvl 2 - Focus Cadet 🛡️";
+
+            document.getElementById('nofap-badge-top').innerText = badgeName;
+
+            const totalCheckins = nofapData.history.length;
+            const cleanCheckins = nofapData.history.filter(x => x.status === 'Clean').length;
+            const ratePct = totalCheckins > 0 ? Math.round((cleanCheckins / totalCheckins) * 100) : 100;
+            document.getElementById('nofap-rate').innerText = `${ratePct}%`;
+
+            const pctRoadmap = Math.min(100, Math.round((daysClean / 90) * 100));
+            document.getElementById('nofap-roadmap-pct').innerText = `${pctRoadmap}% Progress`;
+            document.getElementById('nofap-roadmap-bar').style.width = `${pctRoadmap}%`;
+
+            const milestones = [
+                { id: 'ms-7', target: 7 },
+                { id: 'ms-14', target: 14 },
+                { id: 'ms-30', target: 30 },
+                { id: 'ms-90', target: 90 }
+            ];
+
+            milestones.forEach(m => {
+                const el = document.getElementById(m.id);
+                if (daysClean >= m.target) {
+                    el.className = "bg-red-950/80 p-3.5 rounded-xl border border-red-500/80 shadow-[0_0_15px_rgba(239,68,68,0.3)] space-y-1";
+                } else {
+                    el.className = "bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1 opacity-60";
+                }
+            });
+
+            const historyList = document.getElementById('nofap-history-list');
+            historyList.innerHTML = '';
+            const sorted = [...nofapData.history].reverse();
+
+            sorted.forEach(item => {
+                const isClean = item.status === 'Clean';
+                historyList.innerHTML += `
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs">
+                        <div>
+                            <span class="font-extrabold text-white block">${item.date}</span>
+                            <span class="text-[11px] text-slate-400 font-medium">${item.note || '-'}</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg font-black ${isClean ? 'bg-emerald-950 text-emerald-300 border border-emerald-600/40' : 'bg-red-950 text-red-300 border border-red-600/40'}">
+                            ${isClean ? '✅ Clean' : '⚠️ Reset'}
+                        </span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- KEUANGAN ---
+        let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7680000, side: 500000 };
+        const defaultCategories = {
+            "Makan & Belanja Dapur Harian": { budget: 800000, type: "Kebutuhan Pokok" },
+            "Bensin / Transportasi / Tol": { budget: 300000, type: "Kebutuhan Pokok" },
+            "Listrik, Air, Wifi & Pulsa": { budget: 100000, type: "Kebutuhan Pokok" },
+            "Orang Tua / Keluarga": { budget: 1500000, type: "Kebutuhan Pokok" },
+            "Cicilan Utang & Kewajiban Bulanan": { budget: 3050000, type: "Pembayaran Utang" },
+            "Tabungan / Dana Darurat": { budget: 2000000, type: "Tabungan & Investasi" },
+            "Investasi / Asuransi": { budget: 0, type: "Tabungan & Investasi" },
+            "Belanja Pribadi & Lain-Lain": { budget: 0, type: "Gaya Hidup" },
+            "Hiburan, Hangout & Self-Reward": { budget: 0, type: "Gaya Hidup" }
+        };
+
+        let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
+
+        const masterExcelData = [
+            { id: 1, date: "2026-07-29", category: "Orang Tua / Keluarga", desc: "Orang Tua", amount: 1600000, method: "Cash", locked: true },
+            { id: 2, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aogi", amount: 1300000, method: "Cash", locked: true },
+            { id: 3, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aoga", amount: 1100000, method: "Cash", locked: true },
+            { id: 4, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Dewi", amount: 550000, method: "Cash", locked: true },
+            { id: 5, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Oka", amount: 100000, method: "Cash", locked: true },
+            { id: 6, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Putri", amount: 70000, method: "Cash", locked: true },
+            { id: 7, date: "2026-07-29", category: "Tabungan / Dana Darurat", desc: "Tabungan", amount: 1000000, method: "Mbanking", locked: true },
+            { id: 8, date: "2026-07-29", category: "Belanja Pribadi & Lain-Lain", desc: "Vaps", amount: 140000, method: "Mbanking", locked: true },
+            { id: 9, date: "2026-07-29", category: "Belanja Pribadi & Lain-Lain", desc: "dll", amount: 50000, method: "Mbanking", locked: true },
+            { id: 10, date: "2026-07-29", category: "Belanja Pribadi & Lain-Lain", desc: "Gemini", amount: 16000, method: "Mbanking", locked: true },
+            { id: 11, date: "2026-07-30", category: "Investasi / Asuransi", desc: "Ebook Rekonsiliasi", amount: 65000, method: "Mbanking", locked: true },
+            { id: 12, date: "2026-07-30", category: "Belanja Pribadi & Lain-Lain", desc: "Dll", amount: 25000, method: "Mbanking", locked: true },
+            { id: 13, date: "2026-07-30", category: "Orang Tua / Keluarga", desc: "Jamu ortu", amount: 15000, method: "Mbanking", locked: true },
+            { id: 14, date: "2026-07-30", category: "Listrik, Air, Wifi & Pulsa", desc: "Paketan", amount: 60000, method: "Mbanking", locked: true },
+            { id: 15, date: "2026-07-31", category: "Makan & Belanja Dapur Harian", desc: "Nasgor", amount: 15000, method: "Mbanking", locked: true },
+            { id: 16, date: "2026-07-31", category: "Belanja Pribadi & Lain-Lain", desc: "dll", amount: 150000, method: "Mbanking", locked: true },
+            { id: 17, date: "2026-07-31", category: "Bensin / Transportasi / Tol", desc: "Bensin", amount: 26000, method: "Cash", locked: true },
+            { id: 18, date: "2026-07-31", category: "Bensin / Transportasi / Tol", desc: "Bensin", amount: 26000, method: "Cash", locked: true },
+            { id: 19, date: "2026-08-01", category: "Makan & Belanja Dapur Harian", desc: "Makan Siang", amount: 20000, method: "Cash", locked: false }
+        ];
+
+        let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || masterExcelData;
+        transactions.forEach(t => { if (t.locked === undefined) t.locked = t.date !== todayStr; });
+
+        let pieChartInstance = null;
+        let comparisonChartInstance = null;
+
+        function formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function openModal() { document.getElementById('modal-backdrop').classList.remove('hidden'); document.getElementById('exp-date').valueAsDate = new Date(); }
+        function closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
+        function openIncomeModal() { document.getElementById('income-modal-backdrop').classList.remove('hidden'); document.getElementById('input-salary').value = incomeData.salary; document.getElementById('input-side').value = incomeData.side; }
+        function closeIncomeModal() { document.getElementById('income-modal-backdrop').classList.add('hidden'); }
+
+        function openBudgetModal() {
+            const container = document.getElementById('budget-inputs-container');
+            container.innerHTML = '';
+            Object.keys(budgetCategories).forEach((cat, idx) => {
+                container.innerHTML += `
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">${cat}</label>
+                        <input type="number" id="budget-val-${idx}" data-cat="${cat}" value="${budgetCategories[cat].budget}" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-red-500">
+                    </div>
+                `;
+            });
+            document.getElementById('budget-modal-backdrop').classList.remove('hidden');
+        }
+        function closeBudgetModal() { document.getElementById('budget-modal-backdrop').classList.add('hidden'); }
+
+        document.getElementById('budget-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Object.keys(budgetCategories).forEach((cat, idx) => { budgetCategories[cat].budget = parseFloat(document.getElementById(`budget-val-${idx}`).value) || 0; });
+            localStorage.setItem('fin_budgets', JSON.stringify(budgetCategories));
+            renderApp(); closeBudgetModal();
+        });
+
+        document.getElementById('income-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            incomeData.salary = parseFloat(document.getElementById('input-salary').value) || 0;
+            incomeData.side = parseFloat(document.getElementById('input-side').value) || 0;
+            localStorage.setItem('fin_income', JSON.stringify(incomeData));
+            renderApp(); closeIncomeModal();
+        });
+
+        function quickFill(cat, desc, amount) {
+            document.getElementById('exp-category').value = cat;
+            document.getElementById('exp-desc').value = desc;
+            document.getElementById('exp-amount').value = amount;
+        }
+
+        function triggerSmartNotification() {
+            if (!("Notification" in window)) alert("Browser tidak mendukung push notification.");
+            else {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        new Notification("Master Hub Deadpool", { body: "⚔️ Maximum Effort! Jaga Sholat, Keuangan, & Target Bulking Ubay." });
+                    }
+                });
+            }
+        }
+
+        document.getElementById('ai-parser-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = document.getElementById('ai-parser-input').value.trim();
+            if (!text) return;
+
+            let amount = 0;
+            const matchNum = text.match(/(\d+)(k|rb)?/i);
+            if (matchNum) {
+                let num = parseInt(matchNum[1]);
+                amount = (matchNum[2] && (matchNum[2].toLowerCase() === 'k' || matchNum[2].toLowerCase() === 'rb')) ? num * 1000 : (num < 1000 ? num * 1000 : num);
+            } else return alert("Gagal membaca nominal.");
+
+            let category = "Belanja Pribadi & Lain-Lain";
+            let lower = text.toLowerCase();
+            if (lower.includes('bensin') || lower.includes('tol')) category = "Bensin / Transportasi / Tol";
+            else if (lower.includes('makan') || lower.includes('nasgor')) category = "Makan & Belanja Dapur Harian";
+            
+            transactions.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], category, desc: text, amount, method: "Mbanking", locked: false });
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            document.getElementById('ai-parser-input').value = '';
+            renderApp();
+            alert(`✅ Tercatat: ${category} - ${formatRupiah(amount)}`);
+        });
+
+        function renderApp() {
+            const totalIncome = incomeData.salary + incomeData.side;
+            document.getElementById('disp-salary').innerText = formatRupiah(incomeData.salary);
+            document.getElementById('disp-side').innerText = formatRupiah(incomeData.side);
+            document.getElementById('disp-total-income').innerText = `Total: ${formatRupiah(totalIncome)}`;
+
+            const selectedCycle = document.getElementById('cycle-selector').value;
+            let startDateStr = "2026-07-25", endDateStr = "2026-08-24", labelText = "Gajian Juli - Agst 2026", endCycleDate = new Date("2026-08-24");
+            if (selectedCycle === "2026-08") { startDateStr = "2026-08-25"; endDateStr = "2026-09-24"; labelText = "Gajian Agst - Sept 2026"; endCycleDate = new Date("2026-09-24"); }
+            document.getElementById('cycle-label-display').innerText = labelText;
+
+            const now = new Date();
+            const yesterdayDate = new Date(); yesterdayDate.setDate(now.getDate() - 1);
+            const yesterdayStr = yesterdayDate.toISOString().split('T')[0];
+
+            const sevenDaysAgo = new Date(); sevenDaysAgo.setDate(now.getDate() - 7);
+            const fourteenDaysAgo = new Date(); fourteenDaysAgo.setDate(now.getDate() - 14);
+
+            const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(now.getDate() - 30);
+            const sixtyDaysAgo = new Date(); sixtyDaysAgo.setDate(now.getDate() - 60);
+
+            let todayTotal = 0, yesterdayTotal = 0, weeklyTotal = 0, prevWeeklyTotal = 0;
+            let total30Days = 0, prev30Days = 0, cycleTotal = 0;
+            let categoryTotals = {}; Object.keys(budgetCategories).forEach(c => categoryTotals[c] = 0);
+
+            transactions.forEach(t => {
+                const tDate = new Date(t.date);
+                if (t.date === todayStr) todayTotal += t.amount;
+                if (t.date === yesterdayStr) yesterdayTotal += t.amount;
+                if (tDate > sevenDaysAgo && tDate <= now) weeklyTotal += t.amount;
+                if (tDate > fourteenDaysAgo && tDate <= sevenDaysAgo) prevWeeklyTotal += t.amount;
+                if (tDate > thirtyDaysAgo && tDate <= now) total30Days += t.amount;
+                if (tDate > sixtyDaysAgo && tDate <= thirtyDaysAgo) prev30Days += t.amount;
+
+                if (t.date >= startDateStr && t.date <= endDateStr) {
+                    cycleTotal += t.amount;
+                    categoryTotals[t.category] += t.amount;
+                }
+            });
+
+            const remainingBalance = totalIncome - cycleTotal;
+
+            document.getElementById('sum-today').innerText = formatRupiah(todayTotal);
+            document.getElementById('sum-weekly').innerText = formatRupiah(weeklyTotal);
+            document.getElementById('sum-cycle').innerText = formatRupiah(cycleTotal);
+            document.getElementById('sum-remaining').innerText = formatRupiah(remainingBalance);
+
+            const remainingCardEl = document.getElementById('sum-remaining-card');
+            const remainingStatusEl = document.getElementById('sum-remaining-status');
+            remainingCardEl.className = "glass-card rounded-2xl p-4 flex flex-col justify-between shadow-xl transition-all ";
+
+            if (remainingBalance >= (totalIncome * 0.25)) {
+                remainingCardEl.className += "glow-safe";
+                remainingStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">Status: Keuangan Aman 👍</span>`;
+            } else if (remainingBalance > 0) {
+                remainingCardEl.className += "glow-warning";
+                remainingStatusEl.innerHTML = `<span class="text-amber-400 font-bold">Status: Hemat Jajan ⚠️</span>`;
+            } else {
+                remainingCardEl.className += "glow-danger";
+                remainingStatusEl.innerHTML = `<span class="text-red-400 font-bold">Status: Defisit / Overbudget 🚨</span>`;
+            }
+
+            const dayStatusEl = document.getElementById('eval-day-status');
+            if (todayTotal < yesterdayTotal) dayStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)} vs Kmrn: ${formatRupiah(yesterdayTotal)}</span>`;
+            else if (todayTotal > yesterdayTotal) dayStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)} vs Kmrn: ${formatRupiah(yesterdayTotal)}</span>`;
+            else dayStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(todayTotal)}</span>`;
+
+            const weekStatusEl = document.getElementById('eval-week-status');
+            if (weeklyTotal < prevWeeklyTotal) weekStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)} vs MgLalu: ${formatRupiah(prevWeeklyTotal)}</span>`;
+            else if (weeklyTotal > prevWeeklyTotal) weekStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)} vs MgLalu: ${formatRupiah(prevWeeklyTotal)}</span>`;
+            else weekStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(weeklyTotal)}</span>`;
+
+            const monthStatusEl = document.getElementById('eval-month-status');
+            if (total30Days < prev30Days) monthStatusEl.innerHTML = `<span class="text-emerald-400 font-bold">🟢 Lebih Hemat</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)} vs BlnLalu: ${formatRupiah(prev30Days)}</span>`;
+            else if (total30Days > prev30Days) monthStatusEl.innerHTML = `<span class="text-red-400 font-bold">🔴 Lebih Boros</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)} vs BlnLalu: ${formatRupiah(prev30Days)}</span>`;
+            else monthStatusEl.innerHTML = `<span class="text-amber-400 font-bold">🟡 Stabil</span><br><span class="text-xs font-medium text-slate-300 block mt-0.5">${formatRupiah(total30Days)}</span>`;
+
+            let maxCategory = "", maxAmount = 0;
+            Object.keys(categoryTotals).forEach(cat => { if (categoryTotals[cat] > maxAmount) { maxAmount = categoryTotals[cat]; maxCategory = cat; } });
+
+            const wrappedEl = document.getElementById('ai-wrapped-content');
+            if (maxAmount > 0) {
+                wrappedEl.innerHTML = `⚔️ <strong>Deadpool Audit:</strong> Sisa dompet kamu saat ini adalah <strong>${formatRupiah(remainingBalance)}</strong>. Pengeluaran paling rakus ada di pos <strong>"${maxCategory}"</strong> yaitu sebesar <strong>${formatRupiah(maxAmount)}</strong>!`;
+            } else {
+                wrappedEl.innerHTML = `⚔️ <strong>Deadpool Audit:</strong> Pengeluaranmu masih bersih dan aman!`;
+            }
+
+            const diffTime = endCycleDate - now;
+            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
+            document.getElementById('safe-daily-limit').innerText = `${formatRupiah(remainingBalance > 0 ? Math.floor(remainingBalance / daysLeft) : 0)} / hari`;
+
+            const cardsContainer = document.getElementById('budget-cards-container');
+            cardsContainer.innerHTML = '';
+            Object.keys(budgetCategories).forEach(c => {
+                const b = budgetCategories[c].budget;
+                const s = categoryTotals[c] || 0;
+                const pct = b > 0 ? (s / b) * 100 : (s > 0 ? 100 : 0);
+                let progressColor = pct >= 100 ? 'bg-red-600' : (pct >= 80 ? 'bg-amber-500' : 'bg-emerald-500');
+                
+                cardsContainer.innerHTML += `
+                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-2">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-xs font-bold text-slate-200">${c}</h4>
+                            <div class="text-right">
+                                <span class="text-xs font-bold text-white block">${formatRupiah(s)}</span>
+                                <span class="text-[11px] text-slate-500 block">Batas: ${b > 0 ? formatRupiah(b) : 'Rp 0'}</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
+                            <div class="${progressColor} h-full rounded-full transition-all duration-300" style="width: ${Math.min(pct, 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const historyTable = document.getElementById('history-table');
+            historyTable.innerHTML = '';
+            const searchQ = document.getElementById('search-input').value.toLowerCase();
+            const methodFilter = document.getElementById('method-filter').value;
+            
+            let filtered = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reverse();
+            if (methodFilter !== 'ALL') filtered = filtered.filter(t => t.method === methodFilter);
+            if (searchQ) filtered = filtered.filter(t => t.desc.toLowerCase().includes(searchQ) || t.category.toLowerCase().includes(searchQ));
+            
+            filtered.forEach(t => {
+                const isLocked = t.locked;
+                historyTable.innerHTML += `
+                    <tr class="hover:bg-zinc-800/40 transition-colors">
+                        <td class="p-3 text-slate-400 font-medium">${t.date}</td>
+                        <td class="p-3 font-semibold text-slate-200">
+                            <div>${t.desc}</div>
+                            <span class="text-[10px] text-slate-400 font-normal">${t.category} • <span class="text-red-400 font-semibold">${t.method || 'Mbanking'}</span></span>
+                        </td>
+                        <td class="p-3 font-bold text-red-400">${formatRupiah(t.amount)}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="toggleLockTransaction(${t.id})" class="px-2 py-1 rounded-lg text-xs font-bold ${isLocked ? 'bg-red-950 text-red-300 border border-red-600/40' : 'bg-emerald-950 text-emerald-300 border border-emerald-600/40'}">
+                                ${isLocked ? '🔒' : '🔓'}
+                            </button>
+                        </td>
+                        <td class="p-3 text-center">
+                            ${!isLocked ? `<button onclick="deleteTransaction(${t.id})" class="text-slate-400 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>` : `<span class="text-slate-600"><i class="fa-solid fa-shield"></i></span>`}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            renderCharts(categoryTotals, [prev30Days, total30Days, 0]);
+            updateGamificationLevel();
+        }
+
+        function toggleLockTransaction(id) {
+            const t = transactions.find(x => x.id === id);
+            if (!t) return;
+            if (t.locked) {
+                const pin = prompt("🔒 Kunci Deadpool aktif! Masukkan PIN 'ubay':");
+                if (pin === 'ubay') { t.locked = false; alert("🔓 Di-unlock!"); } 
+                else if (pin !== null) alert("❌ PIN salah!");
+            } else {
+                t.locked = true; alert("🔒 Transaksi dikunci!");
+            }
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            renderApp();
+        }
+
+        function renderCharts(categoryTotals, monthlyTotals) {
+            const ctxPie = document.getElementById('categoryPieChart').getContext('2d');
+            if (pieChartInstance) pieChartInstance.destroy();
+            pieChartInstance = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: { labels: Object.keys(categoryTotals).filter(k => categoryTotals[k] > 0), datasets: [{ data: Object.values(categoryTotals).filter(v => v > 0), backgroundColor: ['#dc2626', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899', '#06b6d4'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 11, weight: 'bold' } } } } }
+            });
+
+            const ctxComp = document.getElementById('monthlyComparisonChart').getContext('2d');
+            if (comparisonChartInstance) comparisonChartInstance.destroy();
+            comparisonChartInstance = new Chart(ctxComp, {
+                type: 'bar',
+                data: { labels: ['30 Hari Lalu', '30 Hari Ini'], datasets: [{ label: 'Pengeluaran (Rp)', data: monthlyTotals, backgroundColor: ['#3b82f6', '#dc2626'], borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { ticks: { color: '#cbd5e1', font: { size: 11, weight: 'bold' } }, grid: { display: false } }, y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#27272a' } } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        document.getElementById('expense-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dVal = document.getElementById('exp-date').value;
+            transactions.push({
+                id: Date.now(),
+                date: dVal,
+                category: document.getElementById('exp-category').value,
+                desc: document.getElementById('exp-desc').value,
+                amount: parseFloat(document.getElementById('exp-amount').value),
+                method: document.getElementById('exp-method').value,
+                locked: dVal !== todayStr
+            });
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            renderApp(); closeModal();
+        });
+
+        function deleteTransaction(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('fin_transactions', JSON.stringify(transactions)); renderApp(); }
+
+        function exportCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Kategori,Deskripsi,Nominal,Metode\n";
+            transactions.forEach(t => {
+                csvContent += `${t.id},${t.date},"${t.category}","${t.desc}",${t.amount},${t.method || 'Mbanking'}\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Keuangan_Ubay_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // --- SHOLAT ---
+        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
+            { date: "2026-07-31", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Jamaah", maghrib: "Munfarid", isya: "Munfarid", dhuha: "2", tahajud: "0", locked: true },
+            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "2", locked: false }
+        ];
+
+        function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; loadSholatByDate(); }
+        function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
+
+        function loadSholatByDate() {
+            const dStr = document.getElementById('input-sholat-date').value;
+            const h = sholats.find(x => x.date === dStr) || {};
+            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => document.getElementById(`s-${s}`).value = h[s] || "Pending");
+            document.getElementById('sunnah-dhuha').value = h.dhuha || "0";
+            document.getElementById('sunnah-tahajud').value = h.tahajud || "0";
+        }
+
+        document.getElementById('sholat-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const dStr = document.getElementById('input-sholat-date').value;
+
+            let existing = sholats.find(h => h.date === dStr) || { date: dStr, subuh: "Pending", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "0", tahajud: "0", locked: dStr !== todayStr };
+
+            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => {
+                existing[s] = document.getElementById(`s-${s}`).value;
+            });
+
+            existing.dhuha = document.getElementById('sunnah-dhuha').value;
+            existing.tahajud = document.getElementById('sunnah-tahajud').value;
+
+            const idx = sholats.findIndex(h => h.date === dStr);
+            if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
+
+            localStorage.setItem('sholat_records', JSON.stringify(sholats)); 
+            renderSholatReports(); 
+            renderMasterTracker(); 
+            closeSholatModal();
+            updateGamificationLevel();
+            triggerConfetti();
+            alert("✅ Check-in sholat tersimpan!");
+        });
+
+        function renderSholatReports() {
+            const cardsList = document.getElementById('sholat-cards-list'); 
+            cardsList.innerHTML = '';
+            sholats.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sholats.forEach(h => {
+                cardsList.innerHTML += `
+                    <div class="glass-card border border-zinc-800 p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="font-extrabold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-day text-red-400"></i> ${h.date}
+                            </span>
+                            <span class="text-xs text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded-lg border border-red-600/40">
+                                ⭐ Sunnah: ${(parseInt(h.dhuha)||0)+(parseInt(h.tahajud)||0)}rk
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-5 gap-1 text-center text-xs">
+                            ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950 p-2 rounded-xl border border-zinc-800"><span class="text-[10px] text-slate-400 uppercase block font-bold">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s]}</strong></div>`).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- MASTER TRACKER 1 TAHUN ---
+        let trackerData = JSON.parse(localStorage.getItem('master_excel_tracker')) || [];
+
+        function getExcelRoutinesForDate(dateStr) {
+            const d = new Date(dateStr);
+            const daysMap = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dayName = daysMap[d.getDay()];
+
+            const list = EXCEL_SCHEDULE_TEMPLATES[dayName] || EXCEL_SCHEDULE_TEMPLATES["Senin"];
+            return list.map((item, idx) => ({
+                id: Date.now() + idx + Math.random(),
+                date: dateStr,
+                day: dayName,
+                time: item.time,
+                desc: item.desc,
+                category: item.category,
+                checked: false
+            }));
+        }
+
+        function resetTrackerToExcelMaster() {
+            if (confirm("🔄 Kembalikan jadwal harian ke versi resmi Excel Master?")) {
+                localStorage.removeItem('master_excel_tracker');
+                trackerData = [];
+                renderTrackerLogs();
+                renderMasterTracker();
+                alert("✨ Jadwal berhasil direset!");
+            }
+        }
+
+        function changeTrackerDate(offset) {
+            const picker = document.getElementById('tracker-date-picker');
+            let current = new Date(picker.value || todayStr);
+            current.setDate(current.getDate() + offset);
+            picker.value = current.toISOString().split('T')[0];
+            renderTrackerLogs();
+        }
+
+        function setTrackerDateToday() {
+            document.getElementById('tracker-date-picker').value = todayStr;
+            renderTrackerLogs();
+        }
+
+        function renderTrackerLogs() {
+            const datePickerVal = document.getElementById('tracker-date-picker').value || todayStr;
+            const container = document.getElementById('tracker-cards-container');
+            container.innerHTML = '';
+
+            let dailyItems = trackerData.filter(x => x.date === datePickerVal);
+
+            if (dailyItems.length === 0) {
+                dailyItems = getExcelRoutinesForDate(datePickerVal);
+                trackerData = trackerData.concat(dailyItems);
+                localStorage.setItem('master_excel_tracker', JSON.stringify(trackerData));
+            }
+
+            const totalDaily = dailyItems.length;
+            const completedDaily = dailyItems.filter(x => x.checked).length;
+            const pctDaily = totalDaily > 0 ? Math.round((completedDaily / totalDaily) * 100) : 0;
+
+            const dObj = new Date(datePickerVal);
+            const daysMap = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const dayName = daysMap[dObj.getDay()];
+
+            document.getElementById('daily-focus-title').innerText = `${dayName}, ${datePickerVal}`;
+            document.getElementById('daily-completion-count').innerText = `${completedDaily} dari ${totalDaily} Aktivitas Selesai`;
+            document.getElementById('daily-completion-pct').innerText = `${pctDaily}%`;
+
+            if (pctDaily === 100) { triggerConfetti(); }
+
+            dailyItems.forEach(item => {
+                const isChecked = item.checked;
+                container.innerHTML += `
+                    <div onclick="toggleTrackerItem(${item.id})" class="glass-card p-4 rounded-2xl border ${isChecked ? 'border-red-600/70 bg-red-950/20' : 'border-zinc-800'} transition-all cursor-pointer hover:border-red-500/40 flex items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-[10px] font-bold text-slate-300 bg-zinc-950 border border-zinc-800 px-2 py-0.5 rounded-md"><i class="fa-regular fa-clock mr-1 text-red-400"></i>${item.time}</span>
+                                <span class="text-[10px] font-bold text-red-400 bg-red-950 px-2 py-0.5 rounded-md border border-red-600/30">${item.category}</span>
+                            </div>
+                            <h4 class="text-sm font-extrabold ${isChecked ? 'text-red-300 line-through opacity-80' : 'text-white'} leading-snug">${item.desc}</h4>
+                        </div>
+                        <button class="w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 transition-all ${isChecked ? 'bg-gradient-to-r from-red-600 to-rose-700 text-white shadow-md shadow-red-900/50' : 'bg-zinc-900 border border-zinc-700 text-slate-500'}">
+                            <i class="fa-solid ${isChecked ? 'fa-check' : 'fa-circle'}"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderMasterTracker() {
+            let sholatDoneDays = sholats.filter(h => ['subuh','dzuhur','ashar','maghrib','isya'].some(s => h[s] === 'Jamaah' || h[s] === 'Munfarid')).length;
+            let spirTrackerChecked = trackerData.filter(x => (x.category.includes('Spiritual') || x.category.includes('Qur\'an')) && x.checked).length;
+            let totalSpiritual = Math.max(sholatDoneDays, spirTrackerChecked);
+
+            let selfCount = trackerData.filter(x => (x.category.includes('Accounting') || x.category.includes('English') || x.category.includes('PPAk') || x.category.includes('Self')) && x.checked).length;
+            let gymCount = trackerData.filter(x => x.category.includes('Gym') && x.checked).length;
+
+            document.getElementById('target-spir-count').innerText = `${totalSpiritual} / 365`;
+            document.getElementById('target-spir-rate').innerText = `${Math.round((totalSpiritual / 365) * 100)}% Selesai`;
+
+            document.getElementById('target-self-count').innerText = `${selfCount} / 365`;
+            document.getElementById('target-self-rate').innerText = `${Math.round((selfCount / 365) * 100)}% Selesai`;
+
+            document.getElementById('target-gym-count').innerText = `${gymCount} / 208`;
+            document.getElementById('target-gym-rate').innerText = `${Math.round((gymCount / 208) * 100)}% Selesai`;
+
+            const monthlyTable = document.getElementById('monthly-report-table');
+            monthlyTable.innerHTML = `
+                <tr class="hover:bg-zinc-800/40">
+                    <td class="p-3 font-bold text-white">Agustus 2026</td>
+                    <td class="p-3 text-center font-bold text-red-400">${totalSpiritual} / 31</td>
+                    <td class="p-3 text-center font-bold text-blue-400">${selfCount} / 31</td>
+                    <td class="p-3 text-center font-bold text-amber-400">${gymCount} / 18</td>
+                    <td class="p-3 text-center font-black text-red-400">${Math.round(((totalSpiritual + selfCount) / 62) * 100)}%</td>
+                </tr>
+            `;
+            renderHeatmapGrid();
+        }
+
+        function renderHeatmapGrid() {
+            const grid = document.getElementById('heatmap-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            for (let i = 0; i < 70; i++) {
+                let bgClass = 'bg-zinc-950 border border-zinc-800/80';
+                if (i % 3 === 0) bgClass = 'bg-red-950 border border-red-800/60';
+                if (i % 5 === 0) bgClass = 'bg-red-700 border border-red-600';
+                if (i % 7 === 0) bgClass = 'bg-red-500 border border-red-400 shadow-[0_0_8px_rgba(239,68,68,0.8)]';
+
+                grid.innerHTML += `<div class="w-4 h-4 rounded-sm ${bgClass} transition-all duration-300 hover:scale-125 cursor-pointer" title="Hari ${i+1}"></div>`;
+            }
+        }
+
+        function renderTrackerEval() {
+            let sholatDoneDays = sholats.filter(h => ['subuh','dzuhur','ashar','maghrib','isya'].some(s => h[s] === 'Jamaah' || h[s] === 'Munfarid')).length;
+            document.getElementById('eval-daily-dynamic-text').innerText = `⚔️ Deadpool Tracker: Kamu menyelesaikan ${sholatDoneDays} hari ibadah & aktivitas dari target!`;
+            document.getElementById('eval-aug-rate').innerText = `${Math.round((sholatDoneDays / 31) * 100)}%`;
+        }
+
+        function toggleTrackerItem(id) {
+            const item = trackerData.find(x => x.id === id);
+            if (item) {
+                item.checked = !item.checked;
+                localStorage.setItem('master_excel_tracker', JSON.stringify(trackerData));
+                renderTrackerLogs();
+                renderMasterTracker();
+                renderTrackerEval();
+                updateGamificationLevel();
+            }
+        }
+
+        function backupJSON() {
+            const fullData = {
+                fin_income: incomeData,
+                fin_budgets: budgetCategories,
+                fin_transactions: transactions,
+                sholat_records: sholats,
+                master_excel_tracker: trackerData,
+                bulking_custom_meals: bulkingCustomMeals,
+                weight_records: weightRecords,
+                nofap_streak_data: nofapData,
+                custom_carb_db: carbDb,
+                custom_prot_db: proteinDb,
+                custom_extra_db: extraDb,
+                user_profile_photo: localStorage.getItem('user_profile_photo') || ''
+            };
+            const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MasterHub_Ubay_Deadpool_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function restoreJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.fin_transactions) localStorage.setItem('fin_transactions', JSON.stringify(imported.fin_transactions));
+                    if (imported.sholat_records) localStorage.setItem('sholat_records', JSON.stringify(imported.sholat_records));
+                    if (imported.master_excel_tracker) localStorage.setItem('master_excel_tracker', JSON.stringify(imported.master_excel_tracker));
+                    if (imported.bulking_custom_meals) localStorage.setItem('bulking_custom_meals', JSON.stringify(imported.bulking_custom_meals));
+                    if (imported.weight_records) localStorage.setItem('weight_records', JSON.stringify(imported.weight_records));
+                    if (imported.nofap_streak_data) localStorage.setItem('nofap_streak_data', JSON.stringify(imported.nofap_streak_data));
+                    if (imported.custom_carb_db) localStorage.setItem('custom_carb_db', JSON.stringify(imported.custom_carb_db));
+                    if (imported.custom_prot_db) localStorage.setItem('custom_prot_db', JSON.stringify(imported.custom_prot_db));
+                    if (imported.custom_extra_db) localStorage.setItem('custom_extra_db', JSON.stringify(imported.custom_extra_db));
+                    if (imported.fin_income) localStorage.setItem('fin_income', JSON.stringify(imported.fin_income));
+                    if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
+                    if (imported.user_profile_photo) localStorage.setItem('user_profile_photo', imported.user_profile_photo);
+                    alert("📥 Data berhasil dipulihkan total!");
+                    location.reload();
+                } catch(err) {
+                    alert("❌ File JSON tidak valid.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function updateGamificationLevel() {
+            let totalCheckedTracker = trackerData.filter(x => x.checked).length;
+            let totalSholatChecked = sholats.length * 3;
+            let totalXP = (totalCheckedTracker * 10) + (totalSholatChecked * 5) + (transactions.length * 2) + 30;
+
+            let level = Math.floor(totalXP / 100) + 1;
+            let xpInCurrentLevel = totalXP % 100;
+
+            const badgeEl = document.getElementById('rank-badge');
+            const barEl = document.getElementById('user-xp-bar');
+
+            if (level === 1) badgeEl.innerText = `Lvl 1 - Merc with a Mouth ⚔️`;
+            else if (level === 2) badgeEl.innerText = `Lvl 2 - X-Force Cadet ⚔️`;
+            else if (level >= 3) badgeEl.innerText = `Lvl ${level} - Maximum Effort Legend ⚔️`;
+
+            if(barEl) barEl.style.width = `${Math.min(xpInCurrentLevel, 100)}%`;
+        }
+
+        renderApp();
+    </script>
+</body>
+</html>
