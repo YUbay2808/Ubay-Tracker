@@ -1,0 +1,25 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Android APK
+        uses: pwa-builder/pwa-action@v1
+        with:
+          manifest-url: 'https://yubay2808.github.io/Ubay-Tracker/manifest.json'
+
+      - name: Upload APK to Github Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Master-Hub-Ubay-APK
+          path: ./*.apk
