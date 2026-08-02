@@ -2,23 +2,18 @@
 <html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
-    <!-- KUNCI VIEWPORT HP: MATIKAN ZOOM & FIT TO SCREEN TOTAL -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Deadpool Edition v3.4</title>
-    <!-- PWA Manifest & Dynamic Theme -->
+    <title id="html-title-tag">Ubay Progress - Ultimate Edition v4.0</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     <link id="app-apple-icon" rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS & FontAwesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -56,7 +51,6 @@
             --border-color: rgba(16, 185, 129, 0.35);
         }
 
-        /* CEGAH LERAN/MELUBER KE KANAN */
         html, body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #090506; 
@@ -73,13 +67,13 @@
             border: 1px solid var(--border-color); 
             box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.7); 
             backdrop-filter: blur(12px);
-            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
-        .tab-transition {
-            transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+        /* BOTTOM SHEET ANIMATION */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0, 0, 0.2, 1);
         }
-
+        
         .breath-circle {
             animation: breatheAnimation 19s infinite ease-in-out;
         }
@@ -96,94 +90,83 @@
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
+<body class="text-slate-100 min-h-screen pb-28 custom-scrollbar">
 
-    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN -->
+    <!-- LOCK SCREEN -->
     <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex flex-col items-center justify-center p-6 space-y-6">
-        <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
+        <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl">
             <i class="fa-solid fa-lock text-3xl text-red-400"></i>
         </div>
         <div class="text-center space-y-1">
             <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Progress</h2>
-            <p class="text-xs text-slate-400">Masukkan PIN Keamanan untuk Membuka Aplikasi</p>
+            <p class="text-xs text-slate-400">Masukkan PIN Keamanan</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
             <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest">
-            <button onclick="unlockApp()" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl">
+            <button onclick="haptic(); unlockApp();" class="w-full bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold py-3.5 rounded-2xl text-sm shadow-xl">
                 <i class="fa-solid fa-key mr-1.5"></i> Buka Akses
             </button>
         </div>
     </div>
 
-    <!-- KONTEN UTAMA APLIKASI -->
+    <!-- MAIN APP CONTENT -->
     <div id="app-main-content" class="hidden">
-        <!-- TOP NAVIGATION BAR COMPACT (RAPI & GAK MELUBER KE KANAN) -->
-        <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
-            <div class="max-w-4xl mx-auto px-3 py-2 space-y-2">
-                
-                <div class="flex items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 min-w-0">
-                        <!-- Dynamic App Icon -->
-                        <div onclick="document.getElementById('app-icon-input').click()" class="w-10 h-10 rounded-xl overflow-hidden border border-red-600 shadow-md bg-red-950 flex items-center justify-center shrink-0 relative cursor-pointer" title="Ganti Icon">
-                            <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover">
-                        </div>
-                        <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
-
-                        <div class="truncate">
-                            <div class="flex items-center gap-1.5 truncate">
-                                <h1 onclick="customRenameAppName()" class="text-sm sm:text-base font-black text-white uppercase truncate cursor-pointer" id="display-app-title">Ubay Progress</h1> 
-                                <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0">Lvl 1</span>
-                            </div>
-                            <p class="text-[10px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agustus 2026</p>
-                        </div>
+        <!-- TOP COMPACT NAV -->
+        <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-xl">
+            <div class="max-w-4xl mx-auto px-3 py-2 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                    <div onclick="document.getElementById('app-icon-input').click()" class="w-9 h-9 rounded-xl overflow-hidden border border-red-600 bg-red-950 shrink-0 relative cursor-pointer">
+                        <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="Icon" class="w-full h-full object-cover">
                     </div>
+                    <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
 
-                    <!-- ACTION BUTTONS TOP RIGHT (GRID DIBUAT KETAT & COMPACT) -->
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button onclick="changePinModal()" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Ganti PIN"><i class="fa-solid fa-key"></i></button>
-                        <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Ganti Tema"><i class="fa-solid fa-palette"></i></button>
-                        <button onclick="triggerSmartNotification()" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Notifikasi"><i class="fa-solid fa-bell"></i></button>
-                        <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 border border-red-900/60 text-slate-300 p-2 rounded-xl text-xs" title="Restore"><i class="fa-solid fa-file-import"></i></button>
-                        <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
+                    <div class="truncate">
+                        <div class="flex items-center gap-1.5 truncate">
+                            <h1 onclick="customRenameAppName()" class="text-sm font-black text-white uppercase truncate cursor-pointer" id="display-app-title">Ubay Progress</h1> 
+                            <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[9px] px-1.5 py-0.5 rounded-full font-bold shrink-0">Lvl 1</span>
+                        </div>
+                        <p class="text-[9px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agst 2026</p>
                     </div>
                 </div>
 
-                <!-- 3 MAIN SWITCH TABS -->
-                <div class="bg-zinc-950 p-1 border border-red-900/50 rounded-xl grid grid-cols-3 gap-1 shadow-inner">
-                    <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-wallet"></i> <span>Keuangan</span>
-                    </button>
-                    <button id="tab-btn-sholat" onclick="switchTab('sholat')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-mosque"></i> <span>Sholat</span>
-                    </button>
-                    <button id="tab-btn-nofap" onclick="switchTab('nofap')" class="py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-fire"></i> <span>NoFap</span>
-                    </button>
+                <div class="flex items-center gap-1 shrink-0">
+                    <button onclick="haptic(); changePinModal();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs"><i class="fa-solid fa-key"></i></button>
+                    <button onclick="haptic(); cycleTheme();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs"><i class="fa-solid fa-palette"></i></button>
+                    <button onclick="haptic(); triggerSmartNotification();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs"><i class="fa-solid fa-bell"></i></button>
+                    <button onclick="haptic(); document.getElementById('restore-file-input').click();" class="bg-zinc-900 border border-red-900/60 text-slate-300 p-2 rounded-xl text-xs"><i class="fa-solid fa-file-import"></i></button>
+                    <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
                 </div>
-
             </div>
         </nav>
 
-        <!-- MASTER DAILY GLANCE WIDGET -->
+        <!-- COLLAPSIBLE MASTER DAILY GLANCE WIDGET -->
         <div class="max-w-4xl mx-auto px-3 pt-3">
-            <div class="grid grid-cols-3 gap-1.5 bg-zinc-950 p-2 rounded-xl border border-red-900/50 shadow-md">
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Batas Harian</span>
-                    <span id="glance-safe-limit" class="text-xs font-black text-red-400 block truncate">Rp 0 / hr</span>
+            <div class="bg-zinc-950 border border-red-900/50 rounded-xl p-2 shadow-md space-y-2">
+                <div class="flex justify-between items-center px-1 cursor-pointer" onclick="haptic(); toggleSummaryCollapse();">
+                    <span class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1">
+                        <i class="fa-solid fa-gauge-high"></i> Master Daily Glance
+                    </span>
+                    <button id="summary-toggle-btn" class="text-xs text-slate-400"><i class="fa-solid fa-chevron-up"></i></button>
                 </div>
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Sholat</span>
-                    <span id="glance-sholat-status" class="text-xs font-black text-emerald-400 block truncate">0/5 Jamaah</span>
-                </div>
-                <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
-                    <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
-                    <span id="glance-nofap-days" class="text-xs font-black text-amber-400 block truncate">0 Hari</span>
+                <div id="summary-content-grid" class="grid grid-cols-3 gap-1.5">
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Batas Harian</span>
+                        <span id="glance-safe-limit" class="text-xs font-black text-red-400 block truncate">Rp 0 / hr</span>
+                    </div>
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Sholat</span>
+                        <span id="glance-sholat-status" class="text-xs font-black text-emerald-400 block truncate">0/5 Jamaah</span>
+                    </div>
+                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800 text-center">
+                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
+                        <span id="glance-nofap-days" class="text-xs font-black text-amber-400 block truncate">0 Hari</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- BANNER ATAS KEUANGAN -->
-        <div id="finance-top-banners" class="max-w-4xl mx-auto px-3 pt-3 space-y-2 tab-transition">
+        <!-- BANNER KEUANGAN -->
+        <div id="finance-top-banners" class="max-w-4xl mx-auto px-3 pt-2 space-y-2">
             <section class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border border-red-600/70 rounded-xl p-3 flex justify-between items-center gap-2 shadow-lg">
                 <div>
                     <h3 class="text-[10px] font-black text-red-400 uppercase tracking-wider">BATAS AMAN JAJAN HARIAN</h3>
@@ -193,39 +176,28 @@
                     <span id="safe-daily-limit" class="text-sm font-black text-red-400 block">Rp 0 / hari</span>
                 </div>
             </section>
-
-            <section class="bg-zinc-900/90 border border-red-900/50 rounded-xl p-3 flex justify-between items-center gap-2">
-                <div>
-                    <span class="text-[10px] uppercase font-black text-amber-400 block">Koreksi Kas Real vs Sistem</span>
-                    <p id="cash-reconcile-status" class="text-[11px] text-slate-300">Kas Real: <strong id="disp-real-cash" class="text-emerald-400">Rp 0</strong></p>
-                </div>
-                <button onclick="openReconcileModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs shrink-0">
-                    Adjust Kas
-                </button>
-            </section>
         </div>
 
-        <!-- SECTION 1: KEUANGAN APP -->
-        <div id="section-finance" class="hidden tab-transition">
+        <!-- SECTION 1: KEUANGAN -->
+        <div id="section-finance" class="hidden">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
                 <section class="glass-card rounded-xl p-3 space-y-2 border-red-600/40">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-red-400 uppercase flex items-center gap-1">
-                            <i class="fa-solid fa-bolt text-xs"></i> Catat Cepat AI / Voice
+                            <i class="fa-solid fa-bolt text-xs"></i> AI Fast-Record / Voice
                         </span>
-                        <button onclick="startVoiceRecognition()" class="bg-red-950 border border-red-600/60 text-red-300 text-[10px] px-2 py-0.5 rounded font-bold">
+                        <button onclick="haptic(); startVoiceRecognition();" class="bg-red-950 border border-red-600/60 text-red-300 text-[10px] px-2 py-0.5 rounded font-bold">
                             <i class="fa-solid fa-microphone text-amber-400"></i> Voice
                         </button>
                     </div>
                     <form id="ai-parser-form" class="flex gap-2">
                         <input type="text" id="ai-parser-input" placeholder="Tulis contoh: Nasgor 15k / Bensin 20k" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
-                        <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl text-xs shrink-0">Simpan</button>
+                        <button type="submit" onclick="haptic()" class="bg-red-600 text-white font-bold px-3 py-2 rounded-xl text-xs shrink-0">Simpan</button>
                     </form>
                 </section>
 
                 <div class="flex justify-between items-center gap-2">
                     <div class="glass-card rounded-xl px-3 py-1.5 flex items-center gap-1.5 border-zinc-800">
-                        <span class="text-[11px] text-slate-400"><i class="fa-solid fa-calendar-days text-red-400"></i></span>
                         <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs font-bold text-red-400 focus:outline-none">
                             <option value="2026-07" class="bg-zinc-900 text-slate-200">Gajian Juli - Agst 2026</option>
                             <option value="2026-08" class="bg-zinc-900 text-slate-200">Gajian Agst - Sept 2026</option>
@@ -234,8 +206,8 @@
                     </div>
 
                     <div class="flex items-center gap-1.5">
-                        <button onclick="exportCSV()" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold p-2 rounded-xl text-xs"><i class="fa-solid fa-file-csv"></i></button>
-                        <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
+                        <button onclick="haptic(); exportCSV();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold p-2 rounded-xl text-xs"><i class="fa-solid fa-file-csv"></i></button>
+                        <button onclick="haptic(); openModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> <span>Catat</span>
                         </button>
                     </div>
@@ -246,7 +218,6 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h2 class="text-sm font-black text-white">Halo, Ubay</h2>
-                            <span id="financial-health-score" class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-600/60 px-2 py-0.5 rounded-full font-bold">Health: 85/100</span>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-0.5">Siklus: <strong id="cycle-label-display" class="text-red-400">Juli - Agst</strong></p>
                     </div>
@@ -255,44 +226,22 @@
                             <div class="text-[10px] text-slate-400">Gaji: <strong class="text-slate-200" id="disp-salary">Rp 0</strong></div>
                             <div class="text-xs font-black text-red-400" id="disp-total-income">Total: Rp 0</div>
                         </div>
-                        <button onclick="openIncomeModal()" class="bg-zinc-800 text-red-400 p-2 rounded-lg text-xs" title="Edit Gaji"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="haptic(); openIncomeModal();" class="bg-zinc-800 text-red-400 p-2 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
                     </div>
                 </section>
 
-                <!-- Card Ringkasan 4 Angka -->
                 <section class="grid grid-cols-2 gap-2">
                     <div class="glass-card rounded-xl p-3 space-y-1">
                         <span class="text-[10px] text-slate-400 font-semibold block">Hari Ini</span>
                         <h3 class="text-base font-extrabold text-amber-400" id="sum-today">Rp 0</h3>
                     </div>
                     <div class="glass-card rounded-xl p-3 space-y-1">
-                        <span class="text-[10px] text-slate-400 font-semibold block">7 Hari Terakhir</span>
-                        <h3 class="text-base font-extrabold text-blue-400" id="sum-weekly">Rp 0</h3>
-                    </div>
-                    <div class="glass-card rounded-xl p-3 space-y-1">
                         <span class="text-[10px] text-slate-400 font-semibold block">Terpakai Siklus Ini</span>
                         <h3 class="text-base font-extrabold text-rose-400" id="sum-cycle">Rp 0</h3>
                     </div>
-                    <div id="sum-remaining-card" class="glass-card rounded-xl p-3 space-y-1 border-emerald-600/50">
-                        <span class="text-[10px] text-emerald-400 font-black uppercase block">Sisa Uang System</span>
-                        <h3 class="text-base font-black text-emerald-300" id="sum-remaining">Rp 0</h3>
-                    </div>
                 </section>
 
-                <!-- IMPULSIVE BUY TIMER -->
-                <section class="glass-card rounded-xl p-3 border-amber-600/40 space-y-2">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[11px] font-black text-amber-400 uppercase flex items-center gap-1">
-                            <i class="fa-solid fa-hourglass-start"></i> Impulsive Wishlist
-                        </span>
-                        <button onclick="addImpulsiveWishlist()" class="text-[10px] bg-amber-950 text-amber-300 border border-amber-600/40 px-2 py-0.5 rounded font-bold">
-                            + Lock Wishlist
-                        </button>
-                    </div>
-                    <div id="wishlist-delay-list" class="space-y-1.5 text-xs"></div>
-                </section>
-
-                <!-- TRACKER UTANG & CICILAN DENGAN SISTEM EDIT & SISA BULAN MANUAL -->
+                <!-- TRACKER UTANG & CICILAN -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-red-900/40">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
@@ -300,29 +249,10 @@
                         </h2>
                         <div class="flex items-center gap-2">
                             <span id="total-debt-sum" class="text-[10px] font-extrabold text-red-400">Total: Rp 0</span>
-                            <button onclick="openAddDebtModal()" class="bg-red-950 text-red-300 border border-red-600/40 text-[10px] px-2 py-0.5 rounded font-bold">+ Utang</button>
+                            <button onclick="haptic(); openAddDebtModal();" class="bg-red-950 text-red-300 border border-red-600/40 text-[10px] px-2 py-0.5 rounded font-bold">+ Utang</button>
                         </div>
                     </div>
                     <div id="debt-tracker-container" class="grid grid-cols-1 gap-2 text-xs"></div>
-                </section>
-
-                <!-- Visual Charts -->
-                <section class="grid grid-cols-1 gap-3">
-                    <div class="glass-card rounded-xl p-3 space-y-2 border-red-900/40">
-                        <h2 class="text-xs font-bold text-slate-200 uppercase"><i class="fa-solid fa-chart-pie text-red-400 mr-1"></i> Proporsi Kategori</h2>
-                        <div class="relative h-44 flex justify-center items-center">
-                            <canvas id="categoryPieChart"></canvas>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Monitoring Target Budget -->
-                <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
-                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-list-check text-red-400 mr-1"></i> Monitoring Budget</h2>
-                        <button onclick="openBudgetModal()" class="bg-zinc-800 text-red-400 px-2 py-1 rounded-lg text-[10px] font-bold">Edit Budget</button>
-                    </div>
-                    <div id="budget-cards-container" class="grid grid-cols-1 gap-2"></div>
                 </section>
 
                 <!-- Tabel Riwayat Keuangan -->
@@ -349,52 +279,40 @@
             </main>
         </div>
 
-        <!-- SECTION 2: SHOLAT APP FIXED (NO MORE INFINITE LOADING) -->
-        <div id="section-sholat" class="hidden tab-transition">
+        <!-- SECTION 2: SHOLAT & PUASA SUNNAH -->
+        <div id="section-sholat" class="hidden">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
                 <div class="flex justify-between items-center gap-2">
                     <div>
                         <h2 class="text-base font-black text-white flex items-center gap-1.5">
                             <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat
                         </h2>
-                        <p class="text-[10px] text-slate-400">Lokasi GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
+                        <p class="text-[10px] text-slate-400">Lokasi: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
                     </div>
-                    <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
+                    <button onclick="haptic(); openSholatModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1">
                         <i class="fa-solid fa-circle-plus"></i> <span>Check-in</span>
                     </button>
                 </div>
 
-                <!-- JADWAL SHOLAT GPS -->
+                <!-- WIDGET PUASA SUNNAH (SENIN-KAMIS & AYYAMUL BIDH) -->
+                <section class="bg-zinc-950 p-3 rounded-xl border border-amber-600/40 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-amber-400 uppercase block">🌙 Tracker Puasa Sunnah</span>
+                        <span id="fasting-today-status" class="text-xs text-slate-200 font-bold block mt-0.5">Hari ini: Puasa Sunnah Recommended</span>
+                    </div>
+                    <button onclick="haptic(); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950 border border-amber-600/50 text-amber-300 px-3 py-1.5 rounded-lg text-xs font-bold">
+                        Niat Puasa Hari Ini
+                    </button>
+                </section>
+
                 <section class="bg-zinc-950 p-3 rounded-xl border border-red-900/50 space-y-1.5">
                     <span class="text-[10px] font-black text-amber-400 uppercase block">🕌 Jadwal Sholat GPS Realtime</span>
                     <div id="prayer-times-grid" class="grid grid-cols-5 gap-1 text-center text-xs"></div>
                 </section>
 
-                <!-- HEATMAP 30 HARI -->
                 <section class="glass-card rounded-xl p-3 space-y-1.5 border-red-900/40">
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-black text-slate-200 uppercase">🟢 Heatmap Sholat (30 Hari)</span>
-                        <span class="text-[9px] text-slate-400">Terang = Full Jamaah</span>
-                    </div>
+                    <span class="text-[10px] font-black text-slate-200 uppercase block">🟢 Heatmap Sholat (30 Hari)</span>
                     <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
-                </section>
-
-                <!-- ANALISIS SHOLAT (FIXED SAFETY RENDERING) -->
-                <section class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-red-600/50">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Hari Ini</span>
-                        <div id="sholat-summary-today" class="text-xs space-y-0.5 font-bold text-white">Menyiapkan data...</div>
-                    </div>
-
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-zinc-800">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Kemarin</span>
-                        <div id="sholat-summary-yesterday" class="text-xs space-y-0.5 font-bold text-slate-300">Menyiapkan data...</div>
-                    </div>
-
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-zinc-800">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Evaluasi Sholat</span>
-                        <div id="sholat-eval-status" class="text-xs font-extrabold mt-0.5">Menyiapkan data...</div>
-                    </div>
                 </section>
 
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
@@ -404,16 +322,15 @@
             </main>
         </div>
 
-        <!-- SECTION 3: NOFAP APP -->
-        <div id="section-nofap" class="hidden tab-transition">
+        <!-- SECTION 3: NOFAP, REFLEKSI & AUDIO RELAKSASI -->
+        <div id="section-nofap" class="hidden">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
-                <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border border-red-600 p-3 rounded-xl text-xs text-red-200 flex items-center gap-2 animate-pulse">
-                    <i class="fa-solid fa-triangle-exclamation text-xl text-amber-400 shrink-0"></i>
-                    <div>
-                        <strong class="font-black text-white block uppercase text-[10px]">🚨 PEAK URGE HOURS DETECTED!</strong>
-                        <span class="text-[11px]">Jam rawan malam (23:00 - 03:00). Segera wudhu atau 15x push-up!</span>
-                    </div>
-                </div>
+                
+                <!-- DAILY MINDSET AFFIRMATION QUOTES GENERATOR -->
+                <section class="bg-gradient-to-r from-red-950 via-zinc-950 to-zinc-900 border border-red-600/50 p-3 rounded-xl space-y-1">
+                    <span class="text-[9px] font-black text-amber-400 uppercase tracking-widest block">🔥 Daily Mindset Quote</span>
+                    <p id="daily-affirmation-text" class="text-xs text-slate-200 italic font-semibold">"Disiplin adalah memilih antara apa yang kamu inginkan sekarang dengan apa yang paling kamu inginkan nanti."</p>
+                </section>
 
                 <section class="glass-card rounded-2xl p-5 text-center border-red-600/60 shadow-xl space-y-4">
                     <div class="flex justify-between items-center">
@@ -431,36 +348,51 @@
                     </div>
 
                     <div class="flex flex-wrap justify-center gap-2 pt-1">
-                        <button onclick="checkInNoFap()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg">
+                        <button onclick="haptic(); checkInNoFap();" class="bg-emerald-600 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg">
                             ✅ Check-in Clean
                         </button>
-                        <button onclick="openPanicModal()" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg animate-pulse">
-                            🚨 Emergency
+                        <button onclick="haptic(); openPanicModal();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-black px-4 py-2.5 rounded-xl text-xs shadow-lg animate-pulse">
+                            🚨 Panic Button
                         </button>
-                        <button onclick="resetNoFap()" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-xl text-xs">
+                        <button onclick="haptic(); resetNoFap();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-xl text-xs">
                             Reset
                         </button>
                     </div>
                 </section>
 
+                <!-- JURNAL REFLEKSI HARIAN (DAILY MENTAL CHECK) -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-amber-600/40">
-                    <span class="text-xs font-black text-amber-400 uppercase block">🏆 Trophy Room</span>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <div id="badge-7d" class="p-2 rounded-lg border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                            <strong class="block text-white text-[11px]">7 Days</strong>
-                            <span class="text-[9px] text-slate-400">Dopamine</span>
+                    <span class="text-xs font-black text-amber-400 uppercase block">⭐ Jurnal Refleksi Mental Harian</span>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Energy</span>
+                            <select id="mental-energy" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-amber-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
                         </div>
-                        <div id="badge-14d" class="p-2 rounded-lg border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                            <strong class="block text-white text-[11px]">14 Days</strong>
-                            <span class="text-[9px] text-slate-400">Testosteron</span>
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Focus</span>
+                            <select id="mental-focus" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-blue-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
                         </div>
-                        <div id="badge-30d" class="p-2 rounded-lg border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                            <strong class="block text-white text-[11px]">30 Days</strong>
-                            <span class="text-[9px] text-slate-400">Focus</span>
-                        </div>
-                        <div id="badge-90d" class="p-2 rounded-lg border bg-zinc-950 border-zinc-800 text-center opacity-40">
-                            <strong class="block text-white text-[11px]">90 Days</strong>
-                            <span class="text-[9px] text-slate-400">Rewire</span>
+                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Mood</span>
+                            <select id="mental-mood" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-emerald-400 p-1 rounded w-full text-center">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
                         </div>
                     </div>
                 </section>
@@ -472,141 +404,101 @@
             </main>
         </div>
 
-        <!-- FOOTER -->
-        <footer class="max-w-4xl mx-auto px-3 mt-8 pt-3 border-t border-zinc-800 text-center text-xs text-slate-500 flex justify-between items-center gap-2">
-            <span id="footer-app-name">© 2026 Ubay Progress ⚔️</span>
-            <button onclick="backupJSON()" class="bg-zinc-900 text-slate-300 border border-zinc-800 px-2.5 py-1 rounded-lg text-[10px] font-bold">
-                <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
-            </button>
-        </footer>
-
-        <!-- FAB BUTTON -->
-        <div class="fixed bottom-5 right-5 z-40">
-            <div id="fab-menu" class="hidden mb-2 space-y-2 flex flex-col items-end">
-                <button onclick="switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
-                    <span>Emergency</span> <i class="fa-solid fa-triangle-exclamation"></i>
+        <!-- BOTTOM NAVIGATION BAR (JEMPOL FRIENDLY ALA APP NATIVE) -->
+        <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/95 backdrop-blur-lg border-t border-red-900/60 pb-safe">
+            <div class="max-w-4xl mx-auto grid grid-cols-3 h-14">
+                <button id="nav-btn-fin" onclick="haptic(); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-wallet text-base"></i>
+                    <span class="text-[10px] font-bold">Keuangan</span>
                 </button>
-                <button onclick="switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 text-red-400 font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
-                    <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
+                <button id="nav-btn-sholat" onclick="haptic(); switchTab('sholat');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-mosque text-base"></i>
+                    <span class="text-[10px] font-bold">Sholat</span>
                 </button>
-                <button onclick="switchTab('finance'); openModal(); toggleFab();" class="bg-red-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5">
-                    <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
+                <button id="nav-btn-nofap" onclick="haptic(); switchTab('nofap');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-fire text-base"></i>
+                    <span class="text-[10px] font-bold">NoFap</span>
                 </button>
             </div>
-            <button onclick="toggleFab()" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-        </div>
+        </nav>
     </div>
 
-    <!-- MODAL UTANG (MANUAL ADJUSTMENT UTANG, SISA BULAN, & STATUS LUNAS) -->
-    <div id="debt-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-red-600/60 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-2">
-                    <i class="fa-solid fa-link-slash text-red-400"></i> Edit / Tambah Utang
-                </h3>
-                <button onclick="closeDebtModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="debt-form" onsubmit="handleDebtSubmit(event)" class="space-y-3">
-                <input type="hidden" id="debt-edit-id">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Utang / Cicilan</label>
-                    <input type="text" id="debt-name" required placeholder="Misal: Utang Aogi" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Sisa Total Utang (Rp)</label>
-                    <input type="number" id="debt-total" required placeholder="1300000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 mb-1">Cicilan / Bulan (Rp)</label>
-                        <input type="number" id="debt-monthly" required placeholder="1300000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 mb-1">Sisa Durasi (Bulan)</label>
-                        <input type="number" id="debt-months" required placeholder="1" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Status Pelunasan</label>
-                    <select id="debt-status" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
-                        <option value="Belum Lunas">⏳ Belum Lunas</option>
-                        <option value="Lunas">🎉 Lunas</option>
-                    </select>
-                </div>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeDebtModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-2 rounded-xl text-xs">Simpan Utang</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL RECONCILE KAS REAL -->
-    <div id="reconcile-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-amber-500/50 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-2">
-                    <i class="fa-solid fa-scale-balanced text-amber-400"></i> Adjustment Kas Real
-                </h3>
-                <button onclick="closeReconcileModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="reconcile-form" onsubmit="handleReconcileSubmit(event)" class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Total Sisa Uang Real Saat Ini (Rp)</label>
-                    <input type="number" id="input-real-cash" required placeholder="Misal: 900000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none font-bold">
-                </div>
-                <div class="pt-1 flex gap-2">
-                    <button type="button" onclick="closeReconcileModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-amber-600 text-white font-bold py-2 rounded-xl text-xs">Adjust Kas</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL PANIC BUTTON NOFAP -->
-    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-4 text-center relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closePanicModal()" class="absolute right-3 top-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+    <!-- MODAL PANIC BUTTON NOFAP DENGAN AUDIO RELAKSASI GENERATOR -->
+    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-4 text-center relative max-h-[90vh] overflow-y-auto bottom-sheet">
+            <button onclick="haptic(); closePanicModal();" class="absolute right-4 top-4 text-slate-400"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div class="space-y-1">
                 <h3 class="text-lg font-black text-white">Tahan Impulsnya, Ubay! ⚔️</h3>
                 <p class="text-xs text-slate-300 italic">"Rasakan dorongannya tanpa menuruti kemauannya!"</p>
             </div>
+
+            <!-- AUDIO WHITE NOISE GENERATOR -->
+            <div class="bg-zinc-950 p-3 rounded-xl border border-red-900/60 flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-400"><i class="fa-solid fa-headphones mr-1"></i> Audio Relaksasi Calming:</span>
+                <button onclick="haptic(); toggleCalmingAudio();" id="audio-toggle-btn" class="bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
+                    ▶ Play Audio
+                </button>
+            </div>
+
             <div class="py-2 flex flex-col items-center justify-center">
                 <div class="w-24 h-24 rounded-full breath-circle border-2 border-red-500 flex flex-col items-center justify-center">
                     <span class="text-[10px] font-black text-white uppercase">Relaksasi 4-7-8</span>
                 </div>
             </div>
-            <button onclick="closePanicModal(); checkInNoFap();" class="w-full bg-emerald-600 text-white font-black py-2.5 rounded-xl text-xs uppercase">
+            <button onclick="haptic(); closePanicModal(); checkInNoFap();" class="w-full bg-emerald-600 text-white font-black py-3 rounded-xl text-xs uppercase">
                 ✅ Saya Berhasil Melewati Godaan Ini!
             </button>
         </div>
     </div>
 
-    <!-- MODAL EDIT BUDGET -->
-    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-lg rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+    <!-- MODAL UTANG (BOTTOM SHEET) -->
+    <div id="debt-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-red-600/60 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <h3 class="text-xs font-bold text-white">Target Budget Kategori</h3>
-                <button onclick="closeBudgetModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="text-xs font-black text-white">Edit / Tambah Utang</h3>
+                <button onclick="haptic(); closeDebtModal();" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form id="budget-form" class="space-y-2.5">
-                <div id="budget-inputs-container" class="space-y-2"></div>
-                <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeBudgetModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+            <form id="debt-form" onsubmit="handleDebtSubmit(event)" class="space-y-3">
+                <input type="hidden" id="debt-edit-id">
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Utang</label>
+                    <input type="text" id="debt-name" required placeholder="Utang Aogi" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Sisa Total Utang (Rp)</label>
+                    <input type="number" id="debt-total" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 mb-1">Cicilan / Bln (Rp)</label>
+                        <input type="number" id="debt-monthly" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 mb-1">Sisa Durasi (Bulan)</label>
+                        <input type="number" id="debt-months" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Status Pelunasan</label>
+                    <select id="debt-status" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
+                        <option value="Belum Lunas">⏳ Belum Lunas</option>
+                        <option value="Lunas">🎉 Lunas</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="haptic(); closeDebtModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan Utang</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL EDIT PEMASUKAN -->
-    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
+    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Edit Pemasukan</h3>
-                <button onclick="closeIncomeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeIncomeModal();" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="income-form" class="space-y-3">
                 <div>
@@ -618,21 +510,20 @@
                     <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
                 </div>
                 <div class="pt-1 flex gap-2">
-                    <button type="button" onclick="closeIncomeModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeIncomeModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CATAT PENGELUARAN -->
-    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-2xl p-5 shadow-2xl space-y-3">
+    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Catat Pengeluaran</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeModal();" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
             <form id="expense-form" class="space-y-2.5">
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Tanggal</label>
@@ -650,39 +541,30 @@
                         <option value="Investasi / Asuransi">Investasi / Asuransi</option>
                         <option value="Belanja Pribadi & Lain-Lain">Belanja Pribadi & Lain-Lain</option>
                         <option value="Pengeluaran Tidak Tercatat">Pengeluaran Tidak Tercatat 🚨</option>
-                        <option value="Hiburan, Hangout & Self-Reward">Hiburan, Hangout & Self-Reward</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Catatan</label>
-                    <input type="text" id="exp-desc" placeholder="Beli Nasi Goreng" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
+                    <input type="text" id="exp-desc" placeholder="Nasi Goreng" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
                 </div>
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nominal (Rp)</label>
                     <input type="number" id="exp-amount" placeholder="0" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
                 </div>
-                <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Metode Bayar</label>
-                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
-                        <option value="Mbanking">Mbanking / QRIS</option>
-                        <option value="Cash">Cash</option>
-                        <option value="E-Wallet">E-Wallet</option>
-                    </select>
-                </div>
                 <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="closeModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- MODAL CHECK-IN SHOLAT -->
-    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
-        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+    <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                 <h3 class="text-xs font-bold text-white">Check-in Sholat & Mutabaah</h3>
-                <button onclick="closeSholatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic(); closeSholatModal();" class="text-slate-400"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="sholat-form" class="space-y-3">
                 <div>
@@ -691,7 +573,7 @@
                 </div>
 
                 <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib</span>
+                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib (Jamaah = 2x XP)</span>
                     <div class="grid grid-cols-5 gap-1 text-center text-xs">
                         <div><label class="text-[9px] text-slate-400 block">Subuh</label><select id="s-subuh" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
                         <div><label class="text-[9px] text-slate-400 block">Dzuhur</label><select id="s-dzuhur" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
@@ -701,57 +583,56 @@
                     </div>
                 </div>
 
-                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sunnah & Mutabaah</span>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">Sholat Dhuha</label>
-                            <select id="sunnah-dhuha" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white">
-                                <option value="0">❌ 0 Rakaat</option>
-                                <option value="2">✨ 2 Rakaat</option>
-                                <option value="4">✨ 4 Rakaat</option>
-                                <option value="6">✨ 6 Rakaat</option>
-                                <option value="8">✨ 8 Rakaat</option>
-                                <option value="12">👑 12 Rakaat</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">Sholat Tahajud</label>
-                            <input type="number" id="sunnah-tahajud" placeholder="Rakaat..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">📖 Tilawah (Hal)</label>
-                            <input type="number" id="mutabaah-tilawah" placeholder="Jumlah..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">🤲 Sedekah (Rp)</label>
-                            <input type="number" id="mutabaah-sedekah" placeholder="Nominal..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
-                    </div>
-                </div>
-
                 <div class="pt-1 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="closeSholatModal()" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
+                    <button type="button" onclick="haptic(); closeSholatModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic()" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Script Utama Application -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW err:', err));
+        const todayStr = new Date().toISOString().split('T')[0];
+        let audioContext = null, audioOsc = null, isAudioPlaying = false;
+
+        // 1. HAPTIC FEEDBACK (VIBRASI HP)
+        function haptic() {
+            if ("vibrate" in navigator) { navigator.vibrate(15); }
         }
 
-        const todayStr = new Date().toISOString().split('T')[0];
-        let currentThemeIndex = 0;
-        const themes = ['default', 'theme-oled', 'theme-emerald'];
+        // 2. SUMMARY COLLAPSE TOGGLE
+        function toggleSummaryCollapse() {
+            const grid = document.getElementById('summary-content-grid');
+            const btn = document.getElementById('summary-toggle-btn');
+            grid.classList.toggle('hidden');
+            btn.innerHTML = grid.classList.contains('hidden') ? '<i class="fa-solid fa-chevron-down"></i>' : '<i class="fa-solid fa-chevron-up"></i>';
+        }
 
-        /* FITUR REFRESH TANPA INPUT PIN LAGI (MENGGUNAKAN SESSIONSTORAGE) */
+        // 3. AUDIO WHITE NOISE GENERATOR FOR PANIC BUTTON
+        function toggleCalmingAudio() {
+            const btn = document.getElementById('audio-toggle-btn');
+            if (!isAudioPlaying) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                audioOsc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                audioOsc.type = 'sine';
+                audioOsc.frequency.setValueAtTime(174, audioContext.currentTime); // Solfeggio frequency 174Hz (Calming)
+                gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+                audioOsc.connect(gain);
+                gain.connect(audioContext.destination);
+                audioOsc.start();
+                isAudioPlaying = true;
+                btn.innerText = "⏸ Stop Audio";
+            } else {
+                if (audioOsc) audioOsc.stop();
+                isAudioPlaying = false;
+                btn.innerText = "▶ Play Audio";
+            }
+        }
+
+        // AUTH & SESSION
         function checkAppAuth() {
-            const isUnlockedSession = sessionStorage.getItem('app_unlocked_session');
-            if (isUnlockedSession === 'true') {
+            if (sessionStorage.getItem('app_unlocked_session') === 'true') {
                 document.getElementById('app-lock-screen').style.display = 'none';
                 document.getElementById('app-main-content').classList.remove('hidden');
             } else {
@@ -767,776 +648,246 @@
                 sessionStorage.setItem('app_unlocked_session', 'true');
                 document.getElementById('app-lock-screen').style.display = 'none';
                 document.getElementById('app-main-content').classList.remove('hidden');
-            } else {
-                alert("❌ PIN Keamanan Salah!");
-            }
-        }
-
-        function customRenameAppName() {
-            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
-            const newTitle = prompt("Masukkan Nama Baru untuk Aplikasi Kamu:", currentTitle);
-            if (newTitle && newTitle.trim() !== "") {
-                const cleaned = newTitle.trim();
-                localStorage.setItem('user_custom_app_title', cleaned);
-                applyCustomAppName(cleaned);
-            }
-        }
-
-        function applyCustomAppName(title) {
-            document.getElementById('display-app-title').innerText = title;
-            document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Deadpool Edition`;
-            document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
-        }
-
-        function changePinModal() {
-            const currentSavedPin = localStorage.getItem('user_security_pin') || 'ubay';
-            const oldPinInput = prompt("Masukkan PIN Lama kamu:");
-            if (oldPinInput === null) return;
-            if (oldPinInput !== currentSavedPin) { alert("❌ PIN Lama Salah!"); return; }
-
-            const newPin = prompt("Masukkan PIN Baru kamu:");
-            if (newPin && newPin.trim() !== "") {
-                localStorage.setItem('user_security_pin', newPin.trim());
-                alert("🔑 PIN Keamanan berhasil diperbarui!");
-            }
-        }
-
-        function cycleTheme() {
-            document.body.classList.remove('theme-oled', 'theme-emerald');
-            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-            if (themes[currentThemeIndex] !== 'default') {
-                document.body.classList.add(themes[currentThemeIndex]);
-            }
-            localStorage.setItem('user_app_theme', themes[currentThemeIndex]);
+            } else alert("❌ PIN Salah!");
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             checkAppAuth();
-
-            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
-            applyCustomAppName(savedAppName);
-
-            const savedTheme = localStorage.getItem('user_app_theme');
-            if (savedTheme && savedTheme !== 'default') document.body.classList.add(savedTheme);
-
-            const savedIcon = localStorage.getItem('user_app_icon');
-            if (savedIcon) {
-                document.getElementById('nav-app-icon-img').src = savedIcon;
-                document.getElementById('app-favicon').href = savedIcon;
-                document.getElementById('app-apple-icon').href = savedIcon;
-            }
-
             const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
             switchTab(lastActiveTab);
-
-            updateGamificationLevel();
             setInterval(updateNoFapTimer, 1000);
-            checkPeakUrgeHours();
-            initGeolocationPrayer();
+            initFastingTracker();
+            loadMentalCheck();
+            updateGamificationLevel();
         });
-
-        function checkPeakUrgeHours() {
-            const currentHour = new Date().getHours();
-            if (currentHour >= 23 || currentHour <= 3) {
-                const warnEl = document.getElementById('peak-urge-warning');
-                if (warnEl) warnEl.classList.remove('hidden');
-            }
-        }
-
-        function startVoiceRecognition() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Browser HP kamu belum mendukung Voice Command.");
-                return;
-            }
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'id-ID';
-            recognition.start();
-
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('ai-parser-input').value = transcript;
-            };
-        }
-
-        function triggerConfetti() {
-            if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-        }
-
-        function handleAppIconUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64String = e.target.result;
-                localStorage.setItem('user_app_icon', base64String);
-                document.getElementById('nav-app-icon-img').src = base64String;
-                document.getElementById('app-favicon').href = base64String;
-                document.getElementById('app-apple-icon').href = base64String;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function toggleFab() { document.getElementById('fab-menu').classList.toggle('hidden'); }
 
         function switchTab(tab) {
             localStorage.setItem('master_hub_active_tab', tab);
+            document.getElementById('section-finance').classList.add('hidden');
+            document.getElementById('section-sholat').classList.add('hidden');
+            document.getElementById('section-nofap').classList.add('hidden');
+            document.getElementById('finance-top-banners').classList.add('hidden');
 
-            const finSec = document.getElementById('section-finance');
-            const sholatSec = document.getElementById('section-sholat');
-            const nofapSec = document.getElementById('section-nofap');
-            const topBanners = document.getElementById('finance-top-banners');
+            const inactiveNav = "flex flex-col items-center justify-center space-y-1 text-slate-500 hover:text-white";
+            const activeNav = "flex flex-col items-center justify-center space-y-1 text-red-500 font-extrabold";
 
-            finSec.classList.add('hidden');
-            sholatSec.classList.add('hidden');
-            nofapSec.classList.add('hidden');
-            topBanners.classList.add('hidden');
-
-            const inactiveClass = 'py-2 rounded-lg text-xs font-bold text-slate-400 flex items-center justify-center gap-1';
-            const activeClass = 'py-2 rounded-lg text-xs font-black bg-gradient-to-r from-red-600 to-rose-700 text-white shadow flex items-center justify-center gap-1';
-
-            document.getElementById('tab-btn-fin').className = inactiveClass;
-            document.getElementById('tab-btn-sholat').className = inactiveClass;
-            document.getElementById('tab-btn-nofap').className = inactiveClass;
+            document.getElementById('nav-btn-fin').className = inactiveNav;
+            document.getElementById('nav-btn-sholat').className = inactiveNav;
+            document.getElementById('nav-btn-nofap').className = inactiveNav;
 
             if (tab === 'finance') {
-                finSec.classList.remove('hidden');
-                topBanners.classList.remove('hidden');
-                document.getElementById('tab-btn-fin').className = activeClass;
+                document.getElementById('section-finance').classList.remove('hidden');
+                document.getElementById('finance-top-banners').classList.remove('hidden');
+                document.getElementById('nav-btn-fin').className = activeNav;
                 renderApp();
             } else if (tab === 'sholat') {
-                sholatSec.classList.remove('hidden');
-                document.getElementById('tab-btn-sholat').className = activeClass;
+                document.getElementById('section-sholat').classList.remove('hidden');
+                document.getElementById('nav-btn-sholat').className = activeNav;
                 renderSholatReports();
             } else if (tab === 'nofap') {
-                nofapSec.classList.remove('hidden');
-                document.getElementById('tab-btn-nofap').className = activeClass;
+                document.getElementById('section-nofap').classList.remove('hidden');
+                document.getElementById('nav-btn-nofap').className = activeNav;
                 renderNoFapModule();
             }
         }
 
-        // --- NOFAP MODULE ---
-        let nofapData = JSON.parse(localStorage.getItem('nofap_streak_data')) || {
-            startDate: new Date().toISOString(),
-            longestStreakDays: 1,
-            history: [{ date: todayStr, status: "Clean", note: "Check-in Awal" }]
-        };
+        // 4. PUASA SUNNAH TRACKER
+        function initFastingTracker() {
+            const dayOfWeek = new Date().getDay(); // 1 = Senin, 4 = Kamis
+            const isPuasaRecommended = (dayOfWeek === 1 || dayOfWeek === 4);
+            const savedFasting = localStorage.getItem(`fasting_${todayStr}`);
 
-        function openPanicModal() { document.getElementById('nofap-panic-modal').classList.remove('hidden'); }
-        function closePanicModal() { document.getElementById('nofap-panic-modal').classList.add('hidden'); }
+            const statusEl = document.getElementById('fasting-today-status');
+            const btn = document.getElementById('fasting-btn');
 
-        function checkInNoFap() {
-            const existingIdx = nofapData.history.findIndex(x => x.date === todayStr);
-            if (existingIdx >= 0) {
-                nofapData.history[existingIdx].status = "Clean";
+            if (savedFasting === 'done') {
+                statusEl.innerText = "Hari ini: 🎉 Puasa Sunnah Terlaksana!";
+                btn.innerText = "✅ Puasa Terpenuhi";
             } else {
-                nofapData.history.push({ date: todayStr, status: "Clean", note: "Clean Day Check-in" });
+                statusEl.innerText = isPuasaRecommended ? "Hari ini: Rekomendasi Puasa Sunnah (Senin/Kamis)" : "Hari ini: Hari Biasa";
             }
-            localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+        }
+
+        function toggleFastingCheckin() {
+            localStorage.setItem(`fasting_${todayStr}`, 'done');
+            initFastingTracker();
             triggerConfetti();
-            renderNoFapModule();
+            alert("✨ Masya Allah! Status Puasa Sunnah Tersimpan.");
         }
 
-        function resetNoFap() {
-            if (confirm("⚠️ Kamu yakin mau reset streak NoFap?")) {
-                const reason = prompt("Apa pemicu godaan tadi?") || "Tidak disebutkan";
-                nofapData.history.push({ date: todayStr, status: "Reset", note: `Pemicu: ${reason}` });
-                nofapData.startDate = new Date().toISOString();
-                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
-                renderNoFapModule();
+        // 5. JURNAL REFLEKSI HARI INI
+        function saveMentalCheck() {
+            const data = {
+                energy: document.getElementById('mental-energy').value,
+                focus: document.getElementById('mental-focus').value,
+                mood: document.getElementById('mental-mood').value
+            };
+            localStorage.setItem(`mental_check_${todayStr}`, JSON.stringify(data));
+        }
+
+        function loadMentalCheck() {
+            const saved = JSON.parse(localStorage.getItem(`mental_check_${todayStr}`));
+            if (saved) {
+                document.getElementById('mental-energy').value = saved.energy || "3";
+                document.getElementById('mental-focus').value = saved.focus || "3";
+                document.getElementById('mental-mood').value = saved.mood || "3";
             }
         }
 
-        function updateNoFapTimer() {
-            const start = new Date(nofapData.startDate);
-            const now = new Date();
-            const diffMs = now - start;
-            if (diffMs < 0) return;
-
-            const diffSecs = Math.floor(diffMs / 1000);
-            const days = Math.floor(diffSecs / (3600 * 24));
-            const hours = Math.floor((diffSecs % (3600 * 24)) / 3600);
-            const minutes = Math.floor((diffSecs % 3600) / 60);
-
-            if (document.getElementById('nofap-streak-days')) document.getElementById('nofap-streak-days').innerText = `${days} Hari`;
-            if (document.getElementById('nofap-streak-timer')) document.getElementById('nofap-streak-timer').innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit Clean`;
-            if (document.getElementById('glance-nofap-days')) document.getElementById('glance-nofap-days').innerText = `${days} Hari Clean`;
-
-            if (days > nofapData.longestStreakDays) {
-                nofapData.longestStreakDays = days;
-                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
-            }
-        }
-
-        function renderNoFapModule() {
-            updateNoFapTimer();
-            const daysClean = Math.floor((new Date() - new Date(nofapData.startDate)) / (1000 * 60 * 60 * 24));
-            let badgeName = "Lvl 1 - Novice";
-            if (daysClean >= 90) badgeName = "Lvl 5 - Mind Master 👑";
-            else if (daysClean >= 30) badgeName = "Lvl 4 - Iron Will ⚔️";
-            else if (daysClean >= 14) badgeName = "Lvl 3 - Warrior 🔥";
-            else if (daysClean >= 7) badgeName = "Lvl 2 - Focus Cadet 🛡️";
-
-            document.getElementById('nofap-badge-top').innerText = badgeName;
-
-            const historyList = document.getElementById('nofap-history-list');
-            historyList.innerHTML = '';
-            [...nofapData.history].reverse().forEach(item => {
-                const isClean = item.status === 'Clean';
-                historyList.innerHTML += `
-                    <div class="bg-zinc-950 p-2.5 rounded-xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs">
-                        <div>
-                            <span class="font-bold text-white block">${item.date}</span>
-                            <span class="text-[10px] text-slate-400">${item.note || '-'}</span>
-                        </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'}">
-                            ${isClean ? '✅ Clean' : '⚠️ Reset'}
-                        </span>
-                    </div>
-                `;
-            });
-        }
-
-        // --- KEUANGAN ENHANCED & UTANG ADJUSTABLE ---
+        // KEUANGAN & UTANG
         let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7680000, side: 500000 };
-        const defaultCategories = {
-            "Makan & Belanja Dapur Harian": { budget: 800000 },
-            "Bensin / Transportasi / Tol": { budget: 300000 },
-            "Listrik, Air, Wifi & Pulsa": { budget: 100000 },
-            "Orang Tua / Keluarga": { budget: 1500000 },
-            "Cicilan Utang & Kewajiban Bulanan": { budget: 3050000 },
-            "Tabungan / Dana Darurat": { budget: 2000000 },
-            "Investasi / Asuransi": { budget: 0 },
-            "Belanja Pribadi & Lain-Lain": { budget: 0 },
-            "Pengeluaran Tidak Tercatat": { budget: 0 },
-            "Hiburan, Hangout & Self-Reward": { budget: 0 }
-        };
-
-        let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
-
-        /* MODUL UTANG BISA DI-ADJUST DENGAN SISA BULAN, NOMINAL, & STATUS LUNAS */
         let debtItems = JSON.parse(localStorage.getItem('fin_debt_items')) || [
-            { id: 1, name: "Utang Aogi", total: 1300000, monthlyPay: 1300000, remainingMonths: 1, status: "Belum Lunas" },
-            { id: 2, name: "Utang Aoga", total: 1100000, monthlyPay: 1100000, remainingMonths: 1, status: "Belum Lunas" }
+            { id: 1, name: "Utang Aogi", total: 1300000, monthlyPay: 1300000, remainingMonths: 1, status: "Belum Lunas" }
         ];
+        let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || [];
 
-        let impulsiveWishlist = JSON.parse(localStorage.getItem('fin_impulsive_wishlist')) || [];
+        function formatRupiah(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num); }
 
-        const masterExcelData = [
-            { id: 1, date: "2026-07-29", category: "Orang Tua / Keluarga", desc: "Orang Tua", amount: 1600000, method: "Cash" },
-            { id: 2, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aogi", amount: 1300000, method: "Cash" },
-            { id: 3, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aoga", amount: 1100000, method: "Cash" }
-        ];
-
-        let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || masterExcelData;
-        let realCashValue = parseFloat(localStorage.getItem('fin_real_cash')) || 0;
-
-        let pieChartInstance = null;
-
-        function formatRupiah(num) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
-        }
-
-        /* CRUD KELOLA UTANG */
-        function openAddDebtModal() {
-            document.getElementById('debt-edit-id').value = '';
-            document.getElementById('debt-name').value = '';
-            document.getElementById('debt-total').value = '';
-            document.getElementById('debt-monthly').value = '';
-            document.getElementById('debt-months').value = '';
-            document.getElementById('debt-status').value = 'Belum Lunas';
-            document.getElementById('debt-modal-backdrop').classList.remove('hidden');
-        }
-
-        function editDebtItem(id) {
-            const d = debtItems.find(x => x.id === id);
-            if (!d) return;
-            document.getElementById('debt-edit-id').value = d.id;
-            document.getElementById('debt-name').value = d.name;
-            document.getElementById('debt-total').value = d.total;
-            document.getElementById('debt-monthly').value = d.monthlyPay;
-            document.getElementById('debt-months').value = d.remainingMonths;
-            document.getElementById('debt-status').value = d.status || 'Belum Lunas';
-            document.getElementById('debt-modal-backdrop').classList.remove('hidden');
-        }
-
+        function openAddDebtModal() { document.getElementById('debt-modal-backdrop').classList.remove('hidden'); }
         function closeDebtModal() { document.getElementById('debt-modal-backdrop').classList.add('hidden'); }
+        function openIncomeModal() { document.getElementById('income-modal-backdrop').classList.remove('hidden'); }
+        function closeIncomeModal() { document.getElementById('income-modal-backdrop').classList.add('hidden'); }
+        function openModal() { document.getElementById('modal-backdrop').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
 
         function handleDebtSubmit(e) {
             e.preventDefault();
-            const editId = document.getElementById('debt-edit-id').value;
-            const name = document.getElementById('debt-name').value.trim();
+            const name = document.getElementById('debt-name').value;
             const total = parseFloat(document.getElementById('debt-total').value) || 0;
             const monthlyPay = parseFloat(document.getElementById('debt-monthly').value) || 0;
             const remainingMonths = parseInt(document.getElementById('debt-months').value) || 0;
             const status = document.getElementById('debt-status').value;
-
-            if (editId) {
-                const idx = debtItems.findIndex(x => x.id == editId);
-                if (idx >= 0) debtItems[idx] = { id: parseInt(editId), name, total, monthlyPay, remainingMonths, status };
-            } else {
-                debtItems.push({ id: Date.now(), name, total, monthlyPay, remainingMonths, status });
-            }
-
+            debtItems.push({ id: Date.now(), name, total, monthlyPay, remainingMonths, status });
             localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
-            closeDebtModal();
-            renderApp();
+            closeDebtModal(); renderApp();
         }
-
-        function toggleDebtStatus(id) {
-            const d = debtItems.find(x => x.id === id);
-            if (!d) return;
-            d.status = d.status === 'Lunas' ? 'Belum Lunas' : 'Lunas';
-            if (d.status === 'Lunas') d.remainingMonths = 0;
-            localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
-            renderApp();
-        }
-
-        function deleteDebtItem(id) {
-            if (confirm("Hapus catatan utang ini?")) {
-                debtItems = debtItems.filter(x => x.id !== id);
-                localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
-                renderApp();
-            }
-        }
-
-        function addImpulsiveWishlist() {
-            const item = prompt("Masukkan wishlist:");
-            if (!item) return;
-            const price = parseFloat(prompt("Nominal harga (Rp):")) || 0;
-            impulsiveWishlist.push({ id: Date.now(), item, price, lockUntil: Date.now() + (72 * 3600 * 1000) });
-            localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(impulsiveWishlist));
-            renderApp();
-        }
-
-        function openModal() { document.getElementById('modal-backdrop').classList.remove('hidden'); document.getElementById('exp-date').valueAsDate = new Date(); }
-        function closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
-        function openIncomeModal() { document.getElementById('income-modal-backdrop').classList.remove('hidden'); document.getElementById('input-salary').value = incomeData.salary; document.getElementById('input-side').value = incomeData.side; }
-        function closeIncomeModal() { document.getElementById('income-modal-backdrop').classList.add('hidden'); }
-        function openReconcileModal() { document.getElementById('reconcile-modal-backdrop').classList.remove('hidden'); }
-        function closeReconcileModal() { document.getElementById('reconcile-modal-backdrop').classList.add('hidden'); }
-
-        function handleReconcileSubmit(event) {
-            event.preventDefault();
-            realCashValue = parseFloat(document.getElementById('input-real-cash').value) || 0;
-            localStorage.setItem('fin_real_cash', realCashValue);
-            closeReconcileModal();
-            renderApp();
-        }
-
-        function openBudgetModal() {
-            const container = document.getElementById('budget-inputs-container');
-            container.innerHTML = '';
-            Object.keys(budgetCategories).forEach((cat, idx) => {
-                container.innerHTML += `
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">${cat}</label>
-                        <input type="number" id="budget-val-${idx}" data-cat="${cat}" value="${budgetCategories[cat].budget}" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
-                    </div>
-                `;
-            });
-            document.getElementById('budget-modal-backdrop').classList.remove('hidden');
-        }
-        function closeBudgetModal() { document.getElementById('budget-modal-backdrop').classList.add('hidden'); }
-
-        document.getElementById('budget-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            Object.keys(budgetCategories).forEach((cat, idx) => { budgetCategories[cat].budget = parseFloat(document.getElementById(`budget-val-${idx}`).value) || 0; });
-            localStorage.setItem('fin_budgets', JSON.stringify(budgetCategories));
-            renderApp(); closeBudgetModal();
-        });
-
-        document.getElementById('income-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            incomeData.salary = parseFloat(document.getElementById('input-salary').value) || 0;
-            incomeData.side = parseFloat(document.getElementById('input-side').value) || 0;
-            localStorage.setItem('fin_income', JSON.stringify(incomeData));
-            renderApp(); closeIncomeModal();
-        });
-
-        function triggerSmartNotification() {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") new Notification("Ubay Progress", { body: "⚔️ Tetap konsisten Ubay!" });
-                });
-            }
-        }
-
-        document.getElementById('ai-parser-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const text = document.getElementById('ai-parser-input').value.trim();
-            if (!text) return;
-
-            let amount = 0;
-            const matchNum = text.match(/(\d+)(k|rb)?/i);
-            if (matchNum) {
-                let num = parseInt(matchNum[1]);
-                amount = (matchNum[2] && (matchNum[2].toLowerCase() === 'k' || matchNum[2].toLowerCase() === 'rb')) ? num * 1000 : (num < 1000 ? num * 1000 : num);
-            } else return alert("Gagal membaca nominal.");
-
-            let category = "Belanja Pribadi & Lain-Lain";
-            let lower = text.toLowerCase();
-            if (lower.includes('bensin') || lower.includes('tol')) category = "Bensin / Transportasi / Tol";
-            else if (lower.includes('makan') || lower.includes('nasgor')) category = "Makan & Belanja Dapur Harian";
-            
-            transactions.push({ id: Date.now(), date: todayStr, category, desc: text, amount, method: "Mbanking" });
-            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
-            document.getElementById('ai-parser-input').value = '';
-            renderApp();
-        });
 
         function renderApp() {
             const totalIncome = incomeData.salary + incomeData.side;
             document.getElementById('disp-salary').innerText = formatRupiah(incomeData.salary);
             document.getElementById('disp-total-income').innerText = `Total: ${formatRupiah(totalIncome)}`;
 
-            const selectedCycle = document.getElementById('cycle-selector').value;
-            let startDateStr = "2026-07-25", endDateStr = "2026-08-24", labelText = "Juli - Agst", endCycleDate = new Date("2026-08-24");
-            if (selectedCycle === "2026-08") { startDateStr = "2026-08-25"; endDateStr = "2026-09-24"; labelText = "Agst - Sept"; endCycleDate = new Date("2026-09-24"); }
-            document.getElementById('cycle-label-display').innerText = labelText;
-
-            const now = new Date();
-            let todayTotal = 0, weeklyTotal = 0, cycleTotal = 0;
-            let categoryTotals = {}; Object.keys(budgetCategories).forEach(c => categoryTotals[c] = 0);
-
+            let todayTotal = 0, cycleTotal = 0;
             transactions.forEach(t => {
                 if (t.date === todayStr) todayTotal += t.amount;
-                if (t.date >= startDateStr && t.date <= endDateStr) {
-                    cycleTotal += t.amount;
-                    if (categoryTotals[t.category] !== undefined) categoryTotals[t.category] += t.amount;
-                }
+                cycleTotal += t.amount;
             });
 
-            const remainingBalance = totalIncome - cycleTotal;
-            document.getElementById('disp-real-cash').innerText = formatRupiah(realCashValue > 0 ? realCashValue : remainingBalance);
-
             document.getElementById('sum-today').innerText = formatRupiah(todayTotal);
-            document.getElementById('sum-weekly').innerText = formatRupiah(weeklyTotal);
             document.getElementById('sum-cycle').innerText = formatRupiah(cycleTotal);
-            document.getElementById('sum-remaining').innerText = formatRupiah(remainingBalance);
 
-            const diffTime = endCycleDate - now;
-            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
-            const safeDailyVal = remainingBalance > 0 ? Math.floor(remainingBalance / daysLeft) : 0;
-            document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
-            document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
-            document.getElementById('glance-safe-limit').innerText = `${formatRupiah(safeDailyVal)} / hr`;
-
-            // Wishlist Render
-            const wishlistContainer = document.getElementById('wishlist-delay-list');
-            wishlistContainer.innerHTML = '';
-            if (impulsiveWishlist.length === 0) {
-                wishlistContainer.innerHTML = `<span class="text-slate-500 italic text-[10px]">Tidak ada wishlist terkunci.</span>`;
-            } else {
-                impulsiveWishlist.forEach(w => {
-                    wishlistContainer.innerHTML += `
-                        <div class="bg-zinc-950 p-2 rounded-lg border border-zinc-800 flex justify-between items-center text-xs">
-                            <div><strong class="text-white block">${w.item}</strong><span class="text-amber-400 font-bold">${formatRupiah(w.price)}</span></div>
-                            <span class="px-2 py-0.5 bg-amber-950 text-amber-300 rounded font-bold text-[10px]">Wishlist</span>
-                        </div>
-                    `;
-                });
-            }
-
-            // Render Debt Tracker Sesuai Penyesuaian
             const debtContainer = document.getElementById('debt-tracker-container');
             debtContainer.innerHTML = '';
             let totalDebtAll = 0;
             debtItems.forEach(d => {
                 if (d.status !== 'Lunas') totalDebtAll += d.total;
-                const isLunas = d.status === 'Lunas';
                 debtContainer.innerHTML += `
-                    <div class="bg-zinc-950 p-2.5 rounded-xl border ${isLunas ? 'border-emerald-600/40 opacity-60' : 'border-zinc-800'} space-y-1">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-white">${d.name} ${isLunas ? '🎉' : ''}</span>
-                            <span class="font-bold ${isLunas ? 'text-emerald-400' : 'text-red-400'}">${formatRupiah(d.total)}</span>
-                        </div>
-                        <div class="text-[10px] text-slate-400 flex justify-between items-center">
-                            <span>Cicilan: ${formatRupiah(d.monthlyPay)}/bln</span>
-                            <span>Sisa: <strong>${d.remainingMonths} bln</strong></span>
-                        </div>
-                        <div class="flex justify-end gap-2 pt-1 border-t border-zinc-900">
-                            <button onclick="toggleDebtStatus(${d.id})" class="text-[10px] font-bold px-2 py-0.5 rounded ${isLunas ? 'bg-amber-950 text-amber-300' : 'bg-emerald-950 text-emerald-300'}">
-                                ${isLunas ? 'Batal Lunas' : 'Tandai Lunas'}
-                            </button>
-                            <button onclick="editDebtItem(${d.id})" class="text-slate-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <button onclick="deleteDebtItem(${d.id})" class="text-slate-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
-                        </div>
+                    <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 space-y-1">
+                        <div class="flex justify-between font-bold text-white"><span>${d.name}</span><span class="text-red-400">${formatRupiah(d.total)}</span></div>
+                        <div class="text-[10px] text-slate-400 flex justify-between"><span>Cicilan: ${formatRupiah(d.monthlyPay)}</span><span>Sisa: ${d.remainingMonths} bln</span></div>
                     </div>
                 `;
             });
             document.getElementById('total-debt-sum').innerText = `Total: ${formatRupiah(totalDebtAll)}`;
 
-            // Render Budget Kategori
-            const cardsContainer = document.getElementById('budget-cards-container');
-            cardsContainer.innerHTML = '';
-            Object.keys(budgetCategories).forEach(c => {
-                const b = budgetCategories[c].budget;
-                const s = categoryTotals[c] || 0;
-                const pct = b > 0 ? (s / b) * 100 : (s > 0 ? 100 : 0);
-                
-                cardsContainer.innerHTML += `
-                    <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 space-y-1.5">
-                        <div class="flex justify-between text-xs">
-                            <span class="font-bold text-slate-200 truncate">${c}</span>
-                            <span class="font-bold text-white">${formatRupiah(s)}</span>
-                        </div>
-                        <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
-                            <div class="${pct >= 100 ? 'bg-red-600' : 'bg-emerald-500'} h-full rounded-full" style="width: ${Math.min(pct, 100)}%"></div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Render Tabel Riwayat
             const historyTable = document.getElementById('history-table');
             historyTable.innerHTML = '';
-            const searchQ = document.getElementById('search-input').value.toLowerCase();
-            
-            let filtered = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reverse();
-            if (searchQ) filtered = filtered.filter(t => t.desc.toLowerCase().includes(searchQ) || t.category.toLowerCase().includes(searchQ));
-            
-            filtered.forEach(t => {
+            transactions.slice().reverse().forEach(t => {
                 historyTable.innerHTML += `
                     <tr class="hover:bg-zinc-800/40">
-                        <td class="p-2 text-slate-400 font-medium text-[11px]">${t.date.substring(5)}</td>
-                        <td class="p-2 font-semibold text-slate-200 text-xs">
-                            <div>${t.desc}</div>
-                            <span class="text-[9px] text-slate-500">${t.category}</span>
-                        </td>
+                        <td class="p-2 text-slate-400 text-[11px]">${t.date.substring(5)}</td>
+                        <td class="p-2 font-semibold text-slate-200 text-xs">${t.desc}</td>
                         <td class="p-2 font-bold text-red-400 text-xs">${formatRupiah(t.amount)}</td>
-                        <td class="p-2 text-center">
-                            <button onclick="deleteTransaction(${t.id})" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
-                        </td>
+                        <td class="p-2 text-center"><button onclick="deleteTransaction(${t.id})" class="text-slate-500"><i class="fa-solid fa-trash-can"></i></button></td>
                     </tr>
                 `;
             });
-
-            renderCharts(categoryTotals);
-            updateGamificationLevel();
         }
 
-        function renderCharts(categoryTotals) {
-            const ctxPie = document.getElementById('categoryPieChart').getContext('2d');
-            if (pieChartInstance) pieChartInstance.destroy();
-            pieChartInstance = new Chart(ctxPie, {
-                type: 'doughnut',
-                data: { labels: Object.keys(categoryTotals).filter(k => categoryTotals[k] > 0), datasets: [{ data: Object.values(categoryTotals).filter(v => v > 0), backgroundColor: ['#dc2626', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899'], borderWidth: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } } } }
-            });
-        }
+        // SHOLAT & 2X XP BONUS FOR JAMAAH
+        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
 
-        document.getElementById('expense-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            transactions.push({
-                id: Date.now(),
-                date: document.getElementById('exp-date').value,
-                category: document.getElementById('exp-category').value,
-                desc: document.getElementById('exp-desc').value,
-                amount: parseFloat(document.getElementById('exp-amount').value),
-                method: document.getElementById('exp-method').value
-            });
-            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
-            renderApp(); closeModal();
-        });
-
-        function deleteTransaction(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('fin_transactions', JSON.stringify(transactions)); renderApp(); }
-
-        function exportCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Kategori,Deskripsi,Nominal,Metode\n";
-            transactions.forEach(t => { csvContent += `${t.id},${t.date},"${t.category}","${t.desc}",${t.amount},${t.method || 'Mbanking'}\n`; });
-            const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", `Keuangan_Ubay_${todayStr}.csv`);
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        }
-
-        // --- SHOLAT MODULE (DENGAN PENANGANAN ERROR LOADING FIXED) ---
-        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
-            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000" }
-        ];
-
-        function initGeolocationPrayer() {
-            const timesGrid = document.getElementById('prayer-times-grid');
-            timesGrid.innerHTML = `
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
-            `;
-        }
-
-        function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; loadSholatByDate(); }
+        function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; }
         function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
-
-        function loadSholatByDate() {
-            const dStr = document.getElementById('input-sholat-date').value;
-            const h = sholats.find(x => x.date === dStr) || {};
-            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => document.getElementById(`s-${s}`).value = h[s] || "Pending");
-            document.getElementById('sunnah-dhuha').value = h.dhuha || "0";
-            document.getElementById('sunnah-tahajud').value = h.tahajud || "";
-            document.getElementById('mutabaah-tilawah').value = h.tilawah || "";
-            document.getElementById('mutabaah-sedekah').value = h.sedekah || "";
-        }
 
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const dStr = document.getElementById('input-sholat-date').value;
-            let existing = sholats.find(h => h.date === dStr) || { date: dStr };
-
+            let existing = { date: dStr };
             ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => { existing[s] = document.getElementById(`s-${s}`).value; });
-            existing.dhuha = document.getElementById('sunnah-dhuha').value;
-            existing.tahajud = document.getElementById('sunnah-tahajud').value || "0";
-            existing.tilawah = document.getElementById('mutabaah-tilawah').value || "0";
-            existing.sedekah = document.getElementById('mutabaah-sedekah').value || "0";
-
-            const idx = sholats.findIndex(h => h.date === dStr);
-            if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
-
-            localStorage.setItem('sholat_records', JSON.stringify(sholats)); 
-            renderSholatReports(); 
-            closeSholatModal();
+            sholats.push(existing);
+            localStorage.setItem('sholat_records', JSON.stringify(sholats));
+            closeSholatModal(); renderSholatReports(); updateGamificationLevel();
         });
 
-        function getSholatStats(record) {
-            if (!record) return { jamaah: 0, munfarid: 0, dhuha: 0, tahajud: 0, tilawah: 0, sedekah: 0 };
-            const wajib = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
-            let jamaah = 0, munfarid = 0;
-            wajib.forEach(w => {
-                if (record[w] === 'Jamaah') jamaah++;
-                else if (record[w] === 'Munfarid') munfarid++;
-            });
-            return {
-                jamaah, munfarid,
-                dhuha: parseInt(record.dhuha) || 0,
-                tahajud: parseInt(record.tahajud) || 0,
-                tilawah: parseInt(record.tilawah) || 0,
-                sedekah: parseInt(record.sedekah) || 0
-            };
-        }
-
-        /* FIXED RENDER SHOLAT SUPAYA GAK LOADING STUCK */
         function renderSholatReports() {
-            try {
-                const todayRec = sholats.find(x => x.date === todayStr);
-                const nowD = new Date();
-                const yestD = new Date(); yestD.setDate(nowD.getDate() - 1);
-                const yestStr = yestD.toISOString().split('T')[0];
-                const yestRec = sholats.find(x => x.date === yestStr);
-
-                const stToday = getSholatStats(todayRec);
-                const stYest = getSholatStats(yestRec);
-
-                if (document.getElementById('glance-sholat-status')) {
-                    document.getElementById('glance-sholat-status').innerText = `${stToday.jamaah}/5 Jamaah`;
-                }
-
-                document.getElementById('sholat-summary-today').innerHTML = `
-                    <div class="text-emerald-400">🕌 Jamaah: ${stToday.jamaah} Sholat</div>
-                    <div class="text-blue-400">🏠 Sendiri: ${stToday.munfarid} Sholat</div>
-                    <div class="text-amber-400">⭐ Dhuha: ${stToday.dhuha}rk | Tahajud: ${stToday.tahajud}rk</div>
-                `;
-
-                document.getElementById('sholat-summary-yesterday').innerHTML = `
-                    <div>🕌 Jamaah: ${stYest.jamaah} Sholat</div>
-                    <div>🏠 Sendiri: ${stYest.munfarid} Sholat</div>
-                    <div>⭐ Dhuha: ${stYest.dhuha}rk | Tahajud: ${stYest.tahajud}rk</div>
-                `;
-
-                const evalEl = document.getElementById('sholat-eval-status');
-                if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
-                else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
-                else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
-
-                // Render Heatmap 30 Hari
-                const heatmapEl = document.getElementById('prayer-heatmap');
-                heatmapEl.innerHTML = '';
-                for (let i = 29; i >= 0; i--) {
-                    const d = new Date(); d.setDate(nowD.getDate() - i);
-                    const dStr = d.toISOString().split('T')[0];
-                    const rec = sholats.find(x => x.date === dStr);
-                    const st = getSholatStats(rec);
-                    
-                    let bgClass = "bg-zinc-900 border-zinc-800";
-                    if (st.jamaah >= 4) bgClass = "bg-emerald-500 border-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]";
-                    else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
-                    else if (rec) bgClass = "bg-red-800 border-red-700";
-
-                    heatmapEl.innerHTML += `<div title="${dStr}" class="h-5 rounded border ${bgClass}"></div>`;
-                }
-
-                const cardsList = document.getElementById('sholat-cards-list'); 
-                cardsList.innerHTML = '';
-                sholats.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                sholats.forEach(h => {
-                    cardsList.innerHTML += `
-                        <div class="glass-card border border-zinc-800 p-3 rounded-xl space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">${h.date}</span>
-                                <span class="text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded text-[10px]">⭐ Dhuha: ${h.dhuha || 0}rk</span>
-                            </div>
-                            <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
-                                ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950 p-1 rounded border border-zinc-800"><span class="text-slate-400 block uppercase font-bold text-[8px]">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s]}</strong></div>`).join('')}
-                            </div>
+            const cardsList = document.getElementById('sholat-cards-list');
+            cardsList.innerHTML = '';
+            sholats.forEach(h => {
+                cardsList.innerHTML += `
+                    <div class="glass-card border border-zinc-800 p-3 rounded-xl space-y-2 text-xs">
+                        <div class="font-bold text-white">${h.date}</div>
+                        <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
+                            ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950 p-1 rounded border border-zinc-800"><span class="text-slate-400 block uppercase font-bold">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':'text-slate-500'}">${h[s]}</strong></div>`).join('')}
                         </div>
-                    `;
-                });
-            } catch (err) {
-                console.log("Sholat report error:", err);
-            }
+                    </div>
+                `;
+            });
         }
 
-        function backupJSON() {
-            const fullData = {
-                fin_income: incomeData,
-                fin_budgets: budgetCategories,
-                fin_transactions: transactions,
-                fin_real_cash: realCashValue,
-                fin_debt_items: debtItems,
-                fin_impulsive_wishlist: impulsiveWishlist,
-                sholat_records: sholats,
-                nofap_streak_data: nofapData,
-                user_app_icon: localStorage.getItem('user_app_icon') || '',
-                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Progress',
-                user_security_pin: localStorage.getItem('user_security_pin') || 'ubay'
-            };
-            const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_${todayStr}.json`;
-            link.click();
+        // NOFAP
+        let nofapData = JSON.parse(localStorage.getItem('nofap_streak_data')) || { startDate: new Date().toISOString(), history: [] };
+
+        function openPanicModal() { document.getElementById('nofap-panic-modal').classList.remove('hidden'); }
+        function closePanicModal() { document.getElementById('nofap-panic-modal').classList.add('hidden'); }
+
+        function checkInNoFap() {
+            nofapData.history.push({ date: todayStr, status: "Clean" });
+            localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            triggerConfetti(); renderNoFapModule();
         }
 
-        function restoreJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported.fin_transactions) localStorage.setItem('fin_transactions', JSON.stringify(imported.fin_transactions));
-                    if (imported.sholat_records) localStorage.setItem('sholat_records', JSON.stringify(imported.sholat_records));
-                    if (imported.nofap_streak_data) localStorage.setItem('nofap_streak_data', JSON.stringify(imported.nofap_streak_data));
-                    if (imported.fin_income) localStorage.setItem('fin_income', JSON.stringify(imported.fin_income));
-                    if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
-                    if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data berhasil dipulihkan!");
-                    location.reload();
-                } catch(err) { alert("❌ File JSON tidak valid."); }
-            };
-            reader.readAsText(file);
+        function resetNoFap() {
+            nofapData.startDate = new Date().toISOString();
+            localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            renderNoFapModule();
         }
 
+        function updateNoFapTimer() {
+            const diffSecs = Math.floor((new Date() - new Date(nofapData.startDate)) / 1000);
+            const days = Math.floor(diffSecs / (3600 * 24));
+            if (document.getElementById('nofap-streak-days')) document.getElementById('nofap-streak-days').innerText = `${days} Hari`;
+            if (document.getElementById('glance-nofap-days')) document.getElementById('glance-nofap-days').innerText = `${days} Hari`;
+        }
+
+        function renderNoFapModule() {
+            updateNoFapTimer();
+            const historyList = document.getElementById('nofap-history-list');
+            historyList.innerHTML = '';
+            nofapData.history.slice().reverse().forEach(item => {
+                historyList.innerHTML += `
+                    <div class="bg-zinc-950 p-2.5 rounded-xl border border-emerald-600/40 flex justify-between text-xs">
+                        <span class="font-bold text-white">${item.date}</span>
+                        <span class="text-emerald-300 font-bold">✅ Clean</span>
+                    </div>
+                `;
+            });
+        }
+
+        // 6. GAMIFIKASI DENGAN 2X XP SHOLAT JAMAAH
         function updateGamificationLevel() {
-            let totalXP = (sholats.length * 15) + (transactions.length * 2) + 30;
+            let totalXP = 0;
+            sholats.forEach(s => {
+                ['subuh','dzuhur','ashar','maghrib','isya'].forEach(w => {
+                    if (s[w] === 'Jamaah') totalXP += 20; // BONUS 2X XP JAMAAH!
+                    else if (s[w] === 'Munfarid') totalXP += 10;
+                });
+            });
             let level = Math.floor(totalXP / 100) + 1;
             document.getElementById('rank-badge').innerText = `Lvl ${level}`;
         }
 
-        renderApp();
+        function triggerConfetti() { if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 }); }
     </script>
 </body>
 </html>
