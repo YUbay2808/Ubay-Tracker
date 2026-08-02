@@ -1,16 +1,23 @@
 {
-  "name": "Master Hub Ubay Deadpool",
-  "short_name": "Ubay",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#090506",
-  "theme_color": "#dc2626",
+  "short_name": "Ubay Hub",
+  "name": "Ubay Deadpool Master Hub",
   "icons": [
     {
       "src": "https://i.ibb.co.com/8K6N33h/image.jpg",
-      "sizes": "192x192 512x512",
       "type": "image/jpeg",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co.com/8K6N33h/image.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "background_color": "#090506",
+  "theme_color": "#dc2626",
+  "display": "standalone",
+  "orientation": "portrait"
 }
