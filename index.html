@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Hub - Ubay (Deadpool Ultra Effort v3.0)</title>
+    <title id="html-title-tag">Ubay Hub - Deadpool Edition v3.1</title>
     <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
@@ -100,12 +100,6 @@
             pointer-events: none;
             transform: scale(0.97);
         }
-
-        .smooth-show {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
-        }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar transition-all duration-300">
@@ -116,7 +110,7 @@
             <i class="fa-solid fa-lock text-3xl text-red-400"></i>
         </div>
         <div class="text-center space-y-1">
-            <h2 class="text-xl font-black text-white uppercase tracking-wider">Master Vault Deadpool</h2>
+            <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Master Vault Deadpool</h2>
             <p class="text-xs text-slate-400">Masukkan PIN Keamanan untuk Membuka Aplikasi</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
@@ -134,18 +128,20 @@
             
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari HP">
+                    <!-- Dynamic App Icon Change Trigger -->
+                    <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari Galeri HP">
                         <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover absolute inset-0">
                         <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-red-400 font-extrabold text-center px-1">
-                            Ganti Icon
+                            Ganti Icon HP
                         </div>
                     </div>
                     <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
 
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
-                            <h1 class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5">
-                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc v3.0</span>
+                            <h1 onclick="customRenameAppName()" class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5 cursor-pointer group" title="Klik untuk ganti nama aplikasi">
+                                <span id="display-app-title">Ubay Hub</span> 
+                                <i class="fa-solid fa-pen text-[10px] text-slate-500 group-hover:text-red-400 transition-colors"></i>
                             </h1>
                             <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
                         </div>
@@ -157,7 +153,6 @@
                 </div>
 
                 <div class="flex items-center gap-1.5">
-                    <!-- Theme Switcher -->
                     <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti Tema">
                         <i class="fa-solid fa-palette text-amber-400"></i>
                     </button>
@@ -303,7 +298,7 @@
                         </div>
                         <div class="text-base font-black text-red-400 mt-0.5" id="disp-total-income">Total: Rp 8.180.000</div>
                     </div>
-                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors">
+                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors" title="Edit Pemasukan">
                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                     </button>
                 </div>
@@ -347,7 +342,7 @@
                 </div>
             </section>
 
-            <!-- IMPULSIVE BUY DELAY TIMER (TAHAN JAJAN 72 JAM) -->
+            <!-- IMPULSIVE BUY DELAY TIMER -->
             <section class="glass-card rounded-2xl p-4 border-amber-600/40 space-y-3">
                 <div class="flex justify-between items-center">
                     <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
@@ -360,7 +355,7 @@
                 <div id="wishlist-delay-list" class="space-y-2 text-xs"></div>
             </section>
 
-            <!-- TRACKER UTANG & CICILAN (DEBT SNOWBALL TRACKER) -->
+            <!-- TRACKER UTANG & CICILAN -->
             <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
                 <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                     <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
@@ -599,7 +594,7 @@
 
     <!-- FOOTER -->
     <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
-        <span>© 2026 Master Hub Ubay - Deadpool v3.0 ⚔️</span>
+        <span id="footer-app-name">© 2026 Ubay Hub - Deadpool Edition ⚔️</span>
         <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
             <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
         </button>
@@ -648,7 +643,7 @@
         </div>
     </div>
 
-    <!-- MODAL PANIC BUTTON WITH BREATHING AUDIO/METRONOME -->
+    <!-- MODAL PANIC BUTTON -->
     <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-5 text-center relative max-h-[90vh] overflow-y-auto">
             <button onclick="closePanicModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -789,7 +784,7 @@
         </div>
     </div>
 
-    <!-- MODAL CHECK-IN SHOLAT + MUTABAAH YAUMIYAAH -->
+    <!-- MODAL CHECK-IN SHOLAT -->
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
         <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
@@ -863,6 +858,24 @@
         let currentThemeIndex = 0;
         const themes = ['default', 'theme-oled', 'theme-emerald'];
 
+        function customRenameAppName() {
+            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay Hub';
+            const newTitle = prompt("Masukkan Nama Baru untuk Aplikasi Kamu:", currentTitle);
+            if (newTitle && newTitle.trim() !== "") {
+                const cleaned = newTitle.trim();
+                localStorage.setItem('user_custom_app_title', cleaned);
+                applyCustomAppName(cleaned);
+                alert(`✨ Nama aplikasi diperbarui menjadi: "${cleaned}"`);
+            }
+        }
+
+        function applyCustomAppName(title) {
+            document.getElementById('display-app-title').innerText = title;
+            document.getElementById('lock-screen-app-name').innerText = title;
+            document.getElementById('html-title-tag').innerText = `${title} - Deadpool Edition`;
+            document.getElementById('footer-app-name').innerText = `© 2026 ${title} - Deadpool Edition ⚔️`;
+        }
+
         function unlockApp() {
             const inputPin = document.getElementById('lock-pin-input').value;
             if (inputPin === 'ubay' || inputPin === '1234' || inputPin === '') {
@@ -883,6 +896,9 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Hub';
+            applyCustomAppName(savedAppName);
+
             const savedTheme = localStorage.getItem('user_app_theme');
             if (savedTheme && savedTheme !== 'default') {
                 document.body.classList.add(savedTheme);
@@ -945,8 +961,25 @@
                 document.getElementById('nav-app-icon-img').src = base64String;
                 document.getElementById('app-favicon').href = base64String;
                 document.getElementById('app-apple-icon').href = base64String;
+                
+                // Regenerate Manifest Link dynamically
+                const manifestData = {
+                    short_name: localStorage.getItem('user_custom_app_title') || "Ubay Hub",
+                    name: localStorage.getItem('user_custom_app_title') || "Ubay Master Hub",
+                    icons: [{ src: base64String, sizes: "512x512", type: "image/png" }],
+                    start_url: "./index.html",
+                    display: "standalone",
+                    background_color: "#090506",
+                    theme_color: "#dc2626"
+                };
+                const stringManifest = JSON.stringify(manifestData);
+                const blobManifest = new Blob([stringManifest], { type: 'application/json' });
+                const manifestURL = URL.createObjectURL(blobManifest);
+                let manifestLink = document.querySelector('link[rel="manifest"]');
+                if (manifestLink) manifestLink.setAttribute('href', manifestURL);
+
                 triggerConfetti();
-                alert("✨ Icon / Logo aplikasi berhasil diperbarui!");
+                alert("✨ Icon / Logo aplikasi berhasil diperbarui! Jika sudah terpasang di HP, hapus pintasan lama lalu klik 'Tambahkan ke Layar Utama' ulang agar ikon baru di HP aktif.");
             };
             reader.readAsDataURL(file);
         }
@@ -1702,13 +1735,14 @@
                 sholat_records: sholats,
                 nofap_streak_data: nofapData,
                 user_app_icon: localStorage.getItem('user_app_icon') || '',
+                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Hub',
                 user_app_theme: localStorage.getItem('user_app_theme') || 'default'
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `MasterHub_Ubay_Deadpool_${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `MasterHub_${localStorage.getItem('user_custom_app_title') || 'Ubay'}_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
         }
@@ -1729,6 +1763,7 @@
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
                     if (imported.fin_impulsive_wishlist) localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(imported.fin_impulsive_wishlist));
                     if (imported.user_app_icon) localStorage.setItem('user_app_icon', imported.user_app_icon);
+                    if (imported.user_custom_app_title) localStorage.setItem('user_custom_app_title', imported.user_custom_app_title);
                     alert("📥 Data berhasil dipulihkan total!");
                     location.reload();
                 } catch(err) {
