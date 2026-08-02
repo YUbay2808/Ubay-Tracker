@@ -1,0 +1,17 @@
+{
+  "name": "Master Hub Ubay",
+  "short_name": "Master Hub",
+  "description": "Master Hub - Ubay Deadpool Maximum Effort Edition",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090506",
+  "theme_color": "#090506",
+  "icons": [
+    {
+      "src": "https://i.ibb.co.com/8K6N33h/image.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
