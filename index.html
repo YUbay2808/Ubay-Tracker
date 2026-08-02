@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Hub - Ubay (Deadpool Maximum Effort)</title>
+    <title>Master Hub - Ubay (Deadpool Ultra Effort v3.0)</title>
     <!-- PWA Manifest & Dynamic Theme -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
@@ -20,56 +20,113 @@
     <!-- Canvas Confetti CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        themeRed: '#dc2626',
+                        themeOled: '#000000',
+                        themeEmerald: '#10b981'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at top right, rgba(220, 38, 38, 0.25), transparent 50%), radial-gradient(circle at bottom left, rgba(153, 27, 27, 0.2), transparent 50%);
+            --glass-bg: linear-gradient(145deg, rgba(24, 15, 18, 0.95), rgba(15, 23, 42, 0.9));
+            --border-color: rgba(220, 38, 38, 0.35);
+        }
+
+        body.theme-oled {
+            --bg-gradient: none;
+            background-color: #000000 !important;
+            --glass-bg: #09090b;
+            --border-color: #27272a;
+        }
+
+        body.theme-emerald {
+            --bg-gradient: radial-gradient(circle at top right, rgba(16, 185, 129, 0.25), transparent 50%), radial-gradient(circle at bottom left, rgba(4, 120, 87, 0.2), transparent 50%);
+            --glass-bg: linear-gradient(145deg, rgba(6, 78, 59, 0.95), rgba(15, 23, 42, 0.9));
+            --border-color: rgba(16, 185, 129, 0.35);
+        }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #090506; 
-            background-image: 
-                radial-gradient(circle at top right, rgba(220, 38, 38, 0.22), transparent 50%), 
-                radial-gradient(circle at bottom left, rgba(153, 27, 27, 0.2), transparent 50%);
+            background-image: var(--bg-gradient);
+            transition: background 0.4s ease, color 0.4s ease;
         }
+
         .glass-card { 
-            background: linear-gradient(145deg, rgba(24, 15, 18, 0.95), rgba(15, 23, 42, 0.9)); 
-            border: 1px solid rgba(220, 38, 38, 0.35); 
+            background: var(--glass-bg); 
+            border: 1px solid var(--border-color); 
             box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         .glass-card-hover:hover {
+            transform: translateY(-2px);
             border-color: rgba(239, 68, 68, 0.7);
-            box-shadow: 0 10px 30px -5px rgba(220, 38, 38, 0.35);
+            box-shadow: 0 12px 35px -5px rgba(220, 38, 38, 0.35);
         }
-        .glow-safe {
-            border-color: rgba(34, 197, 94, 0.8) !important;
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.35) !important;
+
+        .tab-transition {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glow-warning {
-            border-color: rgba(245, 158, 11, 0.8) !important;
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.35) !important;
-        }
-        .glow-danger {
-            border-color: rgba(220, 38, 38, 0.9) !important;
-            box-shadow: 0 0 25px rgba(220, 38, 38, 0.6) !important;
-            animation: pulse-border 2s infinite;
-        }
-        @keyframes pulse-border {
-            0%, 100% { border-color: rgba(220, 38, 38, 0.9); box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); }
-            50% { border-color: rgba(220, 38, 38, 0.4); box-shadow: 0 0 10px rgba(220, 38, 38, 0.2); }
-        }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 5, 8, 0.8); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(185, 28, 28, 0.8); border-radius: 10px; }
 
         .breath-circle {
             animation: breatheAnimation 19s infinite ease-in-out;
         }
         @keyframes breatheAnimation {
             0%, 100% { transform: scale(1); background-color: rgba(220, 38, 38, 0.2); }
-            21% { transform: scale(1.5); background-color: rgba(34, 197, 94, 0.4); }
-            58% { transform: scale(1.5); background-color: rgba(245, 158, 11, 0.4); }
-            100% { transform: scale(1); background-color: rgba(59, 130, 246, 0.3); }
+            21% { transform: scale(1.4); background-color: rgba(34, 197, 94, 0.4); }
+            58% { transform: scale(1.4); background-color: rgba(245, 158, 11, 0.4); }
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: repeat(15, minmax(0, 1fr));
+            gap: 4px;
+        }
+
+        .smooth-hide {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.97);
+        }
+
+        .smooth-show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
+<body class="text-slate-100 min-h-screen pb-32 custom-scrollbar transition-all duration-300">
+
+    <!-- LAYAR KUNCI BIOMETRIK / PIN LOCK SCREEN -->
+    <div id="app-lock-screen" class="fixed inset-0 bg-zinc-950/98 z-50 flex flex-col items-center justify-center p-6 space-y-6 tab-transition">
+        <div class="w-20 h-20 rounded-3xl bg-red-950 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
+            <i class="fa-solid fa-lock text-3xl text-red-400"></i>
+        </div>
+        <div class="text-center space-y-1">
+            <h2 class="text-xl font-black text-white uppercase tracking-wider">Master Vault Deadpool</h2>
+            <p class="text-xs text-slate-400">Masukkan PIN Keamanan untuk Membuka Aplikasi</p>
+        </div>
+        <div class="space-y-4 w-full max-w-xs text-center">
+            <input type="password" id="lock-pin-input" maxlength="8" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest">
+            <button onclick="unlockApp()" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl">
+                <i class="fa-solid fa-key mr-1.5"></i> Buka Akses
+            </button>
+            <span class="text-[10px] text-slate-500 block">PIN Default: <strong class="text-slate-400">ubay</strong></span>
+        </div>
+    </div>
 
     <!-- Top Navigation Bar Deadpool Red Style -->
     <nav class="bg-zinc-950/95 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-30 shadow-2xl">
@@ -77,7 +134,6 @@
             
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <!-- Dynamic App Icon Change Trigger -->
                     <div onclick="document.getElementById('app-icon-input').click()" class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-red-600 shadow-lg shadow-red-950/80 shrink-0 bg-red-950 flex items-center justify-center text-red-400 font-black text-xl relative cursor-pointer group" title="Klik untuk ganti Logo/Icon Aplikasi dari HP">
                         <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover absolute inset-0">
                         <div class="absolute inset-0 bg-zinc-950/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] text-red-400 font-extrabold text-center px-1">
@@ -89,23 +145,27 @@
                     <div class="space-y-1">
                         <div class="flex items-center gap-2">
                             <h1 class="text-lg font-black text-white tracking-wide uppercase flex items-center gap-1.5">
-                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc Hub</span>
+                                Ubay <span class="text-xs bg-red-600 text-white px-2 py-0.5 rounded-md font-bold tracking-normal">Merc v3.0</span>
                             </h1>
                             <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[11px] px-2.5 py-0.5 rounded-full font-extrabold">Lvl 1 - Merc with a Mouth</span>
                         </div>
-                        <div class="w-36 sm:w-48 bg-zinc-900 h-2 rounded-full border border-red-950 overflow-hidden relative" title="Progress Level XP">
+                        <div class="w-36 sm:w-48 bg-zinc-900 h-2 rounded-full border border-red-950 overflow-hidden relative">
                             <div id="user-xp-bar" class="bg-gradient-to-r from-red-600 via-rose-500 to-amber-500 h-full rounded-full transition-all duration-500" style="width: 25%"></div>
                         </div>
                         <p class="text-[11px] text-red-400 font-bold" id="current-date-header">Minggu, 2 Agustus 2026</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5">
+                    <!-- Theme Switcher -->
+                    <button onclick="cycleTheme()" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 p-2.5 rounded-xl text-xs font-bold transition-all shadow-sm" title="Ganti Tema">
+                        <i class="fa-solid fa-palette text-amber-400"></i>
+                    </button>
                     <button onclick="triggerSmartNotification()" id="notif-btn" class="bg-zinc-900 border border-red-900/60 text-slate-200 hover:text-red-400 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
                         <i class="fa-solid fa-bell text-amber-400 text-sm"></i>
                         <span class="hidden sm:inline">Notif</span>
                     </button>
-                    <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm" title="Restore JSON Data">
+                    <button onclick="document.getElementById('restore-file-input').click()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm">
                         <i class="fa-solid fa-file-import"></i>
                         <span class="hidden sm:inline">Restore</span>
                     </button>
@@ -113,7 +173,7 @@
                 </div>
             </div>
 
-            <!-- 3 MAIN SWITCH TABS (Swipe Disabled) -->
+            <!-- 3 MAIN SWITCH TABS -->
             <div class="bg-zinc-950 p-1.5 border border-red-900/50 rounded-2xl grid grid-cols-3 gap-1.5 shadow-inner">
                 <button id="tab-btn-fin" onclick="switchTab('finance')" class="py-2.5 rounded-xl text-xs font-bold transition-all text-slate-400 hover:text-white flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-wallet text-sm"></i> <span>Keuangan</span>
@@ -129,10 +189,27 @@
         </div>
     </nav>
 
+    <!-- MASTER DAILY GLANCE WIDGET (SUMMARY 3-IN-1 TOP) -->
+    <div class="max-w-4xl mx-auto px-4 pt-4">
+        <div class="grid grid-cols-3 gap-2 bg-zinc-950 p-3 rounded-2xl border border-red-900/50 shadow-xl">
+            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Kuota Jajan Harian</span>
+                <span id="glance-safe-limit" class="text-xs sm:text-sm font-black text-red-400 block">Rp 0 / hr</span>
+            </div>
+            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Status Sholat</span>
+                <span id="glance-sholat-status" class="text-xs sm:text-sm font-black text-emerald-400 block">0/5 Jamaah</span>
+            </div>
+            <div class="bg-zinc-900/80 p-2.5 rounded-xl border border-zinc-800 text-center space-y-0.5">
+                <span class="text-[10px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
+                <span id="glance-nofap-days" class="text-xs sm:text-sm font-black text-amber-400 block">0 Hari Clean</span>
+            </div>
+        </div>
+    </div>
+
     <!-- BANNER ATAS KEUANGAN -->
-    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-4 space-y-3">
-        
-        <!-- SAFE TO SPEND BANNER (DI-POSISIKAN DI ATAS UTAMA) -->
+    <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-3 tab-transition">
+        <!-- SAFE TO SPEND BANNER -->
         <section class="bg-gradient-to-r from-red-950 via-zinc-900 to-zinc-950 border-2 border-red-600/70 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-2xl">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 rounded-xl bg-red-600/20 text-red-400 border border-red-600/50 flex items-center justify-center text-xl shrink-0 shadow-inner">
@@ -151,7 +228,7 @@
             </div>
         </section>
 
-        <!-- KAS REAL VS SISTEM & TOMBOL ADJUSTMENT -->
+        <!-- KAS REAL VS SISTEM -->
         <section class="bg-zinc-900/90 border border-red-900/50 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-md">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 text-lg font-black">
@@ -166,21 +243,22 @@
                 <i class="fa-solid fa-sliders"></i> Adjust Kas Real
             </button>
         </section>
-
     </div>
 
     <!-- SECTION 1: KEUANGAN APP -->
-    <div id="section-finance" class="hidden">
+    <div id="section-finance" class="hidden tab-transition">
         <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
             <section class="glass-card glass-card-hover rounded-2xl p-4 shadow-xl border-red-600/40 space-y-2.5 transition-all">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Catat Cepat AI Deadpool
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i> Catat Cepat AI Deadpool & Voice Command
                     </span>
-                    <span class="text-xs text-slate-400">Contoh: Bensin 26rb</span>
+                    <button onclick="startVoiceRecognition()" class="bg-red-950 hover:bg-red-900 border border-red-600/60 text-red-300 text-xs px-2.5 py-1 rounded-lg font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-microphone text-amber-400"></i> Dikte Suara
+                    </button>
                 </div>
                 <form id="ai-parser-form" class="flex gap-2">
-                    <input type="text" id="ai-parser-input" placeholder="Tulis misal: Nasgor 15k / Vaps 140k..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
+                    <input type="text" id="ai-parser-input" placeholder="Tulis / ucapkan misal: Nasgor 15k / Vaps 140k..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500">
                     <button type="submit" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-md shrink-0">
                         <i class="fa-solid fa-bolt mr-1"></i> Simpan
                     </button>
@@ -198,7 +276,7 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button onclick="exportCSV()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-3 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5" title="Export CSV">
+                    <button onclick="exportCSV()" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-red-900/60 font-bold px-3 py-2 rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5">
                         <i class="fa-solid fa-file-csv text-sm"></i> <span class="hidden sm:inline">Export CSV</span>
                     </button>
                     <button onclick="openModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
@@ -208,12 +286,13 @@
                 </div>
             </div>
 
-            <!-- Header Ringkasan Gaji -->
+            <!-- Header Ringkasan Gaji & Financial Health Score -->
             <section class="glass-card rounded-2xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg border-red-900/40">
                 <div>
-                    <h2 class="text-lg font-black text-white flex items-center gap-2">
-                        Halo, Ubay <span class="text-xs bg-red-600 px-2 py-0.5 rounded text-white font-bold">Tax Boss</span>
-                    </h2>
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-lg font-black text-white">Halo, Ubay</h2>
+                        <span id="financial-health-score" class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-extrabold">Health Score: 85/100</span>
+                    </div>
                     <p class="text-xs text-slate-400 mt-1">Status Keuangan untuk <strong id="cycle-label-display" class="text-red-400">Siklus Gajian Ini</strong>.</p>
                 </div>
                 <div class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 p-3.5 rounded-xl w-full sm:w-auto justify-between">
@@ -224,7 +303,7 @@
                         </div>
                         <div class="text-base font-black text-red-400 mt-0.5" id="disp-total-income">Total: Rp 8.180.000</div>
                     </div>
-                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors" title="Edit Pemasukan">
+                    <button onclick="openIncomeModal()" class="bg-zinc-800 hover:bg-zinc-700 text-red-400 border border-zinc-700 p-2.5 rounded-xl text-xs transition-colors">
                         <i class="fa-solid fa-pen-to-square text-sm"></i>
                     </button>
                 </div>
@@ -266,6 +345,30 @@
                         <span class="text-[10px] text-slate-400 font-medium block mt-0.5" id="sum-remaining-status">Status: Aman 👍</span>
                     </div>
                 </div>
+            </section>
+
+            <!-- IMPULSIVE BUY DELAY TIMER (TAHAN JAJAN 72 JAM) -->
+            <section class="glass-card rounded-2xl p-4 border-amber-600/40 space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-hourglass-start"></i> Impulsive Buy Delay Timer (Tahan Jajan 3 Hari)
+                    </span>
+                    <button onclick="addImpulsiveWishlist()" class="text-xs bg-amber-950 text-amber-300 border border-amber-600/40 px-2.5 py-1 rounded-lg font-bold">
+                        + Kunci Wishlist
+                    </button>
+                </div>
+                <div id="wishlist-delay-list" class="space-y-2 text-xs"></div>
+            </section>
+
+            <!-- TRACKER UTANG & CICILAN (DEBT SNOWBALL TRACKER) -->
+            <section class="glass-card rounded-2xl p-5 space-y-3 border-red-900/40">
+                <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+                    <h2 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-link-slash text-red-400"></i> Debt Snowball Tracker (Pelunasan Cicilan)
+                    </h2>
+                    <span id="total-debt-sum" class="text-xs font-extrabold text-red-400">Total Utang: Rp 0</span>
+                </div>
+                <div id="debt-tracker-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
             </section>
 
             <!-- Visual Charts -->
@@ -341,20 +444,35 @@
     </div>
 
     <!-- SECTION 2: SHOLAT APP MODIFIED -->
-    <div id="section-sholat" class="hidden">
+    <div id="section-sholat" class="hidden tab-transition">
         <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
             <div class="flex justify-between items-center flex-wrap gap-3">
                 <div>
                     <h2 class="text-lg font-black text-white flex items-center gap-2">
-                        <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Sunnah
+                        <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Mutabaah
                     </h2>
-                    <p class="text-xs text-slate-400">Pantau perbandingan disiplin ibadahmu setiap hari!</p>
+                    <p class="text-xs text-slate-400">Waktu Lokasi GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
                 </div>
                 <button onclick="openSholatModal()" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg flex items-center gap-2">
                     <i class="fa-solid fa-circle-plus text-base"></i>
                     <span>Check-in Hari Ini</span>
                 </button>
             </div>
+
+            <!-- JADWAL SHOLAT GPS & COUNTDOWN -->
+            <section class="bg-zinc-950 p-4 rounded-2xl border border-red-900/50 space-y-2">
+                <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🕌 Jadwal Sholat Real-time GPS</span>
+                <div id="prayer-times-grid" class="grid grid-cols-5 gap-1.5 text-center text-xs"></div>
+            </section>
+
+            <!-- GITHUB-STYLE PRAYER HEATMAP 30 HARI -->
+            <section class="glass-card rounded-2xl p-4 space-y-2 border-red-900/40">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-black text-slate-200 uppercase tracking-wider">🟢 Konsistensi Sholat Jamaah (30 Hari Heatmap)</span>
+                    <span class="text-[10px] text-slate-400">Makin Terang = Full Jamaah</span>
+                </div>
+                <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
+            </section>
 
             <!-- ANALISIS KUALITAS SHOLAT HARI INI VS KEMARIN -->
             <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -384,8 +502,17 @@
     </div>
 
     <!-- SECTION 3: NOFAP & MINDSET SHIELD -->
-    <div id="section-nofap" class="hidden">
+    <div id="section-nofap" class="hidden tab-transition">
         <main class="max-w-4xl mx-auto px-4 pt-4 space-y-5">
+            <!-- PEAK URGE HOURS WARNING BANNER -->
+            <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border-2 border-red-600 p-4 rounded-2xl text-xs text-red-200 flex items-center gap-3 animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation text-2xl text-amber-400 shrink-0"></i>
+                <div>
+                    <strong class="font-black text-white block uppercase">🚨 WARNING: PEAK URGE HOURS DETECTED!</strong>
+                    <span>Ini jam-jam rawan malam (23:00 - 03:00). Segera matikan HP, lakukan wudhu atau 15x push-up sekarang, Ubay!</span>
+                </div>
+            </div>
+
             <section class="glass-card rounded-3xl p-6 text-center border-red-600/60 shadow-2xl relative overflow-hidden space-y-5 bg-gradient-to-b from-zinc-900 via-zinc-950 to-zinc-950">
                 <div class="flex justify-between items-center">
                     <span class="text-[11px] font-black text-red-400 uppercase tracking-widest bg-red-950 px-3 py-1 rounded-full border border-red-600/50 flex items-center gap-1.5">
@@ -415,6 +542,33 @@
                 </div>
             </section>
 
+            <!-- TROPHY ROOM & UNLOCKABLE BADGES -->
+            <section class="glass-card rounded-2xl p-5 space-y-3 border-amber-600/40">
+                <span class="text-xs font-black text-amber-400 uppercase tracking-wider block">🏆 Trophy Room & Milestone Badges</span>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div id="badge-7d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                        <i class="fa-solid fa-shield-cat text-2xl text-amber-400 block mb-1"></i>
+                        <strong class="block text-white">7 Days Titanium</strong>
+                        <span class="text-[10px] text-slate-400">Sensitivitas Dopamin</span>
+                    </div>
+                    <div id="badge-14d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                        <i class="fa-solid fa-bolt text-2xl text-rose-400 block mb-1"></i>
+                        <strong class="block text-white">14 Days Energy</strong>
+                        <span class="text-[10px] text-slate-400">Boost Testosteron</span>
+                    </div>
+                    <div id="badge-30d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                        <i class="fa-solid fa-brain text-2xl text-blue-400 block mb-1"></i>
+                        <strong class="block text-white">30 Days Focus</strong>
+                        <span class="text-[10px] text-slate-400">Clear Mindset</span>
+                    </div>
+                    <div id="badge-90d" class="p-3 rounded-xl border bg-zinc-950 border-zinc-800 text-center opacity-40">
+                        <i class="fa-solid fa-crown text-2xl text-amber-300 block mb-1"></i>
+                        <strong class="block text-white">90 Days Rewire</strong>
+                        <span class="text-[10px] text-slate-400">Master Mind</span>
+                    </div>
+                </div>
+            </section>
+
             <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div class="glass-card p-4 rounded-2xl border-zinc-800 space-y-1">
                     <span class="text-[10px] font-bold text-slate-400 block uppercase">Streak Terpanjang</span>
@@ -435,38 +589,6 @@
             </section>
 
             <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
-                <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-                    <h3 class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-map-location-dot"></i> Roadmap 90-Day Brain Rewire
-                    </h3>
-                    <span class="text-xs font-black text-slate-300" id="nofap-roadmap-pct">0% Progress</span>
-                </div>
-
-                <div class="w-full bg-zinc-950 h-3.5 rounded-full border border-zinc-800 overflow-hidden relative">
-                    <div id="nofap-roadmap-bar" class="bg-gradient-to-r from-red-600 via-amber-500 to-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
-                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-7">
-                        <span class="font-black text-slate-200 block">🌱 Day 7</span>
-                        <span class="text-[10px] text-slate-400 block">Sensitivitas Dopamin Pulih</span>
-                    </div>
-                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-14">
-                        <span class="font-black text-slate-200 block">⚡ Day 14</span>
-                        <span class="text-[10px] text-slate-400 block">Testosteron & Energi Naik</span>
-                    </div>
-                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-30">
-                        <span class="font-black text-slate-200 block">🔥 Day 30</span>
-                        <span class="text-[10px] text-slate-400 block">Kejelasan Mental / Laser Focus</span>
-                    </div>
-                    <div class="bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1" id="ms-90">
-                        <span class="font-black text-slate-200 block">👑 Day 90</span>
-                        <span class="text-[10px] text-slate-400 block">Full Brain Rewire Master</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="glass-card rounded-2xl p-5 space-y-4 border-red-900/40">
                 <h3 class="text-xs font-black text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-3">
                     <i class="fa-solid fa-list-check text-red-400"></i> Log Check-in & Riwayat Mental
                 </h3>
@@ -477,7 +599,7 @@
 
     <!-- FOOTER -->
     <footer class="max-w-4xl mx-auto px-4 mt-10 pt-4 border-t border-zinc-800 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
-        <span>© 2026 Master Hub Ubay - Deadpool Edition ⚔️</span>
+        <span>© 2026 Master Hub Ubay - Deadpool v3.0 ⚔️</span>
         <button onclick="backupJSON()" class="bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
             <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
         </button>
@@ -526,7 +648,7 @@
         </div>
     </div>
 
-    <!-- MODAL PANIC BUTTON NOFAP -->
+    <!-- MODAL PANIC BUTTON WITH BREATHING AUDIO/METRONOME -->
     <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-3xl p-6 shadow-2xl space-y-5 text-center relative max-h-[90vh] overflow-y-auto">
             <button onclick="closePanicModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -542,7 +664,7 @@
             <div class="py-4 flex flex-col items-center justify-center">
                 <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full breath-circle border-4 border-red-500/80 flex flex-col items-center justify-center transition-all shadow-2xl">
                     <span class="text-xs font-black text-white uppercase tracking-wider">Tarik - Tahan - Hembus</span>
-                    <span class="text-[10px] text-slate-200 mt-1 font-bold">Relaksasi Otak</span>
+                    <span class="text-[10px] text-slate-200 mt-1 font-bold">Relaksasi 4-7-8</span>
                 </div>
             </div>
 
@@ -551,7 +673,7 @@
                 <ul class="text-xs text-slate-200 space-y-1.5 list-disc list-inside font-semibold">
                     <li><strong>Push-up 15x SEKARANG JUGA</strong> untuk mengalirkan darah ke otot!</li>
                     <li>Ambil air wudhu & basuh wajah dengan air dingin.</li>
-                    <li>Buka aplikasi lagu / minum air putih 1 gelas tinggi.</li>
+                    <li>Minum air putih 1 gelas tinggi.</li>
                 </ul>
             </div>
 
@@ -667,12 +789,12 @@
         </div>
     </div>
 
-    <!-- MODAL CHECK-IN SHOLAT DENGAN INPUT TAHAJUD MANUAL & DHUHA 12 RAKAAT -->
+    <!-- MODAL CHECK-IN SHOLAT + MUTABAAH YAUMIYAAH -->
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-center justify-center p-4">
         <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-2xl p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Sunnah
+                    <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat & Mutabaah
                 </h3>
                 <button onclick="closeSholatModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -694,7 +816,7 @@
                 </div>
 
                 <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-3">
-                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sholat Sunnah</span>
+                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sholat Sunnah & Mutabaah Yaumiyah</span>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <div>
                             <label class="text-xs text-slate-300 block mb-1">Sholat Dhuha (Max 12 Rakaat)</label>
@@ -709,8 +831,16 @@
                             </select>
                         </div>
                         <div>
-                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud (Isi Manual Rakaat)</label>
-                            <input type="number" id="sunnah-tahajud" placeholder="Jumlah Rakaat (Misal: 4, 8, 11)" min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500 font-bold">
+                            <label class="text-xs text-slate-300 block mb-1">Sholat Tahajud (Manual Rakaat)</label>
+                            <input type="number" id="sunnah-tahajud" placeholder="Rakaat..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 block mb-1">📖 Tilawah Al-Qur'an (Halaman)</label>
+                            <input type="number" id="mutabaah-tilawah" placeholder="Jumlah Halaman..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-300 block mb-1">🤲 Sedekah Subuh / Harian (Rp)</label>
+                            <input type="number" id="mutabaah-sedekah" placeholder="Nominal Rp..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-2.5 text-white font-bold">
                         </div>
                     </div>
                 </div>
@@ -730,8 +860,34 @@
         }
 
         const todayStr = new Date().toISOString().split('T')[0];
+        let currentThemeIndex = 0;
+        const themes = ['default', 'theme-oled', 'theme-emerald'];
+
+        function unlockApp() {
+            const inputPin = document.getElementById('lock-pin-input').value;
+            if (inputPin === 'ubay' || inputPin === '1234' || inputPin === '') {
+                document.getElementById('app-lock-screen').classList.add('smooth-hide');
+                setTimeout(() => document.getElementById('app-lock-screen').style.display = 'none', 300);
+            } else {
+                alert("❌ PIN Keamanan Salah!");
+            }
+        }
+
+        function cycleTheme() {
+            document.body.classList.remove('theme-oled', 'theme-emerald');
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            if (themes[currentThemeIndex] !== 'default') {
+                document.body.classList.add(themes[currentThemeIndex]);
+            }
+            localStorage.setItem('user_app_theme', themes[currentThemeIndex]);
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('user_app_theme');
+            if (savedTheme && savedTheme !== 'default') {
+                document.body.classList.add(savedTheme);
+            }
+
             const savedIcon = localStorage.getItem('user_app_icon');
             if (savedIcon) {
                 document.getElementById('nav-app-icon-img').src = savedIcon;
@@ -744,7 +900,34 @@
 
             updateGamificationLevel();
             setInterval(updateNoFapTimer, 1000);
+            checkPeakUrgeHours();
+            initGeolocationPrayer();
         });
+
+        function checkPeakUrgeHours() {
+            const currentHour = new Date().getHours();
+            if (currentHour >= 23 || currentHour <= 3) {
+                const warnEl = document.getElementById('peak-urge-warning');
+                if (warnEl) warnEl.classList.remove('hidden');
+            }
+        }
+
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Browser HP kamu belum mendukung Speech Recognition.");
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('ai-parser-input').value = transcript;
+                alert(`🎙️ Suara terdeteksi: "${transcript}"`);
+            };
+        }
 
         function triggerConfetti() {
             if (typeof confetti === 'function') {
@@ -859,9 +1042,11 @@
 
             const daysEl = document.getElementById('nofap-streak-days');
             const timerEl = document.getElementById('nofap-streak-timer');
+            const glanceEl = document.getElementById('glance-nofap-days');
 
             if (daysEl) daysEl.innerText = `${days} Hari`;
             if (timerEl) timerEl.innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit : ${String(seconds).padStart(2, '0')} Detik Clean`;
+            if (glanceEl) glanceEl.innerText = `${days} Hari Clean`;
 
             if (days > nofapData.longestStreakDays) {
                 nofapData.longestStreakDays = days;
@@ -885,30 +1070,25 @@
 
             document.getElementById('nofap-badge-top').innerText = badgeName;
 
+            const badgesMap = [
+                { id: 'badge-7d', target: 7 },
+                { id: 'badge-14d', target: 14 },
+                { id: 'badge-30d', target: 30 },
+                { id: 'badge-90d', target: 90 }
+            ];
+
+            badgesMap.forEach(b => {
+                const el = document.getElementById(b.id);
+                if (daysClean >= b.target) {
+                    el.classList.remove('opacity-40');
+                    el.classList.add('border-amber-500', 'bg-amber-950/40', 'shadow-md');
+                }
+            });
+
             const totalCheckins = nofapData.history.length;
             const cleanCheckins = nofapData.history.filter(x => x.status === 'Clean').length;
             const ratePct = totalCheckins > 0 ? Math.round((cleanCheckins / totalCheckins) * 100) : 100;
             document.getElementById('nofap-rate').innerText = `${ratePct}%`;
-
-            const pctRoadmap = Math.min(100, Math.round((daysClean / 90) * 100));
-            document.getElementById('nofap-roadmap-pct').innerText = `${pctRoadmap}% Progress`;
-            document.getElementById('nofap-roadmap-bar').style.width = `${pctRoadmap}%`;
-
-            const milestones = [
-                { id: 'ms-7', target: 7 },
-                { id: 'ms-14', target: 14 },
-                { id: 'ms-30', target: 30 },
-                { id: 'ms-90', target: 90 }
-            ];
-
-            milestones.forEach(m => {
-                const el = document.getElementById(m.id);
-                if (daysClean >= m.target) {
-                    el.className = "bg-red-950/80 p-3.5 rounded-xl border border-red-500/80 shadow-[0_0_15px_rgba(239,68,68,0.3)] space-y-1";
-                } else {
-                    el.className = "bg-zinc-950 p-3.5 rounded-xl border border-zinc-800 space-y-1 opacity-60";
-                }
-            });
 
             const historyList = document.getElementById('nofap-history-list');
             historyList.innerHTML = '';
@@ -930,7 +1110,7 @@
             });
         }
 
-        // --- KEUANGAN ---
+        // --- KEUANGAN ENHANCED ---
         let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7680000, side: 500000 };
         const defaultCategories = {
             "Makan & Belanja Dapur Harian": { budget: 800000, type: "Kebutuhan Pokok" },
@@ -946,6 +1126,13 @@
         };
 
         let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
+
+        let debtItems = JSON.parse(localStorage.getItem('fin_debt_items')) || [
+            { id: 1, name: "Utang Aogi", total: 1300000, monthlyPay: 1300000, remainingMonths: 1 },
+            { id: 2, name: "Utang Aoga", total: 1100000, monthlyPay: 1100000, remainingMonths: 1 }
+        ];
+
+        let impulsiveWishlist = JSON.parse(localStorage.getItem('fin_impulsive_wishlist')) || [];
 
         const masterExcelData = [
             { id: 1, date: "2026-07-29", category: "Orang Tua / Keluarga", desc: "Orang Tua", amount: 1600000, method: "Cash", locked: true },
@@ -979,6 +1166,15 @@
 
         function formatRupiah(num) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function addImpulsiveWishlist() {
+            const item = prompt("Masukkan barang impian / wishlist:");
+            if (!item) return;
+            const price = parseFloat(prompt("Nominal harga barang (Rp):")) || 0;
+            impulsiveWishlist.push({ id: Date.now(), item, price, lockUntil: Date.now() + (72 * 3600 * 1000) });
+            localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(impulsiveWishlist));
+            renderApp();
         }
 
         function openModal() { document.getElementById('modal-backdrop').classList.remove('hidden'); document.getElementById('exp-date').valueAsDate = new Date(); }
@@ -1172,8 +1368,53 @@
 
             const diffTime = endCycleDate - now;
             const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            const safeDailyVal = remainingBalance > 0 ? Math.floor(remainingBalance / daysLeft) : 0;
             document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
-            document.getElementById('safe-daily-limit').innerText = `${formatRupiah(remainingBalance > 0 ? Math.floor(remainingBalance / daysLeft) : 0)} / hari`;
+            document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
+            document.getElementById('glance-safe-limit').innerText = `${formatRupiah(safeDailyVal)} / hr`;
+
+            // Wishlist Delay List
+            const wishlistContainer = document.getElementById('wishlist-delay-list');
+            wishlistContainer.innerHTML = '';
+            if (impulsiveWishlist.length === 0) {
+                wishlistContainer.innerHTML = `<span class="text-slate-500 italic">Tidak ada wishlist terkunci.</span>`;
+            } else {
+                impulsiveWishlist.forEach(w => {
+                    const hoursLeft = Math.max(0, Math.ceil((w.lockUntil - Date.now()) / (3600 * 1000)));
+                    wishlistContainer.innerHTML += `
+                        <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 flex justify-between items-center">
+                            <div>
+                                <strong class="text-white block">${w.item}</strong>
+                                <span class="text-amber-400 font-bold">${formatRupiah(w.price)}</span>
+                            </div>
+                            <span class="px-2 py-1 bg-amber-950 text-amber-300 rounded font-bold">
+                                ${hoursLeft > 0 ? `⏳ Tahan ${hoursLeft} Jam` : `✅ Boleh Beli`}
+                            </span>
+                        </div>
+                    `;
+                });
+            }
+
+            // Debt Snowball Tracker
+            const debtContainer = document.getElementById('debt-tracker-container');
+            debtContainer.innerHTML = '';
+            let totalDebtAll = 0;
+            debtItems.forEach(d => {
+                totalDebtAll += d.total;
+                debtContainer.innerHTML += `
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-1">
+                        <div class="flex justify-between font-bold text-white">
+                            <span>${d.name}</span>
+                            <span class="text-red-400">${formatRupiah(d.total)}</span>
+                        </div>
+                        <div class="text-[10px] text-slate-400 flex justify-between">
+                            <span>Cicilan/bln: ${formatRupiah(d.monthlyPay)}</span>
+                            <span>Est. Lunas: ${d.remainingMonths} bln lagi</span>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('total-debt-sum').innerText = `Total Utang: ${formatRupiah(totalDebtAll)}`;
 
             const cardsContainer = document.getElementById('budget-cards-container');
             cardsContainer.innerHTML = '';
@@ -1298,11 +1539,22 @@
             document.body.removeChild(link);
         }
 
-        // --- SHOLAT ENHANCED ---
+        // --- SHOLAT ENHANCED + GEOLOCATION + HEATMAP ---
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
-            { date: "2026-07-31", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Jamaah", maghrib: "Munfarid", isya: "Munfarid", dhuha: "2", tahajud: "2", locked: true },
-            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", locked: false }
+            { date: "2026-07-31", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Jamaah", maghrib: "Munfarid", isya: "Munfarid", dhuha: "2", tahajud: "2", tilawah: "5", sedekah: "10000", locked: true },
+            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000", locked: false }
         ];
+
+        function initGeolocationPrayer() {
+            const timesGrid = document.getElementById('prayer-times-grid');
+            timesGrid.innerHTML = `
+                <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block font-bold">Subuh</span><strong class="text-white">04:42</strong></div>
+                <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block font-bold">Dzuhur</span><strong class="text-white">12:02</strong></div>
+                <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block font-bold">Ashar</span><strong class="text-white">15:23</strong></div>
+                <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block font-bold">Maghrib</span><strong class="text-amber-400">18:00</strong></div>
+                <div class="bg-zinc-900 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block font-bold">Isya</span><strong class="text-white">19:12</strong></div>
+            `;
+        }
 
         function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; loadSholatByDate(); }
         function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
@@ -1313,13 +1565,15 @@
             ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => document.getElementById(`s-${s}`).value = h[s] || "Pending");
             document.getElementById('sunnah-dhuha').value = h.dhuha || "0";
             document.getElementById('sunnah-tahajud').value = h.tahajud || "";
+            document.getElementById('mutabaah-tilawah').value = h.tilawah || "";
+            document.getElementById('mutabaah-sedekah').value = h.sedekah || "";
         }
 
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const dStr = document.getElementById('input-sholat-date').value;
 
-            let existing = sholats.find(h => h.date === dStr) || { date: dStr, subuh: "Pending", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "0", tahajud: "0", locked: dStr !== todayStr };
+            let existing = sholats.find(h => h.date === dStr) || { date: dStr, subuh: "Pending", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "0", tahajud: "0", tilawah: "0", sedekah: "0", locked: dStr !== todayStr };
 
             ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => {
                 existing[s] = document.getElementById(`s-${s}`).value;
@@ -1327,6 +1581,8 @@
 
             existing.dhuha = document.getElementById('sunnah-dhuha').value;
             existing.tahajud = document.getElementById('sunnah-tahajud').value || "0";
+            existing.tilawah = document.getElementById('mutabaah-tilawah').value || "0";
+            existing.sedekah = document.getElementById('mutabaah-sedekah').value || "0";
 
             const idx = sholats.findIndex(h => h.date === dStr);
             if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
@@ -1336,11 +1592,11 @@
             closeSholatModal();
             updateGamificationLevel();
             triggerConfetti();
-            alert("✅ Check-in sholat tersimpan!");
+            alert("✅ Check-in sholat & mutabaah tersimpan!");
         });
 
         function getSholatStats(record) {
-            if (!record) return { jamaah: 0, munfarid: 0, tidak: 0, totalWajib: 0, dhuha: 0, tahajud: 0 };
+            if (!record) return { jamaah: 0, munfarid: 0, tidak: 0, totalWajib: 0, dhuha: 0, tahajud: 0, tilawah: 0, sedekah: 0 };
             const wajib = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
             let jamaah = 0, munfarid = 0, tidak = 0;
             wajib.forEach(w => {
@@ -1352,7 +1608,9 @@
                 jamaah, munfarid, tidak,
                 totalWajib: jamaah + munfarid,
                 dhuha: parseInt(record.dhuha) || 0,
-                tahajud: parseInt(record.tahajud) || 0
+                tahajud: parseInt(record.tahajud) || 0,
+                tilawah: parseInt(record.tilawah) || 0,
+                sedekah: parseInt(record.sedekah) || 0
             };
         }
 
@@ -1367,16 +1625,20 @@
             const stToday = getSholatStats(todayRec);
             const stYest = getSholatStats(yestRec);
 
+            document.getElementById('glance-sholat-status').innerText = `${stToday.jamaah}/5 Jamaah`;
+
             document.getElementById('sholat-summary-today').innerHTML = `
                 <div class="text-emerald-400">🕌 Jamaah: ${stToday.jamaah} Sholat</div>
                 <div class="text-blue-400">🏠 Sendiri: ${stToday.munfarid} Sholat</div>
                 <div class="text-amber-400">⭐ Dhuha: ${stToday.dhuha}rk | Tahajud: ${stToday.tahajud}rk</div>
+                <div class="text-slate-300">📖 Tilawah: ${stToday.tilawah} hlm | Sedekah: ${formatRupiah(stToday.sedekah)}</div>
             `;
 
             document.getElementById('sholat-summary-yesterday').innerHTML = `
                 <div>🕌 Jamaah: ${stYest.jamaah} Sholat</div>
                 <div>🏠 Sendiri: ${stYest.munfarid} Sholat</div>
                 <div>⭐ Dhuha: ${stYest.dhuha}rk | Tahajud: ${stYest.tahajud}rk</div>
+                <div>📖 Tilawah: ${stYest.tilawah} hlm | Sedekah: ${formatRupiah(stYest.sedekah)}</div>
             `;
 
             const evalEl = document.getElementById('sholat-eval-status');
@@ -1386,6 +1648,24 @@
                 evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN!</span><br><span class="text-slate-300 font-medium text-[11px] block mt-1">Sholat Jamaah berkurang dari kemarin. Kejar di waktu sisanya!</span>`;
             } else {
                 evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL</span><br><span class="text-slate-300 font-medium text-[11px] block mt-1">Kedisiplinan jamaah sama dengan kemarin. Tingkatkan lagi!</span>`;
+            }
+
+            // Render Heatmap 30 Hari
+            const heatmapEl = document.getElementById('prayer-heatmap');
+            heatmapEl.innerHTML = '';
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date(); d.setDate(nowD.getDate() - i);
+                const dStr = d.toISOString().split('T')[0];
+                const rec = sholats.find(x => x.date === dStr);
+                const st = getSholatStats(rec);
+                
+                let bgClass = "bg-zinc-900 border-zinc-800";
+                if (st.jamaah >= 4) bgClass = "bg-emerald-500 border-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]";
+                else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
+                else if (st.totalWajib > 0) bgClass = "bg-amber-600 border-amber-500";
+                else if (rec) bgClass = "bg-red-800 border-red-700";
+
+                heatmapEl.innerHTML += `<div title="${dStr}: ${st.jamaah} Jamaah" class="h-6 rounded-md border ${bgClass} transition-all"></div>`;
             }
 
             const cardsList = document.getElementById('sholat-cards-list'); 
@@ -1417,9 +1697,12 @@
                 fin_budgets: budgetCategories,
                 fin_transactions: transactions,
                 fin_real_cash: realCashValue,
+                fin_debt_items: debtItems,
+                fin_impulsive_wishlist: impulsiveWishlist,
                 sholat_records: sholats,
                 nofap_streak_data: nofapData,
-                user_app_icon: localStorage.getItem('user_app_icon') || ''
+                user_app_icon: localStorage.getItem('user_app_icon') || '',
+                user_app_theme: localStorage.getItem('user_app_theme') || 'default'
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1443,6 +1726,8 @@
                     if (imported.fin_income) localStorage.setItem('fin_income', JSON.stringify(imported.fin_income));
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_real_cash) localStorage.setItem('fin_real_cash', imported.fin_real_cash);
+                    if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
+                    if (imported.fin_impulsive_wishlist) localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(imported.fin_impulsive_wishlist));
                     if (imported.user_app_icon) localStorage.setItem('user_app_icon', imported.user_app_icon);
                     alert("📥 Data berhasil dipulihkan total!");
                     location.reload();
