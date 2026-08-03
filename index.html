@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Master Tactile v5.2.1</title>
+    <title id="html-title-tag">Ubay Progress - Master Tactile v5.2.2</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -64,15 +64,19 @@
         html.app-locked #app-lock-screen { display: flex !important; }
         html.app-locked #app-main-content { display: none !important; }
 
+        /* UNLOCK ZOOM & FULL FIT SCREEN FIX */
         html, body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #090506; 
             background-image: var(--bg-gradient);
             transition: background 0.3s ease, color 0.3s ease;
+            width: 100vw;
             max-width: 100vw;
             overflow-x: hidden !important;
-            touch-action: manipulation;
+            touch-action: pan-x pan-y;
+            -webkit-text-size-adjust: 100%;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .glass-card { 
@@ -159,7 +163,7 @@
                                 <h1 onclick="customRenameAppName()" class="text-sm sm:text-base font-black text-white uppercase truncate cursor-pointer" id="display-app-title">Ubay Progress</h1> 
                                 <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0">Lvl 1</span>
                             </div>
-                            <p class="text-[10px] text-red-400 font-bold" id="current-date-header">Senin, 3 Agustus 2026</p>
+                            <p class="text-[10px] text-red-400 font-bold" id="current-date-header">Senin, 03/08/2026</p>
                         </div>
                     </div>
 
@@ -262,7 +266,7 @@
                     </div>
                 </div>
 
-                <!-- Header Ringkasan Gaji & Financial Health -->
+                <!-- Header Ringkasan Gaji -->
                 <section class="glass-card rounded-xl p-3.5 flex justify-between items-center gap-2 border-red-900/40">
                     <div>
                         <div class="flex items-center gap-2">
@@ -362,7 +366,7 @@
                     <div id="budget-cards-container" class="grid grid-cols-1 gap-2"></div>
                 </section>
 
-                <!-- TABEL RIWAYAT KEUANGAN -->
+                <!-- TABEL RIWAYAT KEUANGAN (FORMAT DD/MM/YYYY) -->
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
@@ -394,7 +398,7 @@
                         <table class="w-full text-left text-xs text-slate-300">
                             <thead class="bg-zinc-950 text-slate-400 uppercase text-[10px] font-bold">
                                 <tr>
-                                    <th class="p-2">Tgl</th>
+                                    <th class="p-2">Tgl (DD/MM)</th>
                                     <th class="p-2">Catatan</th>
                                     <th class="p-2">Nominal</th>
                                     <th class="p-2 text-center">Aksi</th>
@@ -445,7 +449,7 @@
                     <div id="prayer-times-grid" class="grid grid-cols-5 gap-1 text-center text-xs"></div>
                 </section>
 
-                <!-- HEATMAP 30 HARI -->
+                <!-- HEATMAP 30 HARI DENGAN TOOLTIP TANGGAL DD/MM/YYYY -->
                 <section class="glass-card rounded-xl p-3 space-y-1.5 border-red-900/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-slate-200 uppercase">🟢 Heatmap Sholat (30 Hari)</span>
@@ -523,7 +527,6 @@
                     </div>
                 </section>
 
-                <!-- JURNAL REFLEKSI MENTAL HARIAN -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-amber-600/40">
                     <span class="text-xs font-black text-amber-400 uppercase block">⭐ Jurnal Refleksi Mental Harian</span>
                     <div class="grid grid-cols-3 gap-2 text-center">
@@ -589,7 +592,7 @@
             </main>
         </div>
 
-        <!-- BOTTOM NAVIGATION BAR (MURNI 3 CORE TAB) -->
+        <!-- BOTTOM NAVIGATION BAR -->
         <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/95 backdrop-blur-lg border-t border-red-900/60 pb-safe">
             <div class="max-w-4xl mx-auto grid grid-cols-3 h-14">
                 <button id="nav-btn-fin" onclick="haptic('light'); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white">
@@ -939,13 +942,49 @@
         </div>
     </div>
 
-    <!-- SCRIPT UTAMA & ENGINE HAPTIC/SOUND SYSTEM -->
+    <!-- SCRIPT UTAMA -->
     <script>
+        // DISABLE DOUBLE TAP ZOOM IN HP
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW err:', err));
         }
 
         const todayStr = new Date().toISOString().split('T')[0];
+
+        // HELPER FORMAT TANGGAL DD/MM/YYYY
+        function formatDateDDMMYYYY(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateString;
+        }
+
+        function formatDateDDMM(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}`;
+            }
+            return dateString;
+        }
+
         let currentThemeIndex = 0;
         const themes = ['default', 'theme-oled', 'theme-emerald'];
         let showAllHistory = false;
@@ -956,7 +995,6 @@
         // WALLETS DATA
         let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
 
-        // 1. ENGINE HAPTIC PULSES BERTINGKAT
         function haptic(type = 'light') {
             if (!("vibrate" in navigator)) return;
             if (type === 'light') navigator.vibrate(10);
@@ -964,7 +1002,6 @@
             else if (type === 'heavy') navigator.vibrate([60, 40, 60]);
         }
 
-        // 2. WEB AUDIO SYNTHESIZER ENGINE
         function getAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1025,7 +1062,6 @@
             } catch(e) { console.log('Audio err:', e); }
         }
 
-        // 3. AMBIENT CALMING NOISE GENERATOR
         function toggleCalmingAudio() {
             const btn = document.getElementById('audio-toggle-btn');
             const type = document.getElementById('ambient-sound-type').value;
@@ -1055,7 +1091,6 @@
             }
         }
 
-        // 4. FIX: BLUR PRIVACY KHUSUS SAAT DI BACKGROUND / RECENT APPS (REFRESH TETAP AMAN)
         window.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 document.getElementById('app-main-content').classList.add('privacy-blur');
@@ -1074,7 +1109,6 @@
             const inputPin = document.getElementById('lock-pin-input').value;
             const currentPin = localStorage.getItem('user_security_pin') || 'ubay';
             if (inputPin === currentPin) {
-                // TERSIMPAN DI LOCALSTORAGE BIAR TETAP UNLOCKED KALO DI-REFRESH
                 localStorage.setItem('app_unlocked_session', 'true');
                 document.documentElement.classList.remove('app-locked');
                 document.documentElement.classList.add('app-unlocked');
@@ -1127,6 +1161,9 @@
             setTimeout(() => {
                 const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
                 applyCustomAppName(savedAppName);
+
+                // Set header date in DD/MM/YYYY
+                document.getElementById('current-date-header').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
 
                 if (isAudioMuted) {
                     document.getElementById('audio-mute-btn').innerHTML = `<i class="fa-solid fa-volume-xmark text-red-400"></i>`;
@@ -1234,7 +1271,7 @@
             }
         }
 
-        // --- PUASA SUNNAH TRACKER ---
+        // PUASA SUNNAH TRACKER
         function initFastingTracker() {
             const dayOfWeek = new Date().getDay();
             const isPuasaRecommended = (dayOfWeek === 1 || dayOfWeek === 4);
@@ -1258,7 +1295,7 @@
             alert("✨ Masya Allah! Status Puasa Sunnah Tersimpan.");
         }
 
-        // --- JURNAL REFLEKSI MENTAL HARIAN ---
+        // JURNAL REFLEKSI MENTAL
         function saveMentalCheck() {
             const data = {
                 energy: document.getElementById('mental-energy').value,
@@ -1277,7 +1314,7 @@
             }
         }
 
-        // --- NOFAP MODULE ---
+        // NOFAP MODULE
         let nofapData = JSON.parse(localStorage.getItem('nofap_streak_data')) || {
             startDate: new Date().toISOString(),
             longestStreakDays: 1,
@@ -1353,7 +1390,7 @@
                 historyList.innerHTML += `
                     <div class="bg-zinc-950 p-2.5 rounded-xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs">
                         <div>
-                            <span class="font-bold text-white block">${item.date}</span>
+                            <span class="font-bold text-white block">${formatDateDDMMYYYY(item.date)}</span>
                             <span class="text-[10px] text-slate-400">${item.note || '-'}</span>
                         </div>
                         <span class="px-2 py-0.5 rounded text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'}">
@@ -1364,7 +1401,7 @@
             });
         }
 
-        // --- KEUANGAN ENHANCED ---
+        // KEUANGAN ENHANCED
         let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7680000, side: 500000 };
         const defaultCategories = {
             "Makan & Belanja Dapur Harian": { budget: 800000 },
@@ -1655,7 +1692,7 @@
                 `;
             });
 
-            // Transactions Table Filter
+            // Transactions Table (Formatted DD/MM/YYYY)
             const historyTable = document.getElementById('history-table');
             historyTable.innerHTML = '';
 
@@ -1691,7 +1728,7 @@
                 displayList.forEach(t => {
                     historyTable.innerHTML += `
                         <tr class="hover:bg-zinc-800/40">
-                            <td class="p-2 text-slate-400 font-medium text-[11px]">${t.date.substring(5)}</td>
+                            <td class="p-2 text-slate-400 font-bold text-[10px]">${formatDateDDMM(t.date)}</td>
                             <td class="p-2 font-semibold text-slate-200 text-xs">
                                 <div>${t.desc}</div>
                                 <span class="text-[9px] text-slate-500">${t.category}</span>
@@ -1745,14 +1782,14 @@
 
         function exportCSV() {
             let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Kategori,Deskripsi,Nominal,Metode\n";
-            transactions.forEach(t => { csvContent += `${t.id},${t.date},"${t.category}","${t.desc}",${t.amount},${t.method || 'Bank'}\n`; });
+            transactions.forEach(t => { csvContent += `${t.id},${formatDateDDMMYYYY(t.date)},"${t.category}","${t.desc}",${t.amount},${t.method || 'Bank'}\n`; });
             const link = document.createElement("a");
             link.setAttribute("href", encodeURI(csvContent));
             link.setAttribute("download", `Keuangan_Ubay_${todayStr}.csv`);
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // --- SHOLAT MODULE ---
+        // SHOLAT MODULE
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
             { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000" }
         ];
@@ -1849,12 +1886,14 @@
                 else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
                 else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
 
-                // Heatmap 30 Hari
+                // HEATMAP 30 HARI + LABEL TANGGAL
                 const heatmapEl = document.getElementById('prayer-heatmap');
                 heatmapEl.innerHTML = '';
                 for (let i = 29; i >= 0; i--) {
                     const d = new Date(); d.setDate(nowD.getDate() - i);
                     const dStr = d.toISOString().split('T')[0];
+                    const formattedDisplayDate = formatDateDDMM(dStr);
+                    const fullFormattedDate = formatDateDDMMYYYY(dStr);
                     const rec = sholats.find(x => x.date === dStr);
                     const st = getSholatStats(rec);
                     
@@ -1863,7 +1902,12 @@
                     else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
                     else if (rec) bgClass = "bg-red-800 border-red-700";
 
-                    heatmapEl.innerHTML += `<div title="${dStr}" class="h-5 rounded border ${bgClass}"></div>`;
+                    heatmapEl.innerHTML += `
+                        <div title="Tanggal: ${fullFormattedDate} (${st.jamaah}/5 Jamaah)" class="flex flex-col items-center group cursor-pointer">
+                            <div class="h-6 w-full rounded border ${bgClass} transition-all group-hover:scale-110"></div>
+                            <span class="text-[7px] text-slate-400 font-extrabold mt-1 group-hover:text-amber-400">${formattedDisplayDate}</span>
+                        </div>
+                    `;
                 }
 
                 const cardsList = document.getElementById('sholat-cards-list'); 
@@ -1874,7 +1918,7 @@
                     cardsList.innerHTML += `
                         <div class="glass-card border border-zinc-800 p-3 rounded-xl space-y-2">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">${h.date}</span>
+                                <span class="font-bold text-white">${formatDateDDMMYYYY(h.date)}</span>
                                 <span class="text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded text-[10px]">⭐ Dhuha: ${h.dhuha || 0}rk</span>
                             </div>
                             <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
@@ -1906,7 +1950,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v5.2.1_${todayStr}.json`;
+            link.download = `Ubay_Backup_v5.2.2_${todayStr}.json`;
             link.click();
         }
 
@@ -1924,7 +1968,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v5.2.1 berhasil dipulihkan!");
+                    alert("📥 Data v5.2.2 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
