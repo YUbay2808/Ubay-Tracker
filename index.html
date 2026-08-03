@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Master Tactile v5.2</title>
+    <title id="html-title-tag">Ubay Progress - Master Tactile v5.2.1</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -16,10 +16,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- ZERO-BLINK REFRESH LOCK SCREEN SCRIPT -->
+    <!-- FIX: REFRESH MEMORY LOCK SCRIPT (LOCALSTORAGE) -->
     <script>
         (function() {
-            var isUnlocked = sessionStorage.getItem('app_unlocked_session') === 'true';
+            var isUnlocked = localStorage.getItem('app_unlocked_session') === 'true';
             document.documentElement.classList.add(isUnlocked ? 'app-unlocked' : 'app-locked');
         })();
     </script>
@@ -87,7 +87,6 @@
             transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
         }
 
-        /* FLUID BOTTOM SHEET WITH SPRING PHYSICS ANIMATION */
         .bottom-sheet {
             border-bottom-left-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
@@ -117,9 +116,8 @@
             gap: 4px;
         }
 
-        /* PRIVACY BLUR CURTAIN FOR RECENT APPS SECURITY */
         .privacy-blur {
-            filter: blur(20px) brightness(0.2) !important;
+            filter: blur(25px) brightness(0.15) !important;
             pointer-events: none !important;
             user-select: none !important;
         }
@@ -134,7 +132,7 @@
         </div>
         <div class="text-center space-y-1">
             <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Progress</h2>
-            <p class="text-xs text-slate-400">Security Locked • Touch to Unlock</p>
+            <p class="text-xs text-slate-400">Security Locked • Enter PIN</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
             <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest shadow-inner">
@@ -166,6 +164,7 @@
                     </div>
 
                     <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="haptic('light'); lockAppManually();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Kunci Aplikasi Sekarang"><i class="fa-solid fa-lock"></i></button>
                         <button onclick="haptic('light'); toggleAudioMute();" id="audio-mute-btn" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Mute/Unmute Audio"><i class="fa-solid fa-volume-high"></i></button>
                         <button onclick="haptic('light'); openPomodoroModal();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Pomodoro Focus"><i class="fa-solid fa-stopwatch"></i></button>
                         <button onclick="haptic('light'); changePinModal();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Ganti PIN"><i class="fa-solid fa-key"></i></button>
@@ -965,7 +964,7 @@
             else if (type === 'heavy') navigator.vibrate([60, 40, 60]);
         }
 
-        // 2. WEB AUDIO SYNTHESIZER ENGINE (TANPA ASSET FILE LUAR / ZERO-LAG)
+        // 2. WEB AUDIO SYNTHESIZER ENGINE
         function getAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -987,18 +986,16 @@
             try {
                 const ctx = getAudioContext();
                 if (effect === 'cash') {
-                    // Kring Mesin Kasir (Frequency sweep)
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(987.77, ctx.currentTime); // B5
-                    osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.15); // E6
+                    osc.frequency.setValueAtTime(987.77, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.15);
                     gain.gain.setValueAtTime(0.1, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
                     osc.connect(gain); gain.connect(ctx.destination);
                     osc.start(); osc.stop(ctx.currentTime + 0.25);
                 } else if (effect === 'gong') {
-                    // Gong Emas Bedug (Low Sine Warm Tone)
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'triangle';
@@ -1009,7 +1006,6 @@
                     osc.connect(gain); gain.connect(ctx.destination);
                     osc.start(); osc.stop(ctx.currentTime + 0.8);
                 } else if (effect === 'sword') {
-                    // Pedang Ditarik (White noise sweep)
                     const bufferSize = ctx.sampleRate * 0.2;
                     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                     const data = buffer.getChannelData(0);
@@ -1059,25 +1055,27 @@
             }
         }
 
-        // 4. AUTO-LOCK INSTANT SECURITY UNTUK RECENT APPS / BACKGROUND
+        // 4. FIX: BLUR PRIVACY KHUSUS SAAT DI BACKGROUND / RECENT APPS (REFRESH TETAP AMAN)
         window.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                // Begitu aplikasi minimised / di recent apps: KUNCI TOTAL & BLUR!
-                sessionStorage.removeItem('app_unlocked_session');
-                document.documentElement.classList.remove('app-unlocked');
-                document.documentElement.classList.add('app-locked');
                 document.getElementById('app-main-content').classList.add('privacy-blur');
             } else {
-                // Saat kembali dibuka
                 document.getElementById('app-main-content').classList.remove('privacy-blur');
             }
         });
+
+        function lockAppManually() {
+            localStorage.setItem('app_unlocked_session', 'false');
+            document.documentElement.classList.remove('app-unlocked');
+            document.documentElement.classList.add('app-locked');
+        }
 
         function unlockApp() {
             const inputPin = document.getElementById('lock-pin-input').value;
             const currentPin = localStorage.getItem('user_security_pin') || 'ubay';
             if (inputPin === currentPin) {
-                sessionStorage.setItem('app_unlocked_session', 'true');
+                // TERSIMPAN DI LOCALSTORAGE BIAR TETAP UNLOCKED KALO DI-REFRESH
+                localStorage.setItem('app_unlocked_session', 'true');
                 document.documentElement.classList.remove('app-locked');
                 document.documentElement.classList.add('app-unlocked');
                 document.getElementById('lock-pin-input').value = '';
@@ -1125,7 +1123,6 @@
             localStorage.setItem('user_app_theme', themes[currentThemeIndex]);
         }
 
-        // LAZY ASYNC INITIALIZATION BIAR BEBAS NGELAG
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
@@ -1909,7 +1906,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v5.2_${todayStr}.json`;
+            link.download = `Ubay_Backup_v5.2.1_${todayStr}.json`;
             link.click();
         }
 
@@ -1927,7 +1924,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v5.2 berhasil dipulihkan!");
+                    alert("📥 Data v5.2.1 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
