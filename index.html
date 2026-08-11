@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Master Tactile v6.0</title>
+    <title id="html-title-tag">Ubay Progress - Master Tactile v6.1</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -46,7 +46,6 @@
             --border-color: rgba(220, 38, 38, 0.35);
         }
 
-        /* DYNAMIC PRAYER ATMOSPHERIC BACKGROUNDS */
         body.bg-subuh { background: radial-gradient(circle at top, #1e1b4b, #020617) !important; }
         body.bg-dzuhur { background: radial-gradient(circle at top, #0284c7, #0f172a) !important; }
         body.bg-maghrib { background: radial-gradient(circle at top, #c2410c, #090506) !important; }
@@ -92,9 +91,7 @@
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease;
         }
 
-        .tab-transition {
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-        }
+        .tab-transition { transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; }
 
         .bottom-sheet {
             border-bottom-left-radius: 0 !important;
@@ -140,14 +137,25 @@
             user-select: none !important;
         }
 
-        .fast-sholat-btn {
-            transition: all 0.2s ease;
-        }
+        .fast-sholat-btn { transition: all 0.2s ease; }
         .fast-sholat-btn.selected {
             border-color: #10b981 !important;
             background-color: rgba(16, 185, 129, 0.2) !important;
             color: #34d399 !important;
         }
+
+        /* CUSTOM CHIP UI */
+        .chip-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .chip-btn:active { scale: 0.92; background: rgba(220, 38, 38, 0.3); border-color: #ef4444; }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
@@ -193,6 +201,7 @@
                     </div>
 
                     <div class="flex items-center gap-1 shrink-0">
+                        <button onclick="haptic('light'); openSheetsConfigModal();" id="sheets-status-btn" class="bg-zinc-900 border border-zinc-800 text-emerald-400 p-2 rounded-xl text-xs" title="Google Sheets Live Sync"><i class="fa-solid fa-file-excel"></i></button>
                         <button onclick="haptic('light'); lockAppManually();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Kunci Aplikasi Sekarang"><i class="fa-solid fa-lock"></i></button>
                         <button onclick="haptic('light'); toggleAudioMute();" id="audio-mute-btn" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Mute/Unmute Audio"><i class="fa-solid fa-volume-high"></i></button>
                         <button onclick="haptic('light'); openPomodoroModal();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Pomodoro Focus"><i class="fa-solid fa-stopwatch"></i></button>
@@ -212,6 +221,7 @@
                     <span class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1">
                         <i class="fa-solid fa-gauge-high"></i> Master Daily Glance
                     </span>
+                    <span id="sheets-sync-indicator" class="text-[9px] text-emerald-400 font-bold"><i class="fa-solid fa-cloud-arrow-up"></i> Sheets Ready</span>
                 </div>
                 <div id="summary-content-grid" class="grid grid-cols-3 gap-1.5 text-center">
                     <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800">
@@ -246,19 +256,30 @@
         <!-- SECTION 1: KEUANGAN -->
         <div id="section-finance" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
-                <section class="glass-card rounded-xl p-3 space-y-2 border-red-600/40">
+                <!-- SMART FAST INPUT BAR & PRESET CHIPS -->
+                <section class="glass-card rounded-xl p-3 space-y-2.5 border-red-600/40">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-red-400 uppercase flex items-center gap-1">
-                            <i class="fa-solid fa-bolt text-xs"></i> Catat Cepat AI / Voice
+                            <i class="fa-solid fa-bolt text-xs"></i> Fast Input & Smart Chips
                         </span>
                         <button onclick="haptic('light'); startVoiceRecognition();" class="bg-red-950 border border-red-600/60 text-red-300 text-[10px] px-2 py-0.5 rounded font-bold active:scale-90">
-                            <i class="fa-solid fa-microphone text-amber-400"></i> Voice
+                            <i class="fa-solid fa-microphone text-amber-400"></i> Voice AI
                         </button>
                     </div>
+
                     <form id="ai-parser-form" class="flex gap-2">
                         <input type="text" id="ai-parser-input" placeholder="Tulis contoh: Kopi 18k / Bensin 20k" class="flex-1 bg-zinc-950 border border-zinc-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500">
                         <button type="submit" onclick="haptic('double')" class="bg-red-600 hover:bg-red-500 text-white font-bold px-3 py-2 rounded-xl text-xs shrink-0 active:scale-95">Simpan</button>
                     </form>
+
+                    <!-- QUICK CHIPS -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
+                        <button type="button" onclick="quickFillChip('Makan & Belanja Dapur Harian', 'Kopi')" class="chip-btn text-amber-300">☕ Kopi</button>
+                        <button type="button" onclick="quickFillChip('Bensin / Transportasi / Tol', 'Bensin Motor')" class="chip-btn text-blue-300">⛽ Bensin</button>
+                        <button type="button" onclick="quickFillChip('Makan & Belanja Dapur Harian', 'Makan Siang')" class="chip-btn text-emerald-300">🍚 Makan</button>
+                        <button type="button" onclick="quickFillChip('Cicilan Utang & Kewajiban Bulanan', 'Cicilan Utang')" class="chip-btn text-rose-300">💸 Utang</button>
+                        <button type="button" onclick="quickFillChip('Orang Tua / Keluarga', 'Orang Tua')" class="chip-btn text-purple-300">🏠 Orang Tua</button>
+                    </div>
                 </section>
 
                 <div class="flex justify-between items-center gap-2">
@@ -431,7 +452,6 @@
 
         <!-- SECTION 2: SHOLAT & MUTABAAH HUB -->
         <div id="section-sholat" class="hidden tab-transition">
-            <!-- REALTIME PRAYER COUNTDOWN BANNER -->
             <div class="bg-gradient-to-r from-emerald-950 via-zinc-950 to-zinc-900 border-b border-emerald-600/50 p-2.5 text-center text-xs flex justify-between items-center px-4 sticky top-14 z-20 shadow-lg">
                 <span id="next-prayer-title" class="font-extrabold text-emerald-400 uppercase text-[11px]"><i class="fa-solid fa-bell text-amber-400 mr-1"></i> Menuju Maghrib</span>
                 <span id="prayer-countdown-timer" class="font-black text-white text-xs bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-600/60">00 : 00 : 00</span>
@@ -453,7 +473,6 @@
                     </button>
                 </div>
 
-                <!-- FAST FASTING BADGE TOGGLE & SEDEKAH SUBUH CARD -->
                 <section class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div class="bg-zinc-950 p-3 rounded-xl border border-amber-600/50 flex justify-between items-center">
                         <div>
@@ -476,13 +495,11 @@
                     </div>
                 </section>
 
-                <!-- JADWAL SHOLAT REALTIME GRID -->
                 <section class="bg-zinc-950/80 p-3 rounded-xl border border-emerald-900/50 space-y-2">
                     <span class="text-[10px] font-black text-emerald-400 uppercase block tracking-wider">🕌 Jadwal Sholat GPS Realtime</span>
                     <div id="prayer-times-grid" class="grid grid-cols-5 gap-1.5 text-center text-xs"></div>
                 </section>
 
-                <!-- INTERACTIVE 3D KIBLAT COMPASS CARD -->
                 <section id="kiblat-card" class="glass-card p-4 rounded-xl text-center space-y-2 border-emerald-600/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-emerald-400 uppercase"><i class="fa-solid fa-compass text-amber-400 mr-1"></i> Interactive 3D Kiblat Compass</span>
@@ -496,13 +513,11 @@
                     <p id="kiblat-status" class="text-[10px] text-slate-400 font-bold">Gerakkan HP kamu untuk mencocokkan arah Kiblat</p>
                 </section>
 
-                <!-- EVALUATION TREND BANNER -->
                 <div id="sholat-trend-banner" class="bg-zinc-950 p-3 rounded-xl border border-emerald-600/40 flex justify-between items-center">
                     <span class="text-xs font-bold text-slate-300">Trend Sholat Jamaah</span>
                     <span id="sholat-eval-status" class="text-xs font-black text-emerald-400">LEBIH BAIK (+1)</span>
                 </div>
 
-                <!-- 30-DAY GLOWING HEATMAP GRID -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-emerald-900/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-slate-200 uppercase">🟢 30-Day Glowing Heatmap Grid</span>
@@ -511,7 +526,6 @@
                     <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
                 </section>
 
-                <!-- SUNNAH BADGES SHOWCASE -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-amber-600/40">
                     <span class="text-xs font-black text-amber-400 uppercase block"><i class="fa-solid fa-star text-amber-400 mr-1"></i> Sunnah Badges Showcase</span>
                     <div class="grid grid-cols-2 gap-2 text-center">
@@ -579,7 +593,6 @@
                     </div>
                 </section>
 
-                <!-- VISUAL REWIRE BRAIN NETWORK MAP CANVAS -->
                 <section class="glass-card rounded-xl p-3 text-center space-y-2 border-red-900/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-amber-400 uppercase"><i class="fa-solid fa-network-wired mr-1"></i> Brain Synapse Network Map</span>
@@ -591,7 +604,6 @@
                     <p class="text-[9px] text-slate-400">Sinapsis otak akan berkilau makin terang seiring bertambahnya streak clean.</p>
                 </section>
 
-                <!-- INTERACTIVE URGE HEAT-MAP TIME RADAR -->
                 <section class="glass-card rounded-xl p-3 text-center space-y-2 border-red-900/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-red-400 uppercase"><i class="fa-solid fa-radar mr-1"></i> 24-Hour Urge Radar</span>
@@ -702,13 +714,34 @@
                 <button onclick="haptic('light'); switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 text-red-400 font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5 active:scale-95">
                     <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
                 </button>
-                <button onclick="haptic('light'); switchTab('finance'); openModal(); toggleFab();" class="bg-red-600 text-white font-bold px-3 py-2 rounded-xl text-xs shadow-lg flex items-center gap-1.5 active:scale-95">
-                    <span>Catat Pengeluaran</span> <i class="fa-solid fa-wallet"></i>
-                </button>
             </div>
-            <button onclick="haptic('light'); toggleFab();" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl active:scale-90">
+            <!-- FAB MAIN BUTTON DIRECTLY OPENS EXPENSE MODAL FOR FAST TAP -->
+            <button onclick="haptic('light'); openModal();" class="w-12 h-12 rounded-2xl bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl active:scale-90">
                 <i class="fa-solid fa-plus"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIG GOOGLE SHEETS WEB APP URL -->
+    <div id="sheets-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="glass-card border border-emerald-500/60 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+                <h3 class="text-xs font-black text-white flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Integrasi Google Sheets Live Sync
+                </h3>
+                <button onclick="haptic('light'); closeSheetsConfigModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-[11px] text-slate-300">Masukkan **URL Apps Script Web App** kamu agar data pengeluaran terisi otomatis ke Spreadsheet secara real-time.</p>
+            <form onsubmit="handleSheetsUrlSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-emerald-400 mb-1">Web App URL (https://script.google.com/...)</label>
+                    <input type="url" id="input-sheets-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="haptic('light'); closeSheetsConfigModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double')" class="w-1/2 bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Simpan & Aktifkan</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -848,7 +881,6 @@
                 <p class="text-xs text-slate-300 italic">"Gunakan ritme bernapas untuk menenangkan sinapsis otak."</p>
             </div>
 
-            <!-- BREATHING RHYTHM SELECTOR -->
             <div class="flex justify-center gap-2">
                 <button onclick="setBreathingRhythm('box')" id="btn-rhythm-box" class="bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-lg">Box 4-4-4-4</button>
                 <button onclick="setBreathingRhythm('478')" id="btn-rhythm-478" class="bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg">4-7-8 Deep Calm</button>
@@ -954,7 +986,7 @@
                 </div>
                 <div class="pt-2 flex gap-2">
                     <button type="button" onclick="haptic('light'); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double'); playSoundEffect('cash');" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Simpan</button>
+                    <button type="submit" onclick="haptic('double'); playSoundEffect('cash');" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Simpan & Sync</button>
                 </div>
             </form>
         </div>
@@ -973,7 +1005,6 @@
                     <input type="date" id="input-sholat-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
                 </div>
 
-                <!-- FAST TAP BUTTONS FOR SHOLAT WAJIB -->
                 <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-3">
                     <span class="text-xs font-bold text-emerald-400 block uppercase">🕌 Sholat Wajib (<span class="text-emerald-300 font-black">+20 XP Jamaah</span>)</span>
                     
@@ -1026,7 +1057,6 @@
                     </div>
                 </div>
 
-                <!-- SLIDER TILAWAH QURAN -->
                 <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-amber-400 uppercase">📖 Tilawah Al-Qur'an</span>
@@ -1081,8 +1111,54 @@
         let audioCtx = null;
         let tempSholatStates = { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending' };
 
+        // GOOGLE SHEETS LIVE SYNC URL CONFIG
+        let sheetsWebAppUrl = localStorage.getItem('google_sheets_webapp_url') || '';
+
         // WALLETS DATA REAL
         let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
+
+        function openSheetsConfigModal() {
+            document.getElementById('input-sheets-url').value = sheetsWebAppUrl;
+            document.getElementById('sheets-modal-backdrop').classList.remove('hidden');
+        }
+
+        function closeSheetsConfigModal() {
+            document.getElementById('sheets-modal-backdrop').classList.add('hidden');
+        }
+
+        function handleSheetsUrlSubmit(e) {
+            e.preventDefault();
+            sheetsWebAppUrl = document.getElementById('input-sheets-url').value.trim();
+            localStorage.setItem('google_sheets_webapp_url', sheetsWebAppUrl);
+            closeSheetsConfigModal();
+            updateSheetsSyncStatus();
+            alert("✅ URL Google Sheets Apps Script Berhasil Disimpan!");
+        }
+
+        function updateSheetsSyncStatus() {
+            const btn = document.getElementById('sheets-status-btn');
+            const ind = document.getElementById('sheets-sync-indicator');
+            if (sheetsWebAppUrl) {
+                if (btn) btn.className = "bg-emerald-950 border border-emerald-600 text-emerald-400 p-2 rounded-xl text-xs";
+                if (ind) ind.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Sheets Connected`;
+            } else {
+                if (btn) btn.className = "bg-zinc-900 border border-zinc-800 text-slate-500 p-2 rounded-xl text-xs";
+                if (ind) ind.innerHTML = `<i class="fa-solid fa-cloud-slash text-amber-400"></i> Sheets Disconnected`;
+            }
+        }
+
+        // AUTO SYNC DATA TRANS KE GOOGLE SHEETS
+        function syncToGoogleSheets(transData) {
+            if (!sheetsWebAppUrl) return;
+            fetch(sheetsWebAppUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(transData)
+            }).then(() => {
+                console.log("Trans terkirim ke Google Sheets!");
+            }).catch(err => console.error("Sheets sync err:", err));
+        }
 
         function openWalletEditModal() {
             document.getElementById('edit-wallet-cash').value = wallets.cash;
@@ -1235,7 +1311,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Master Tactile v6.0`;
+            document.getElementById('html-title-tag').innerText = `${title} - Master Tactile v6.1`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1283,7 +1359,7 @@
                     document.getElementById('app-apple-icon').href = savedIcon;
                 }
 
-                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'sholat';
+                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
                 switchTab(lastActiveTab);
 
                 initFastingTracker();
@@ -1295,6 +1371,7 @@
                 initGyroCompass();
                 renderBrainCanvas();
                 renderUrgeRadar();
+                updateSheetsSyncStatus();
             }, 10);
         });
 
@@ -1304,6 +1381,14 @@
                 const warnEl = document.getElementById('peak-urge-warning');
                 if (warnEl) warnEl.classList.remove('hidden');
             }
+        }
+
+        function quickFillChip(cat, desc) {
+            openModal();
+            document.getElementById('exp-category').value = cat;
+            document.getElementById('exp-desc').value = desc;
+            document.getElementById('exp-amount').focus();
+            haptic('light');
         }
 
         function startVoiceRecognition() {
@@ -1378,7 +1463,7 @@
             }
         }
 
-        // 3D KIBLAT COMPASS (GYROSCOPE)
+        // 3D KIBLAT COMPASS
         function initGyroCompass() {
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function(e) {
@@ -1403,7 +1488,6 @@
             }
         }
 
-        // REALTIME PRAYER COUNTDOWN BANNER
         function initPrayerCountdown() {
             const prayerTimesGrid = document.getElementById('prayer-times-grid');
             prayerTimesGrid.innerHTML = `
@@ -1429,7 +1513,6 @@
             }, 1000);
         }
 
-        // PULSE BREATHING RING WITH CUSTOM RHYTHM
         let breathInterval = null;
         function setBreathingRhythm(type) {
             document.getElementById('btn-rhythm-box').className = type === 'box' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-lg" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg";
@@ -1450,7 +1533,6 @@
             }, 4000);
         }
 
-        // VISUAL BRAIN REWIRE NETWORK MAP
         function renderBrainCanvas() {
             const cvs = document.getElementById('brainCanvas');
             if (!cvs) return;
@@ -1482,7 +1564,6 @@
             document.getElementById('synapse-power-text').innerText = `Power: ${Math.min(daysClean * 10, 100)}%`;
         }
 
-        // 24-HOUR URGE RADAR
         function renderUrgeRadar() {
             const cvs = document.getElementById('urgeRadarCanvas');
             if (!cvs) return;
@@ -1506,7 +1587,6 @@
             ctx.stroke();
         }
 
-        // PUASA SUNNAH TRACKER
         function initFastingTracker() {
             const dayOfWeek = new Date().getDay();
             const isPuasaRecommended = (dayOfWeek === 1 || dayOfWeek === 4);
@@ -1530,7 +1610,6 @@
             alert("✨ Masya Allah! Status Puasa Sunnah Tersimpan.");
         }
 
-        // JURNAL REFLEKSI MENTAL
         function saveMentalCheck() {
             const data = {
                 energy: document.getElementById('mental-energy').value,
@@ -1640,7 +1719,7 @@
         }
 
         // KEUANGAN ENHANCED
-        let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7680000, side: 500000 };
+        let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7700000, side: 0 };
         const defaultCategories = {
             "Makan & Belanja Dapur Harian": { budget: 800000 },
             "Bensin / Transportasi / Tol": { budget: 300000 },
@@ -1657,16 +1736,22 @@
         let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
 
         let debtItems = JSON.parse(localStorage.getItem('fin_debt_items')) || [
-            { id: 1, name: "Utang Aogi", total: 1300000, monthlyPay: 1300000, remainingMonths: 1, status: "Belum Lunas" },
-            { id: 2, name: "Utang Aoga", total: 1100000, monthlyPay: 1100000, remainingMonths: 1, status: "Belum Lunas" }
+            { id: 1, name: "Laptop", total: 1800000, monthlyPay: 650000, remainingMonths: 3, status: "Belum Lunas" },
+            { id: 2, name: "Renov Kamar", total: 8500000, monthlyPay: 500000, remainingMonths: 17, status: "Belum Lunas" },
+            { id: 3, name: "Pinjaman Teman", total: 1000000, monthlyPay: 300000, remainingMonths: 4, status: "Belum Lunas" }
         ];
 
         let impulsiveWishlist = JSON.parse(localStorage.getItem('fin_impulsive_wishlist')) || [];
 
+        // ALL EXCEL INITIAL TRANSACTIONS
         const masterExcelData = [
             { id: 1, date: "2026-07-29", category: "Orang Tua / Keluarga", desc: "Orang Tua", amount: 1600000, method: "Cash" },
             { id: 2, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aogi", amount: 1300000, method: "Cash" },
-            { id: 3, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aoga", amount: 1100000, method: "Cash" }
+            { id: 3, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aoga", amount: 1100000, method: "Cash" },
+            { id: 4, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Dewi", amount: 550000, method: "Cash" },
+            { id: 5, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Oka", amount: 100000, method: "Cash" },
+            { id: 6, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Putri", amount: 70000, method: "Cash" },
+            { id: 7, date: "2026-07-29", category: "Tabungan / Dana Darurat", desc: "Tabungan", amount: 1000000, method: "Mbanking" }
         ];
 
         let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || masterExcelData;
@@ -1805,11 +1890,16 @@
             if (lower.includes('bensin') || lower.includes('tol')) category = "Bensin / Transportasi / Tol";
             else if (lower.includes('makan') || lower.includes('kopi') || lower.includes('nasgor')) category = "Makan & Belanja Dapur Harian";
             
-            transactions.push({ id: Date.now(), date: todayStr, category, desc: text, amount, method: "Bank" });
+            const newTrans = { id: Date.now(), date: todayStr, category, desc: text, amount, method: "Bank" };
+            transactions.push(newTrans);
             
             wallets.bank -= amount;
             localStorage.setItem('fin_wallets', JSON.stringify(wallets));
             localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            
+            // AUTOMATIC GOOGLE SHEETS LIVE SYNC
+            syncToGoogleSheets(newTrans);
+
             document.getElementById('ai-parser-input').value = '';
             renderApp();
             playSoundEffect('cash');
@@ -1991,15 +2081,21 @@
             else if (method === 'E-Wallet') wallets.ewallet -= amount;
             localStorage.setItem('fin_wallets', JSON.stringify(wallets));
 
-            transactions.push({
+            const newTrans = {
                 id: Date.now(),
                 date: document.getElementById('exp-date').value,
                 category: document.getElementById('exp-category').value,
                 desc: document.getElementById('exp-desc').value,
                 amount: amount,
                 method: method
-            });
+            };
+
+            transactions.push(newTrans);
             localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            
+            // AUTOMATIC GOOGLE SHEETS LIVE SYNC
+            syncToGoogleSheets(newTrans);
+
             renderApp(); closeModal();
         });
 
@@ -2014,7 +2110,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // FAST TAP SHOLAT BUTTONS LOGIC
         function setFastSholat(sholatName, val) {
             tempSholatStates[sholatName] = val;
             ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
@@ -2152,12 +2247,13 @@
                 nofap_streak_data: nofapData,
                 user_app_icon: localStorage.getItem('user_app_icon') || '',
                 user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Progress',
-                user_security_pin: localStorage.getItem('user_security_pin') || 'ubay'
+                user_security_pin: localStorage.getItem('user_security_pin') || 'ubay',
+                google_sheets_webapp_url: sheetsWebAppUrl
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v6.0_${todayStr}.json`;
+            link.download = `Ubay_Backup_v6.1_${todayStr}.json`;
             link.click();
         }
 
@@ -2175,7 +2271,8 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v6.0 berhasil dipulihkan!");
+                    if (imported.google_sheets_webapp_url) localStorage.setItem('google_sheets_webapp_url', imported.google_sheets_webapp_url);
+                    alert("📥 Data v6.1 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
