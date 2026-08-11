@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Master Tactile v5.3</title>
+    <title id="html-title-tag">Ubay Progress - Master Tactile v6.0</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- FIX: REFRESH MEMORY LOCK SCRIPT (LOCALSTORAGE) -->
+    <!-- REFRESH MEMORY LOCK SCRIPT (LOCALSTORAGE) -->
     <script>
         (function() {
             var isUnlocked = localStorage.getItem('app_unlocked_session') === 'true';
@@ -46,6 +46,12 @@
             --border-color: rgba(220, 38, 38, 0.35);
         }
 
+        /* DYNAMIC PRAYER ATMOSPHERIC BACKGROUNDS */
+        body.bg-subuh { background: radial-gradient(circle at top, #1e1b4b, #020617) !important; }
+        body.bg-dzuhur { background: radial-gradient(circle at top, #0284c7, #0f172a) !important; }
+        body.bg-maghrib { background: radial-gradient(circle at top, #c2410c, #090506) !important; }
+        body.bg-isya { background: radial-gradient(circle at top, #311042, #000000) !important; }
+
         body.theme-oled {
             --bg-gradient: none;
             background-color: #000000 !important;
@@ -68,7 +74,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: #090506; 
             background-image: var(--bg-gradient);
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.5s ease, color 0.3s ease;
             width: 100vw;
             max-width: 100vw;
             overflow-x: hidden !important;
@@ -103,14 +109,23 @@
             to { transform: translateY(0); }
         }
 
-        .box-breathing-circle {
-            animation: boxBreathing 16s infinite ease-in-out;
+        .pulse-gold-glow {
+            box-shadow: 0 0 20px #eab308, inset 0 0 10px #eab308;
+            border-color: #facc15 !important;
         }
-        @keyframes boxBreathing {
-            0%, 100% { transform: scale(1); background-color: rgba(220, 38, 38, 0.2); }
-            25% { transform: scale(1.35); background-color: rgba(59, 130, 246, 0.4); }
-            50% { transform: scale(1.35); background-color: rgba(34, 197, 94, 0.4); }
-            75% { transform: scale(1); background-color: rgba(245, 158, 11, 0.4); }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseDot 1.5s infinite;
+        }
+        @keyframes pulseDot {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
 
         .heatmap-grid {
@@ -123,6 +138,15 @@
             filter: blur(25px) brightness(0.15) !important;
             pointer-events: none !important;
             user-select: none !important;
+        }
+
+        .fast-sholat-btn {
+            transition: all 0.2s ease;
+        }
+        .fast-sholat-btn.selected {
+            border-color: #10b981 !important;
+            background-color: rgba(16, 185, 129, 0.2) !important;
+            color: #34d399 !important;
         }
     </style>
 </head>
@@ -162,7 +186,9 @@
                                 <h1 onclick="customRenameAppName()" class="text-sm sm:text-base font-black text-white uppercase truncate cursor-pointer" id="display-app-title">Ubay Progress</h1> 
                                 <span id="rank-badge" class="bg-red-950 text-red-300 border border-red-600/60 text-[9px] px-2 py-0.5 rounded-full font-bold shrink-0">Lvl 1</span>
                             </div>
-                            <p class="text-[10px] text-red-400 font-bold" id="current-date-header">Senin, 03/08/2026</p>
+                            <p class="text-[10px] text-red-400 font-bold" id="current-date-header">
+                                <span id="islamic-date-display" class="text-amber-400 mr-1">1 Safar 1448 H</span> • <span id="gregorian-date-display">Senin, 03/08/2026</span>
+                            </p>
                         </div>
                     </div>
 
@@ -182,11 +208,10 @@
         <!-- MASTER DAILY GLANCE WIDGET -->
         <div class="max-w-4xl mx-auto px-3 pt-3">
             <div class="bg-zinc-950 border border-red-900/50 rounded-xl p-2 shadow-md space-y-2">
-                <div class="flex justify-between items-center px-1 cursor-pointer" onclick="haptic('light'); toggleSummaryCollapse();">
+                <div class="flex justify-between items-center px-1">
                     <span class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1">
                         <i class="fa-solid fa-gauge-high"></i> Master Daily Glance
                     </span>
-                    <button id="summary-toggle-btn" class="text-xs text-slate-400"><i class="fa-solid fa-chevron-up"></i></button>
                 </div>
                 <div id="summary-content-grid" class="grid grid-cols-3 gap-1.5 text-center">
                     <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800">
@@ -255,7 +280,6 @@
                     </div>
                 </div>
 
-                <!-- Header Ringkasan Gaji -->
                 <section class="glass-card rounded-xl p-3.5 flex justify-between items-center gap-2 border-red-900/40">
                     <div>
                         <div class="flex items-center gap-2">
@@ -273,7 +297,6 @@
                     </div>
                 </section>
 
-                <!-- MULTI WALLET DISPLAY (DENGAN ASET EDIT NOMINAL ASLI) -->
                 <section class="space-y-1.5">
                     <div class="flex justify-between items-center px-1">
                         <span class="text-[10px] font-black text-slate-300 uppercase tracking-wider">💳 Rincian Wallet Asli</span>
@@ -295,7 +318,6 @@
                     </div>
                 </section>
 
-                <!-- Ringkasan Angka & Total Uang System -->
                 <section class="grid grid-cols-2 gap-2">
                     <div class="glass-card rounded-xl p-3 space-y-1">
                         <span class="text-[10px] text-slate-400 font-semibold block">Hari Ini</span>
@@ -315,7 +337,6 @@
                     </div>
                 </section>
 
-                <!-- IMPULSIVE BUY TIMER -->
                 <section class="glass-card rounded-xl p-3 border-amber-600/40 space-y-2">
                     <div class="flex justify-between items-center">
                         <span class="text-[11px] font-black text-amber-400 uppercase flex items-center gap-1">
@@ -328,7 +349,6 @@
                     <div id="wishlist-delay-list" class="space-y-1.5 text-xs"></div>
                 </section>
 
-                <!-- TRACKER UTANG & CICILAN -->
                 <section class="glass-card rounded-xl p-3 space-y-2 border-red-900/40">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
@@ -342,7 +362,6 @@
                     <div id="debt-tracker-container" class="grid grid-cols-1 gap-2 text-xs"></div>
                 </section>
 
-                <!-- Visual Charts -->
                 <section class="grid grid-cols-1 gap-3">
                     <div class="glass-card rounded-xl p-3 space-y-2 border-red-900/40">
                         <h2 class="text-xs font-bold text-slate-200 uppercase"><i class="fa-solid fa-chart-pie text-red-400 mr-1"></i> Proporsi Kategori</h2>
@@ -352,7 +371,6 @@
                     </div>
                 </section>
 
-                <!-- Monitoring Target Budget -->
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-list-check text-red-400 mr-1"></i> Monitoring Budget</h2>
@@ -361,7 +379,6 @@
                     <div id="budget-cards-container" class="grid grid-cols-1 gap-2"></div>
                 </section>
 
-                <!-- TABEL RIWAYAT KEUANGAN (FORMAT DD/MM/YYYY) -->
                 <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-800 pb-2">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1">
@@ -412,73 +429,113 @@
             </main>
         </div>
 
-        <!-- SECTION 2: SHOLAT & MUTABAAH -->
+        <!-- SECTION 2: SHOLAT & MUTABAAH HUB -->
         <div id="section-sholat" class="hidden tab-transition">
+            <!-- REALTIME PRAYER COUNTDOWN BANNER -->
+            <div class="bg-gradient-to-r from-emerald-950 via-zinc-950 to-zinc-900 border-b border-emerald-600/50 p-2.5 text-center text-xs flex justify-between items-center px-4 sticky top-14 z-20 shadow-lg">
+                <span id="next-prayer-title" class="font-extrabold text-emerald-400 uppercase text-[11px]"><i class="fa-solid fa-bell text-amber-400 mr-1"></i> Menuju Maghrib</span>
+                <span id="prayer-countdown-timer" class="font-black text-white text-xs bg-emerald-950 px-2.5 py-1 rounded-lg border border-emerald-600/60">00 : 00 : 00</span>
+            </div>
+
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
                 <div class="flex justify-between items-center gap-2">
                     <div>
                         <h2 class="text-base font-black text-white flex items-center gap-1.5">
-                            <i class="fa-solid fa-mosque text-red-400"></i> Check-in Sholat
+                            <i class="fa-solid fa-mosque text-emerald-400"></i> Spiritual Hub
                         </h2>
-                        <p class="text-[10px] text-slate-400">GPS: <strong id="gps-location-name" class="text-amber-400">Jakarta, ID</strong></p>
+                        <div class="flex items-center gap-1.5 text-[10px] text-slate-300">
+                            <span class="live-dot"></span>
+                            <span>GPS: <strong id="gps-location-name" class="text-emerald-400">Jakarta, ID</strong></span>
+                        </div>
                     </div>
-                    <button onclick="haptic('light'); openSholatModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1 active:scale-95">
-                        <i class="fa-solid fa-circle-plus"></i> <span>Check-in</span>
+                    <button onclick="haptic('light'); openSholatModal();" class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-circle-plus"></i> <span>Check-in Sholat</span>
                     </button>
                 </div>
 
-                <!-- WIDGET PUASA SUNNAH -->
-                <section class="bg-zinc-950 p-3 rounded-xl border border-amber-600/40 flex justify-between items-center">
-                    <div>
-                        <span class="text-[10px] font-black text-amber-400 uppercase block">🌙 Tracker Puasa Sunnah</span>
-                        <span id="fasting-today-status" class="text-xs text-slate-200 font-bold block mt-0.5">Hari ini: Rekomendasi Puasa Sunnah</span>
+                <!-- FAST FASTING BADGE TOGGLE & SEDEKAH SUBUH CARD -->
+                <section class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-amber-600/50 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black text-amber-400 uppercase block">🌙 Fasting Sunnah</span>
+                            <span id="fasting-today-status" class="text-xs text-slate-200 font-bold block mt-0.5">Senin/Kamis</span>
+                        </div>
+                        <button onclick="haptic('double'); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950 border border-amber-500/60 text-amber-300 px-3 py-1.5 rounded-lg text-xs font-bold pulse-gold-glow active:scale-95">
+                            Niat Puasa
+                        </button>
                     </div>
-                    <button onclick="haptic('double'); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950 border border-amber-600/50 text-amber-300 px-3 py-1.5 rounded-lg text-xs font-bold active:scale-95">
-                        Niat Puasa Hari Ini
-                    </button>
+
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-amber-500/50 flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black text-amber-400 uppercase block">🤲 Sedekah Subuh</span>
+                            <span id="sedekah-subuh-val" class="text-xs text-white font-black block mt-0.5">Rp 0 Hari Ini</span>
+                        </div>
+                        <button onclick="haptic('light'); addQuickSedekah();" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs active:scale-95">
+                            + Sedekah
+                        </button>
+                    </div>
                 </section>
 
-                <!-- JADWAL SHOLAT GPS -->
-                <section class="bg-zinc-950 p-3 rounded-xl border border-red-900/50 space-y-1.5">
-                    <span class="text-[10px] font-black text-amber-400 uppercase block">🕌 Jadwal Sholat GPS Realtime</span>
-                    <div id="prayer-times-grid" class="grid grid-cols-5 gap-1 text-center text-xs"></div>
+                <!-- JADWAL SHOLAT REALTIME GRID -->
+                <section class="bg-zinc-950/80 p-3 rounded-xl border border-emerald-900/50 space-y-2">
+                    <span class="text-[10px] font-black text-emerald-400 uppercase block tracking-wider">🕌 Jadwal Sholat GPS Realtime</span>
+                    <div id="prayer-times-grid" class="grid grid-cols-5 gap-1.5 text-center text-xs"></div>
                 </section>
 
-                <!-- HEATMAP 30 HARI DENGAN TOOLTIP TANGGAL DD/MM/YYYY -->
-                <section class="glass-card rounded-xl p-3 space-y-1.5 border-red-900/40">
+                <!-- INTERACTIVE 3D KIBLAT COMPASS CARD -->
+                <section id="kiblat-card" class="glass-card p-4 rounded-xl text-center space-y-2 border-emerald-600/40">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-black text-slate-200 uppercase">🟢 Heatmap Sholat (30 Hari)</span>
-                        <span class="text-[9px] text-slate-400">Terang = Full Jamaah</span>
+                        <span class="text-[10px] font-black text-emerald-400 uppercase"><i class="fa-solid fa-compass text-amber-400 mr-1"></i> Interactive 3D Kiblat Compass</span>
+                        <span id="kiblat-degree" class="text-xs font-black text-amber-400">295° NW</span>
+                    </div>
+                    <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
+                        <div id="compass-ring" class="w-28 h-28 rounded-full border-2 border-dashed border-emerald-500 flex items-center justify-center transition-transform duration-200">
+                            <i id="compass-needle" class="fa-solid fa-location-arrow text-3xl text-emerald-400 transform -rotate-45"></i>
+                        </div>
+                    </div>
+                    <p id="kiblat-status" class="text-[10px] text-slate-400 font-bold">Gerakkan HP kamu untuk mencocokkan arah Kiblat</p>
+                </section>
+
+                <!-- EVALUATION TREND BANNER -->
+                <div id="sholat-trend-banner" class="bg-zinc-950 p-3 rounded-xl border border-emerald-600/40 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-300">Trend Sholat Jamaah</span>
+                    <span id="sholat-eval-status" class="text-xs font-black text-emerald-400">LEBIH BAIK (+1)</span>
+                </div>
+
+                <!-- 30-DAY GLOWING HEATMAP GRID -->
+                <section class="glass-card rounded-xl p-3 space-y-2 border-emerald-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-slate-200 uppercase">🟢 30-Day Glowing Heatmap Grid</span>
+                        <span class="text-[9px] text-slate-400">Glow = 5 Time Full Jamaah</span>
                     </div>
                     <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
                 </section>
 
-                <!-- ANALISIS SHOLAT -->
-                <section class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-red-600/50">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Hari Ini</span>
-                        <div id="sholat-summary-today" class="text-xs space-y-0.5 font-bold text-white">Menyiapkan data...</div>
-                    </div>
-
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-zinc-800">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Kemarin</span>
-                        <div id="sholat-summary-yesterday" class="text-xs space-y-0.5 font-bold text-slate-300">Menyiapkan data...</div>
-                    </div>
-
-                    <div class="glass-card rounded-xl p-3 space-y-1 border-zinc-800">
-                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Evaluasi Sholat</span>
-                        <div id="sholat-eval-status" class="text-xs font-extrabold mt-0.5">Menyiapkan data...</div>
+                <!-- SUNNAH BADGES SHOWCASE -->
+                <section class="glass-card rounded-xl p-3 space-y-2 border-amber-600/40">
+                    <span class="text-xs font-black text-amber-400 uppercase block"><i class="fa-solid fa-star text-amber-400 mr-1"></i> Sunnah Badges Showcase</span>
+                    <div class="grid grid-cols-2 gap-2 text-center">
+                        <div class="bg-zinc-950 p-2.5 rounded-xl border border-amber-500/40">
+                            <i class="fa-solid fa-sun text-amber-400 text-base"></i>
+                            <span class="text-[10px] text-slate-400 block mt-1">Sholat Dhuha</span>
+                            <strong id="badge-dhuha-val" class="text-xs font-black text-white block">0 Rakaat</strong>
+                        </div>
+                        <div class="bg-zinc-950 p-2.5 rounded-xl border border-amber-500/40">
+                            <i class="fa-solid fa-moon text-amber-400 text-base"></i>
+                            <span class="text-[10px] text-slate-400 block mt-1">Sholat Tahajud</span>
+                            <strong id="badge-tahajud-val" class="text-xs font-black text-white block">0 Rakaat</strong>
+                        </div>
                     </div>
                 </section>
 
-                <section class="glass-card rounded-xl p-3 space-y-3 border-red-900/40">
-                    <h2 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800 pb-2"><i class="fa-solid fa-list-check text-red-400 mr-1"></i> Log Check-in Sholat</h2>
+                <section class="glass-card rounded-xl p-3 space-y-3 border-emerald-900/40">
+                    <h2 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800 pb-2"><i class="fa-solid fa-list-check text-emerald-400 mr-1"></i> Log Check-in Sholat</h2>
                     <div id="sholat-cards-list" class="space-y-2"></div>
                 </section>
             </main>
         </div>
 
-        <!-- SECTION 3: NOFAP APP -->
+        <!-- SECTION 3: NOFAP & BRAIN REWIRE HUB -->
         <div id="section-nofap" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-3 pt-3 space-y-4">
                 <section class="bg-gradient-to-r from-red-950 via-zinc-950 to-zinc-900 border border-red-600/50 p-3 rounded-xl space-y-1">
@@ -497,7 +554,7 @@
                 <section class="glass-card rounded-2xl p-5 text-center border-red-600/60 shadow-xl space-y-4">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-red-400 uppercase bg-red-950 px-2 py-0.5 rounded border border-red-600/50">
-                            <i class="fa-solid fa-shield-halved"></i> Brain Rewire
+                            <i class="fa-solid fa-brain"></i> Brain Rewire Hub
                         </span>
                         <span class="text-xs font-extrabold text-amber-400" id="nofap-badge-top">Lvl 1 - Novice</span>
                     </div>
@@ -519,6 +576,29 @@
                         <button onclick="haptic('heavy'); resetNoFap();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-xl text-xs active:scale-95">
                             Reset
                         </button>
+                    </div>
+                </section>
+
+                <!-- VISUAL REWIRE BRAIN NETWORK MAP CANVAS -->
+                <section class="glass-card rounded-xl p-3 text-center space-y-2 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-amber-400 uppercase"><i class="fa-solid fa-network-wired mr-1"></i> Brain Synapse Network Map</span>
+                        <span id="synapse-power-text" class="text-[10px] font-bold text-emerald-400">Power: 10%</span>
+                    </div>
+                    <div class="relative h-40 w-full bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800 flex items-center justify-center">
+                        <canvas id="brainCanvas" class="w-full h-full"></canvas>
+                    </div>
+                    <p class="text-[9px] text-slate-400">Sinapsis otak akan berkilau makin terang seiring bertambahnya streak clean.</p>
+                </section>
+
+                <!-- INTERACTIVE URGE HEAT-MAP TIME RADAR -->
+                <section class="glass-card rounded-xl p-3 text-center space-y-2 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-red-400 uppercase"><i class="fa-solid fa-radar mr-1"></i> 24-Hour Urge Radar</span>
+                        <span class="text-[10px] font-bold text-red-400">Peak: 23:00 - 03:00</span>
+                    </div>
+                    <div class="relative h-44 w-full flex justify-center items-center">
+                        <canvas id="urgeRadarCanvas" class="w-44 h-44"></canvas>
                     </div>
                 </section>
 
@@ -759,31 +839,28 @@
         </div>
     </div>
 
-    <!-- MODAL PANIC BUTTON NOFAP -->
+    <!-- MODAL PANIC & PULSE BREATHING RING WITH CUSTOM RHYTHM -->
     <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="glass-card border-2 border-red-600 w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-4 text-center relative max-h-[90vh] overflow-y-auto bottom-sheet">
             <button onclick="haptic('light'); closePanicModal();" class="absolute right-3 top-3 text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div class="space-y-1">
                 <h3 class="text-lg font-black text-white">Tahan Impulsnya, Ubay! ⚔️</h3>
-                <p class="text-xs text-slate-300 italic">"Rasakan dorongannya tanpa menuruti kemauannya!"</p>
+                <p class="text-xs text-slate-300 italic">"Gunakan ritme bernapas untuk menenangkan sinapsis otak."</p>
             </div>
 
-            <div class="bg-zinc-950 p-3 rounded-xl border border-red-900/60 flex items-center justify-between gap-2">
-                <select id="ambient-sound-type" class="bg-zinc-900 border border-zinc-800 text-xs font-bold text-amber-400 p-1.5 rounded-lg flex-1">
-                    <option value="174hz">🪘 174Hz Solfeggio Frequency</option>
-                    <option value="rain">🌧️ Night Rain Calm</option>
-                    <option value="waves">🌊 Deep Ocean Waves</option>
-                </select>
-                <button onclick="haptic('light'); toggleCalmingAudio();" id="audio-toggle-btn" class="bg-amber-600 text-white text-xs font-bold px-3 py-2 rounded-lg shrink-0 active:scale-95">
-                    ▶ Play Audio
-                </button>
+            <!-- BREATHING RHYTHM SELECTOR -->
+            <div class="flex justify-center gap-2">
+                <button onclick="setBreathingRhythm('box')" id="btn-rhythm-box" class="bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-lg">Box 4-4-4-4</button>
+                <button onclick="setBreathingRhythm('478')" id="btn-rhythm-478" class="bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg">4-7-8 Deep Calm</button>
             </div>
 
-            <div class="py-2 flex flex-col items-center justify-center">
-                <div class="w-24 h-24 rounded-full box-breathing-circle border-2 border-red-500 flex flex-col items-center justify-center">
-                    <span class="text-[10px] font-black text-white uppercase">Box Breathing</span>
+            <div class="py-4 flex flex-col items-center justify-center">
+                <div id="breathing-ring" class="w-28 h-28 rounded-full border-4 border-amber-500 flex flex-col items-center justify-center transition-all duration-1000 shadow-2xl">
+                    <span id="breathing-state-text" class="text-xs font-black text-white uppercase">Tarik</span>
+                    <span id="breathing-timer-text" class="text-sm font-bold text-amber-400">4s</span>
                 </div>
             </div>
+
             <button onclick="haptic('heavy'); playSoundEffect('sword'); closePanicModal(); checkInNoFap();" class="w-full bg-emerald-600 text-white font-black py-2.5 rounded-xl text-xs uppercase active:scale-95">
                 ⚔️ Saya Berhasil Melewati Godaan Ini!
             </button>
@@ -883,62 +960,84 @@
         </div>
     </div>
 
-    <!-- MODAL CHECK-IN SHOLAT -->
+    <!-- MODAL CHECK-IN SHOLAT DENGAN FAST TAP GRID BUTTONS -->
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="glass-card border border-zinc-700 w-full max-w-xl rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <h3 class="text-xs font-bold text-white">Check-in Sholat & Mutabaah</h3>
+                <h3 class="text-xs font-bold text-white">Check-in Sholat & Mutabaah Visual</h3>
                 <button onclick="haptic('light'); closeSholatModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="sholat-form" class="space-y-3">
                 <div>
                     <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Tanggal Check-in</label>
-                    <input type="date" id="input-sholat-date" required onchange="loadSholatByDate()" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
+                    <input type="date" id="input-sholat-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2 text-xs text-white">
                 </div>
 
-                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-red-400 block uppercase">🕌 Sholat Wajib (Jamaah = 2x XP)</span>
-                    <div class="grid grid-cols-5 gap-1 text-center text-xs">
-                        <div><label class="text-[9px] text-slate-400 block">Subuh</label><select id="s-subuh" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
-                        <div><label class="text-[9px] text-slate-400 block">Dzuhur</label><select id="s-dzuhur" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
-                        <div><label class="text-[9px] text-slate-400 block">Ashar</label><select id="s-ashar" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
-                        <div><label class="text-[9px] text-slate-400 block">Maghrib</label><select id="s-maghrib" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
-                        <div><label class="text-[9px] text-slate-400 block">Isya</label><select id="s-isya" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-1 text-[11px] text-white"><option value="Pending">⏳</option><option value="Jamaah">🕌</option><option value="Munfarid">🏠</option><option value="Tidak">❌</option></select></div>
+                <!-- FAST TAP BUTTONS FOR SHOLAT WAJIB -->
+                <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-3">
+                    <span class="text-xs font-bold text-emerald-400 block uppercase">🕌 Sholat Wajib (<span class="text-emerald-300 font-black">+20 XP Jamaah</span>)</span>
+                    
+                    <div id="fast-sholat-container" class="space-y-2 text-xs">
+                        <!-- Subuh -->
+                        <div class="flex justify-between items-center bg-zinc-900 p-2 rounded-xl">
+                            <span class="font-bold text-slate-200 w-16">Subuh</span>
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setFastSholat('subuh', 'Jamaah')" id="btn-subuh-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🕌 Jamaah</button>
+                                <button type="button" onclick="setFastSholat('subuh', 'Munfarid')" id="btn-subuh-Munfarid" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🏠 Sendiri</button>
+                                <button type="button" onclick="setFastSholat('subuh', 'Tidak')" id="btn-subuh-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">❌ Absen</button>
+                            </div>
+                        </div>
+                        <!-- Dzuhur -->
+                        <div class="flex justify-between items-center bg-zinc-900 p-2 rounded-xl">
+                            <span class="font-bold text-slate-200 w-16">Dzuhur</span>
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setFastSholat('dzuhur', 'Jamaah')" id="btn-dzuhur-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🕌 Jamaah</button>
+                                <button type="button" onclick="setFastSholat('dzuhur', 'Munfarid')" id="btn-dzuhur-Munfarid" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🏠 Sendiri</button>
+                                <button type="button" onclick="setFastSholat('dzuhur', 'Tidak')" id="btn-dzuhur-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">❌ Absen</button>
+                            </div>
+                        </div>
+                        <!-- Ashar -->
+                        <div class="flex justify-between items-center bg-zinc-900 p-2 rounded-xl">
+                            <span class="font-bold text-slate-200 w-16">Ashar</span>
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setFastSholat('ashar', 'Jamaah')" id="btn-ashar-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🕌 Jamaah</button>
+                                <button type="button" onclick="setFastSholat('ashar', 'Munfarid')" id="btn-ashar-Munfarid" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🏠 Sendiri</button>
+                                <button type="button" onclick="setFastSholat('ashar', 'Tidak')" id="btn-ashar-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">❌ Absen</button>
+                            </div>
+                        </div>
+                        <!-- Maghrib -->
+                        <div class="flex justify-between items-center bg-zinc-900 p-2 rounded-xl">
+                            <span class="font-bold text-slate-200 w-16">Maghrib</span>
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setFastSholat('maghrib', 'Jamaah')" id="btn-maghrib-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🕌 Jamaah</button>
+                                <button type="button" onclick="setFastSholat('maghrib', 'Munfarid')" id="btn-maghrib-Munfarid" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🏠 Sendiri</button>
+                                <button type="button" onclick="setFastSholat('maghrib', 'Tidak')" id="btn-maghrib-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">❌ Absen</button>
+                            </div>
+                        </div>
+                        <!-- Isya -->
+                        <div class="flex justify-between items-center bg-zinc-900 p-2 rounded-xl">
+                            <span class="font-bold text-slate-200 w-16">Isya</span>
+                            <div class="flex gap-1">
+                                <button type="button" onclick="setFastSholat('isya', 'Jamaah')" id="btn-isya-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🕌 Jamaah</button>
+                                <button type="button" onclick="setFastSholat('isya', 'Munfarid')" id="btn-isya-Munfarid" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">🏠 Sendiri</button>
+                                <button type="button" onclick="setFastSholat('isya', 'Tidak')" id="btn-isya-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded-lg text-[10px] font-bold">❌ Absen</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- SLIDER TILAWAH QURAN -->
                 <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-2">
-                    <span class="text-xs font-bold text-amber-400 block uppercase">📿 Sunnah & Mutabaah</span>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">Sholat Dhuha</label>
-                            <select id="sunnah-dhuha" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white">
-                                <option value="0">❌ 0 Rakaat</option>
-                                <option value="2">✨ 2 Rakaat</option>
-                                <option value="4">✨ 4 Rakaat</option>
-                                <option value="6">✨ 6 Rakaat</option>
-                                <option value="8">✨ 8 Rakaat</option>
-                                <option value="12">👑 12 Rakaat</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">Sholat Tahajud</label>
-                            <input type="number" id="sunnah-tahajud" placeholder="Rakaat..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">📖 Tilawah (Hal)</label>
-                            <input type="number" id="mutabaah-tilawah" placeholder="Jumlah..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-300 block mb-0.5">🤲 Sedekah (Rp)</label>
-                            <input type="number" id="mutabaah-sedekah" placeholder="Nominal..." min="0" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white font-bold">
-                        </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="font-bold text-amber-400 uppercase">📖 Tilawah Al-Qur'an</span>
+                        <span id="tilawah-slider-val" class="font-black text-white">0 Halaman</span>
                     </div>
+                    <input type="range" id="mutabaah-tilawah-slider" min="0" max="50" value="0" oninput="updateTilawahVal(this.value)" class="w-full accent-amber-500">
                 </div>
 
                 <div class="pt-1 flex gap-2 border-t border-zinc-800">
                     <button type="button" onclick="haptic('light'); closeSholatModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double'); playSoundEffect('gong');" class="w-1/2 bg-red-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Simpan</button>
+                    <button type="submit" onclick="haptic('double'); playSoundEffect('gong');" class="w-1/2 bg-emerald-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Simpan</button>
                 </div>
             </form>
         </div>
@@ -979,7 +1078,8 @@
         const themes = ['default', 'theme-oled', 'theme-emerald'];
         let showAllHistory = false;
         let isAudioMuted = localStorage.getItem('app_audio_muted') === 'true';
-        let audioCtx = null, ambientOsc = null, isAmbientPlaying = false;
+        let audioCtx = null;
+        let tempSholatStates = { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending' };
 
         // WALLETS DATA REAL
         let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
@@ -1024,6 +1124,21 @@
             isAudioMuted = !isAudioMuted;
             localStorage.setItem('app_audio_muted', isAudioMuted);
             document.getElementById('audio-mute-btn').innerHTML = isAudioMuted ? `<i class="fa-solid fa-volume-xmark text-red-400"></i>` : `<i class="fa-solid fa-volume-high"></i>`;
+        }
+
+        function playSoftTick() {
+            if (isAudioMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, ctx.currentTime);
+                gain.gain.setValueAtTime(0.02, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(); osc.stop(ctx.currentTime + 0.05);
+            } catch(e){}
         }
 
         function playSoundEffect(effect) {
@@ -1078,6 +1193,16 @@
             }
         });
 
+        function updateDynamicPrayerBackground() {
+            const hour = new Date().getHours();
+            document.body.classList.remove('bg-subuh', 'bg-dzuhur', 'bg-maghrib', 'bg-isya');
+
+            if (hour >= 4 && hour < 11) document.body.classList.add('bg-subuh');
+            else if (hour >= 11 && hour < 17) document.body.classList.add('bg-dzuhur');
+            else if (hour >= 17 && hour < 19) document.body.classList.add('bg-maghrib');
+            else document.body.classList.add('bg-isya');
+        }
+
         function lockAppManually() {
             localStorage.setItem('app_unlocked_session', 'false');
             document.documentElement.classList.remove('app-unlocked');
@@ -1110,7 +1235,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Ultimate Edition`;
+            document.getElementById('html-title-tag').innerText = `${title} - Master Tactile v6.0`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1138,10 +1263,11 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
+                updateDynamicPrayerBackground();
                 const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
                 applyCustomAppName(savedAppName);
 
-                document.getElementById('current-date-header').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
+                document.getElementById('gregorian-date-display').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
 
                 if (isAudioMuted) {
                     document.getElementById('audio-mute-btn').innerHTML = `<i class="fa-solid fa-volume-xmark text-red-400"></i>`;
@@ -1157,7 +1283,7 @@
                     document.getElementById('app-apple-icon').href = savedIcon;
                 }
 
-                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
+                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'sholat';
                 switchTab(lastActiveTab);
 
                 initFastingTracker();
@@ -1165,7 +1291,10 @@
                 updateGamificationLevel();
                 setInterval(updateNoFapTimer, 1000);
                 checkPeakUrgeHours();
-                initGeolocationPrayer();
+                initPrayerCountdown();
+                initGyroCompass();
+                renderBrainCanvas();
+                renderUrgeRadar();
             }, 10);
         });
 
@@ -1249,6 +1378,134 @@
             }
         }
 
+        // 3D KIBLAT COMPASS (GYROSCOPE)
+        function initGyroCompass() {
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function(e) {
+                    let alpha = e.alpha || 0;
+                    let compassRing = document.getElementById('compass-ring');
+                    let kiblatCard = document.getElementById('kiblat-card');
+                    let kiblatStatus = document.getElementById('kiblat-status');
+
+                    if (compassRing) {
+                        compassRing.style.transform = `rotate(${-alpha}deg)`;
+                        if (Math.abs(alpha - 295) < 8) {
+                            kiblatCard.classList.add('pulse-gold-glow');
+                            kiblatStatus.innerText = "✨ TEPAT MENGHADAP KIBLAT!";
+                            kiblatStatus.classList.add('text-amber-400');
+                        } else {
+                            kiblatCard.classList.remove('pulse-gold-glow');
+                            kiblatStatus.innerText = "Gerakkan HP kamu untuk mencocokkan arah Kiblat";
+                            kiblatStatus.classList.remove('text-amber-400');
+                        }
+                    }
+                }, true);
+            }
+        }
+
+        // REALTIME PRAYER COUNTDOWN BANNER
+        function initPrayerCountdown() {
+            const prayerTimesGrid = document.getElementById('prayer-times-grid');
+            prayerTimesGrid.innerHTML = `
+                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
+                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
+                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
+                <div class="bg-zinc-900 p-1.5 rounded-lg border border-emerald-500/80 bg-emerald-950/40"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
+                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
+            `;
+
+            setInterval(() => {
+                const now = new Date();
+                const target = new Date(); target.setHours(18, 0, 0);
+                let diff = target - now;
+                if (diff < 0) diff = 0;
+
+                const hrs = Math.floor(diff / 3600000);
+                const mins = Math.floor((diff % 3600000) / 60000);
+                const secs = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('prayer-countdown-timer').innerText = 
+                    `${String(hrs).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
+            }, 1000);
+        }
+
+        // PULSE BREATHING RING WITH CUSTOM RHYTHM
+        let breathInterval = null;
+        function setBreathingRhythm(type) {
+            document.getElementById('btn-rhythm-box').className = type === 'box' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-lg" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg";
+            document.getElementById('btn-rhythm-478').className = type === '478' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-lg" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-lg";
+            
+            clearInterval(breathInterval);
+            let state = 0;
+            const ring = document.getElementById('breathing-ring');
+            const stateText = document.getElementById('breathing-state-text');
+
+            breathInterval = setInterval(() => {
+                playSoftTick();
+                if (type === 'box') {
+                    if (state === 0) { stateText.innerText = "Tarik"; ring.style.transform = "scale(1.35)"; state = 1; }
+                    else if (state === 1) { stateText.innerText = "Tahan"; state = 2; }
+                    else { stateText.innerText = "Hembuskan"; ring.style.transform = "scale(0.9)"; state = 0; }
+                }
+            }, 4000);
+        }
+
+        // VISUAL BRAIN REWIRE NETWORK MAP
+        function renderBrainCanvas() {
+            const cvs = document.getElementById('brainCanvas');
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d');
+            cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight;
+
+            const daysClean = Math.floor((new Date() - new Date(nofapData.startDate)) / (1000 * 60 * 60 * 24));
+            const nodes = 25;
+            let points = [];
+            for (let i = 0; i < nodes; i++) {
+                points.push({ x: Math.random() * cvs.width, y: Math.random() * cvs.height });
+            }
+
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            ctx.strokeStyle = daysClean > 7 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.4)';
+            ctx.lineWidth = Math.min(daysClean, 5);
+
+            for (let i = 0; i < nodes; i++) {
+                for (let j = i + 1; j < nodes; j++) {
+                    const dist = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
+                    if (dist < 70) {
+                        ctx.beginPath();
+                        ctx.moveTo(points[i].x, points[i].y);
+                        ctx.lineTo(points[j].x, points[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            document.getElementById('synapse-power-text').innerText = `Power: ${Math.min(daysClean * 10, 100)}%`;
+        }
+
+        // 24-HOUR URGE RADAR
+        function renderUrgeRadar() {
+            const cvs = document.getElementById('urgeRadarCanvas');
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d');
+            cvs.width = 180; cvs.height = 180;
+            const cx = 90, cy = 90, r = 70;
+
+            ctx.clearRect(0,0,180,180);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#27272a';
+            ctx.lineWidth = 10;
+            ctx.stroke();
+
+            const startAngle = (23 / 24) * 2 * Math.PI - Math.PI/2;
+            const endAngle = (3 / 24) * 2 * Math.PI - Math.PI/2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, startAngle, endAngle);
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 12;
+            ctx.stroke();
+        }
+
         // PUASA SUNNAH TRACKER
         function initFastingTracker() {
             const dayOfWeek = new Date().getDay();
@@ -1299,11 +1556,12 @@
             history: [{ date: todayStr, status: "Clean", note: "Check-in Awal" }]
         };
 
-        function openPanicModal() { document.getElementById('nofap-panic-modal').classList.remove('hidden'); }
+        function openPanicModal() { 
+            document.getElementById('nofap-panic-modal').classList.remove('hidden');
+            setBreathingRhythm('box');
+        }
         function closePanicModal() { 
-            if (ambientOsc) ambientOsc.stop();
-            isAmbientPlaying = false;
-            document.getElementById('audio-toggle-btn').innerText = "▶ Play Audio";
+            clearInterval(breathInterval);
             document.getElementById('nofap-panic-modal').classList.add('hidden'); 
         }
 
@@ -1317,6 +1575,7 @@
             localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
             triggerConfetti();
             renderNoFapModule();
+            renderBrainCanvas();
         }
 
         function resetNoFap() {
@@ -1326,6 +1585,7 @@
                 nofapData.startDate = new Date().toISOString();
                 localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
                 renderNoFapModule();
+                renderBrainCanvas();
             }
         }
 
@@ -1547,7 +1807,6 @@
             
             transactions.push({ id: Date.now(), date: todayStr, category, desc: text, amount, method: "Bank" });
             
-            // potong dari bank default
             wallets.bank -= amount;
             localStorage.setItem('fin_wallets', JSON.stringify(wallets));
             localStorage.setItem('fin_transactions', JSON.stringify(transactions));
@@ -1561,12 +1820,10 @@
             document.getElementById('disp-salary').innerText = formatRupiah(incomeData.salary);
             document.getElementById('disp-total-income').innerText = `Total: ${formatRupiah(totalIncome)}`;
 
-            // TAMPILKAN SALDO DENGAN KAS REAL DARI TIAP WALLET
             document.getElementById('wallet-cash').innerText = formatRupiah(wallets.cash);
             document.getElementById('wallet-bank').innerText = formatRupiah(wallets.bank);
             document.getElementById('wallet-ewallet').innerText = formatRupiah(wallets.ewallet);
 
-            // TOTAL SISA UANG SYSTEM DARI TOTAL KAS KETIGA WALLET
             const totalSystemMoney = wallets.cash + wallets.bank + wallets.ewallet;
 
             const selectedCycle = document.getElementById('cycle-selector').value;
@@ -1598,7 +1855,6 @@
             document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
             document.getElementById('glance-safe-limit').innerText = `${formatRupiah(safeDailyVal)} / hr`;
 
-            // Wishlist Render
             const wishlistContainer = document.getElementById('wishlist-delay-list');
             wishlistContainer.innerHTML = '';
             if (impulsiveWishlist.length === 0) {
@@ -1614,7 +1870,6 @@
                 });
             }
 
-            // Debt Tracker
             const debtContainer = document.getElementById('debt-tracker-container');
             debtContainer.innerHTML = '';
             let totalDebtAll = 0;
@@ -1643,7 +1898,6 @@
             });
             document.getElementById('total-debt-sum').innerText = `Total: ${formatRupiah(totalDebtAll)}`;
 
-            // Monitoring Budget
             const cardsContainer = document.getElementById('budget-cards-container');
             cardsContainer.innerHTML = '';
             Object.keys(budgetCategories).forEach(c => {
@@ -1664,7 +1918,6 @@
                 `;
             });
 
-            // Transactions Table
             const historyTable = document.getElementById('history-table');
             historyTable.innerHTML = '';
 
@@ -1761,45 +2014,39 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
+        // FAST TAP SHOLAT BUTTONS LOGIC
+        function setFastSholat(sholatName, val) {
+            tempSholatStates[sholatName] = val;
+            ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
+                const btn = document.getElementById(`btn-${sholatName}-${opt}`);
+                if (btn) {
+                    if (opt === val) btn.classList.add('selected');
+                    else btn.classList.remove('selected');
+                }
+            });
+            haptic('light');
+        }
+
+        function updateTilawahVal(val) {
+            document.getElementById('tilawah-slider-val').innerText = `${val} Halaman`;
+        }
+
         // SHOLAT MODULE
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
             { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000" }
         ];
 
-        function initGeolocationPrayer() {
-            const timesGrid = document.getElementById('prayer-times-grid');
-            timesGrid.innerHTML = `
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
-                <div class="bg-zinc-900 p-1.5 rounded-lg border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
-            `;
+        function openSholatModal() { 
+            document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); 
+            document.getElementById('input-sholat-date').value = todayStr; 
         }
-
-        function openSholatModal() { document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); document.getElementById('input-sholat-date').value = todayStr; loadSholatByDate(); }
         function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
-
-        function loadSholatByDate() {
-            const dStr = document.getElementById('input-sholat-date').value;
-            const h = sholats.find(x => x.date === dStr) || {};
-            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => document.getElementById(`s-${s}`).value = h[s] || "Pending");
-            document.getElementById('sunnah-dhuha').value = h.dhuha || "0";
-            document.getElementById('sunnah-tahajud').value = h.tahajud || "";
-            document.getElementById('mutabaah-tilawah').value = h.tilawah || "";
-            document.getElementById('mutabaah-sedekah').value = h.sedekah || "";
-        }
 
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const dStr = document.getElementById('input-sholat-date').value;
-            let existing = sholats.find(h => h.date === dStr) || { date: dStr };
-
-            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => { existing[s] = document.getElementById(`s-${s}`).value; });
-            existing.dhuha = document.getElementById('sunnah-dhuha').value;
-            existing.tahajud = document.getElementById('sunnah-tahajud').value || "0";
-            existing.tilawah = document.getElementById('mutabaah-tilawah').value || "0";
-            existing.sedekah = document.getElementById('mutabaah-sedekah').value || "0";
+            let existing = { date: dStr, ...tempSholatStates };
+            existing.tilawah = document.getElementById('mutabaah-tilawah-slider').value;
 
             const idx = sholats.findIndex(h => h.date === dStr);
             if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
@@ -1841,44 +2088,34 @@
                     document.getElementById('glance-sholat-status').innerText = `${stToday.jamaah}/5 Jamaah`;
                 }
 
-                document.getElementById('sholat-summary-today').innerHTML = `
-                    <div class="text-emerald-400">🕌 Jamaah: ${stToday.jamaah} Sholat</div>
-                    <div class="text-blue-400">🏠 Sendiri: ${stToday.munfarid} Sholat</div>
-                    <div class="text-amber-400">⭐ Dhuha: ${stToday.dhuha}rk | Tahajud: ${stToday.tahajud}rk</div>
-                `;
-
-                document.getElementById('sholat-summary-yesterday').innerHTML = `
-                    <div>🕌 Jamaah: ${stYest.jamaah} Sholat</div>
-                    <div>🏠 Sendiri: ${stYest.munfarid} Sholat</div>
-                    <div>⭐ Dhuha: ${stYest.dhuha}rk | Tahajud: ${stYest.tahajud}rk</div>
-                `;
-
                 const evalEl = document.getElementById('sholat-eval-status');
                 if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
                 else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
                 else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
 
                 const heatmapEl = document.getElementById('prayer-heatmap');
-                heatmapEl.innerHTML = '';
-                for (let i = 29; i >= 0; i--) {
-                    const d = new Date(); d.setDate(nowD.getDate() - i);
-                    const dStr = d.toISOString().split('T')[0];
-                    const formattedDisplayDate = formatDateDDMM(dStr);
-                    const fullFormattedDate = formatDateDDMMYYYY(dStr);
-                    const rec = sholats.find(x => x.date === dStr);
-                    const st = getSholatStats(rec);
-                    
-                    let bgClass = "bg-zinc-900 border-zinc-800";
-                    if (st.jamaah >= 4) bgClass = "bg-emerald-500 border-emerald-400 shadow-[0_0_6px_rgba(16,185,129,0.8)]";
-                    else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
-                    else if (rec) bgClass = "bg-red-800 border-red-700";
+                if (heatmapEl) {
+                    heatmapEl.innerHTML = '';
+                    for (let i = 29; i >= 0; i--) {
+                        const d = new Date(); d.setDate(nowD.getDate() - i);
+                        const dStr = d.toISOString().split('T')[0];
+                        const formattedDisplayDate = formatDateDDMM(dStr);
+                        const fullFormattedDate = formatDateDDMMYYYY(dStr);
+                        const rec = sholats.find(x => x.date === dStr);
+                        const st = getSholatStats(rec);
+                        
+                        let bgClass = "bg-zinc-900 border-zinc-800";
+                        if (st.jamaah >= 4) bgClass = "bg-emerald-500 border-emerald-400 pulse-gold-glow";
+                        else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
+                        else if (rec) bgClass = "bg-red-800 border-red-700";
 
-                    heatmapEl.innerHTML += `
-                        <div title="Tanggal: ${fullFormattedDate} (${st.jamaah}/5 Jamaah)" class="flex flex-col items-center group cursor-pointer">
-                            <div class="h-6 w-full rounded border ${bgClass} transition-all group-hover:scale-110"></div>
-                            <span class="text-[7px] text-slate-400 font-extrabold mt-1 group-hover:text-amber-400">${formattedDisplayDate}</span>
-                        </div>
-                    `;
+                        heatmapEl.innerHTML += `
+                            <div title="Tanggal: ${fullFormattedDate} (${st.jamaah}/5 Jamaah)" class="flex flex-col items-center group cursor-pointer">
+                                <div class="h-6 w-full rounded border ${bgClass} transition-all group-hover:scale-110"></div>
+                                <span class="text-[7px] text-slate-400 font-extrabold mt-1 group-hover:text-amber-400">${formattedDisplayDate}</span>
+                            </div>
+                        `;
+                    }
                 }
 
                 const cardsList = document.getElementById('sholat-cards-list'); 
@@ -1890,7 +2127,7 @@
                         <div class="glass-card border border-zinc-800 p-3 rounded-xl space-y-2">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-bold text-white">${formatDateDDMMYYYY(h.date)}</span>
-                                <span class="text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded text-[10px]">⭐ Dhuha: ${h.dhuha || 0}rk</span>
+                                <span class="text-red-400 font-bold bg-red-950 px-2 py-0.5 rounded text-[10px]">📖 Tilawah: ${h.tilawah || 0} Hal</span>
                             </div>
                             <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
                                 ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950 p-1 rounded border border-zinc-800"><span class="text-slate-400 block uppercase font-bold text-[8px]">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s]}</strong></div>`).join('')}
@@ -1920,7 +2157,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v5.3_${todayStr}.json`;
+            link.download = `Ubay_Backup_v6.0_${todayStr}.json`;
             link.click();
         }
 
@@ -1938,7 +2175,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v5.3 berhasil dipulihkan!");
+                    alert("📥 Data v6.0 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
