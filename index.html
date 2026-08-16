@@ -839,6 +839,194 @@
         </div>
     </div>
 
+    <!-- MODAL EXPENSE (CATAT PENGELUARAN) -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-receipt text-red-400 mr-1.5"></i> Catat Pengeluaran Baru</h3>
+                <button onclick="haptic('light'); closeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="expense-form" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Tanggal</label>
+                    <input type="date" id="exp-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Kategori</label>
+                    <select id="exp-category" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                        <option value="Makan & Belanja Dapur Harian">Makan & Belanja Dapur Harian</option>
+                        <option value="Bensin / Transportasi / Tol">Bensin / Transportasi / Tol</option>
+                        <option value="Listrik, Air, Wifi & Pulsa">Listrik, Air, Wifi & Pulsa</option>
+                        <option value="Orang Tua / Keluarga">Orang Tua / Keluarga</option>
+                        <option value="Cicilan Utang & Kewajiban Bulanan">Cicilan Utang & Kewajiban Bulanan</option>
+                        <option value="Tabungan / Dana Darurat">Tabungan / Dana Darurat</option>
+                        <option value="Investasi / Asuransi">Investasi / Asuransi</option>
+                        <option value="Belanja Pribadi & Lain-Lain">Belanja Pribadi & Lain-Lain</option>
+                        <option value="Pengeluaran Tidak Tercatat">Pengeluaran Tidak Tercatat</option>
+                        <option value="Hiburan, Hangout & Self-Reward">Hiburan, Hangout & Self-Reward</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Deskripsi / Catatan</label>
+                    <input type="text" id="exp-desc" placeholder="Contoh: Nasi Padang / Bensin Pertalite" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nominal (Rp)</label>
+                    <input type="number" id="exp-amount" placeholder="25000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Sumber Pembayaran (Wallet)</label>
+                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                        <option value="Bank">Bank Utama (Mbanking)</option>
+                        <option value="Cash">Cash (Dompet)</option>
+                        <option value="E-Wallet">E-Wallet (Gopay/Ovo/Dana)</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="haptic('light'); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double'); playSoundEffect('cash');" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL INCOME (EDIT GAJI) -->
+    <div id="income-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-money-bill-wave text-emerald-400 mr-1.5"></i> Edit Gaji & Pemasukan Bulanan</h3>
+                <button onclick="haptic('light'); closeIncomeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="income-form" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Gaji Pokok Bulanan (Rp)</label>
+                    <input type="number" id="input-salary" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Pemasukan Sampingan / Tambahan (Rp)</label>
+                    <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="haptic('light'); closeIncomeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-emerald-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Gaji</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL BUDGET -->
+    <div id="budget-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-chart-pie text-amber-400 mr-1.5"></i> Atur Limit Budget Kategori</h3>
+                <button onclick="haptic('light'); closeBudgetModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="budget-form" class="space-y-3 text-xs">
+                <div id="budget-inputs-container" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="haptic('light'); closeBudgetModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Budget</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DEBT (UTANG) -->
+    <div id="debt-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-link-slash text-red-400 mr-1.5"></i> Kelola Utang & Cicilan</h3>
+                <button onclick="haptic('light'); closeDebtModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleDebtSubmit(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="debt-edit-id">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Utang / Cicilan</label>
+                    <input type="text" id="debt-name" placeholder="Contoh: Cicilan Laptop" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Total Nominal (Rp)</label>
+                    <input type="number" id="debt-total" placeholder="1800000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Cicilan Per Bulan (Rp)</label>
+                    <input type="number" id="debt-monthly" placeholder="600000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Sisa Bulan / Tenor</label>
+                    <input type="number" id="debt-months" placeholder="3" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Status</label>
+                    <select id="debt-status" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                        <option value="Belum Lunas">Belum Lunas</option>
+                        <option value="Lunas">Lunas</option>
+                    </select>
+                </div>
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="haptic('light'); closeDebtModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-red-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Utang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL WALLET EDIT -->
+    <div id="wallet-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
+            <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-wallet text-amber-400 mr-1.5"></i> Edit Saldo Wallet Real</h3>
+                <button onclick="haptic('light'); closeWalletEditModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleWalletEditSubmit(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">💵 Cash (Dompet Fisik)</label>
+                    <input type="number" id="edit-wallet-cash" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">🏦 Bank Utama (Mbanking)</label>
+                    <input type="number" id="edit-wallet-bank" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">📱 E-Wallet (Gopay/Ovo/Dana)</label>
+                    <input type="number" id="edit-wallet-ewallet" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                </div>
+                <div class="pt-2 flex gap-2 border-t border-zinc-800">
+                    <button type="button" onclick="haptic('light'); closeWalletEditModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Wallet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PANIC NOFAP -->
+    <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="oneui-card border border-red-600 w-full max-w-md rounded-2xl p-6 text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-red-950 border border-red-600 rounded-full flex items-center justify-center mx-auto animate-pulse">
+                <i class="fa-solid fa-shield-halved text-2xl text-red-400"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-black text-white uppercase">🚨 EMERGENCY PANIC PROTOCOL</h3>
+                <p class="text-[11px] text-slate-300 mt-1">Tenangkan pikiran, atur nafas, dan alihkan perhatian dari godaan.</p>
+            </div>
+            
+            <div class="py-2 flex flex-col items-center justify-center">
+                <div id="breathing-ring" class="w-28 h-28 rounded-full border-2 border-red-500 bg-red-950/40 flex items-center justify-center transition-transform duration-1000">
+                    <span id="breathing-state-text" class="text-xs font-black text-amber-400">Tarik</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-2">
+                <button type="button" onclick="setBreathingRhythm('box')" id="btn-rhythm-box" class="bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl">Box 4s</button>
+                <button type="button" onclick="setBreathingRhythm('478')" id="btn-rhythm-478" class="bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl">4-7-8 Relax</button>
+            </div>
+
+            <div class="pt-2 border-t border-zinc-800">
+                <button type="button" onclick="haptic('light'); closePanicModal();" class="w-full bg-zinc-800 text-white font-bold py-3 rounded-2xl text-xs active-press">Saya Sudah Tenang (Tutup)</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CHECK-IN SHOLAT -->
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
@@ -2048,6 +2236,48 @@
             };
         }
 
+        function addQuickSedekah() {
+            const nominal = parseFloat(prompt("Nominal Sedekah Subuh (Rp):", "10000")) || 0;
+            if (nominal <= 0) return;
+            wallets.cash -= nominal;
+            localStorage.setItem('fin_wallets', JSON.stringify(wallets));
+            
+            const newTrans = {
+                id: Date.now(),
+                date: todayStr,
+                category: "Orang Tua / Keluarga",
+                desc: "Sedekah Subuh",
+                amount: nominal,
+                method: "Cash"
+            };
+            transactions.push(newTrans);
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
+            const idx = sholats.findIndex(x => x.date === todayStr);
+            if (idx >= 0) {
+                sholats[idx].sedekah = (parseInt(sholats[idx].sedekah || 0) + nominal).toString();
+            } else {
+                sholats.push({
+                    date: todayStr,
+                    subuh: "Pending",
+                    dzuhur: "Pending",
+                    ashar: "Pending",
+                    maghrib: "Pending",
+                    isya: "Pending",
+                    dhuha: "0",
+                    tahajud: "0",
+                    tilawah: "0",
+                    sedekah: nominal.toString()
+                });
+            }
+            localStorage.setItem('sholat_records', JSON.stringify(sholats));
+            renderApp();
+            renderSholatReports();
+            triggerConfetti();
+            alert("🤲 Alhamdulillah, Sedekah Subuh tercatat!");
+        }
+
         function renderSholatReports() {
             try {
                 sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
@@ -2069,6 +2299,12 @@
 
                 if (todayRec && todayRec.tahajud && parseInt(todayRec.tahajud) > 0) {
                     selectTahajudRakaatUI(parseInt(todayRec.tahajud));
+                }
+
+                const sedekahToday = todayRec && todayRec.sedekah ? parseInt(todayRec.sedekah) : 0;
+                const sedekahEl = document.getElementById('sedekah-subuh-val');
+                if (sedekahEl) {
+                    sedekahEl.innerText = sedekahToday > 0 ? `${formatRupiah(sedekahToday)} Hari Ini` : `Rp 0 Hari Ini`;
                 }
 
                 // UPDATE CAPAIAN & KEUTAMAAN HARI INI (LOCKED STATE SUMMARY)
