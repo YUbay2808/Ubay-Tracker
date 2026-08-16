@@ -199,46 +199,10 @@
                             </p>
                         </div>
                     </div>
-
-                    <div class="flex items-center gap-1 shrink-0">
-                        <button onclick="haptic('light'); openSheetsConfigModal();" id="sheets-status-btn" class="bg-zinc-900 border border-zinc-800 text-emerald-400 p-2 rounded-xl text-xs" title="Google Sheets Live Sync"><i class="fa-solid fa-file-excel"></i></button>
-                        <button onclick="haptic('light'); lockAppManually();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Kunci Aplikasi Sekarang"><i class="fa-solid fa-lock"></i></button>
-                        <button onclick="haptic('light'); toggleAudioMute();" id="audio-mute-btn" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Mute/Unmute Audio"><i class="fa-solid fa-volume-high"></i></button>
-                        <button onclick="haptic('light'); openPomodoroModal();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Pomodoro Focus"><i class="fa-solid fa-stopwatch"></i></button>
-                        <button onclick="haptic('light'); changePinModal();" class="bg-zinc-900 border border-red-900/60 text-red-400 p-2 rounded-xl text-xs" title="Ganti PIN"><i class="fa-solid fa-key"></i></button>
-                        <button onclick="haptic('light'); cycleTheme();" class="bg-zinc-900 border border-red-900/60 text-amber-400 p-2 rounded-xl text-xs" title="Ganti Tema"><i class="fa-solid fa-palette"></i></button>
-                        <button onclick="haptic('light'); document.getElementById('restore-file-input').click();" class="bg-zinc-900 border border-red-900/60 text-slate-300 p-2 rounded-xl text-xs" title="Restore Data"><i class="fa-solid fa-file-import"></i></button>
-                        <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
-                    </div>
+                    <input type="file" id="restore-file-input" accept=".json" class="hidden" onchange="restoreJSON(event)">
                 </div>
             </div>
         </nav>
-
-        <!-- MASTER DAILY GLANCE WIDGET -->
-        <div class="max-w-4xl mx-auto px-3 pt-3">
-            <div class="bg-zinc-950 border border-red-900/50 rounded-xl p-2 shadow-md space-y-2">
-                <div class="flex justify-between items-center px-1">
-                    <span class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1">
-                        <i class="fa-solid fa-gauge-high"></i> Master Daily Glance
-                    </span>
-                    <span id="sheets-sync-indicator" class="text-[9px] text-emerald-400 font-bold"><i class="fa-solid fa-cloud-arrow-up"></i> Sheets Ready</span>
-                </div>
-                <div id="summary-content-grid" class="grid grid-cols-3 gap-1.5 text-center">
-                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800">
-                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Batas Harian</span>
-                        <span id="glance-safe-limit" class="text-xs font-black text-red-400 block truncate">Rp 0 / hr</span>
-                    </div>
-                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800">
-                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Sholat</span>
-                        <span id="glance-sholat-status" class="text-xs font-black text-emerald-400 block truncate">0/5 Jamaah</span>
-                    </div>
-                    <div class="bg-zinc-900/80 p-2 rounded-lg border border-zinc-800">
-                        <span class="text-[9px] text-slate-400 font-extrabold uppercase block">Clean Streak</span>
-                        <span id="glance-nofap-days" class="text-xs font-black text-amber-400 block truncate">0 Hari</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- FINANCE TOP BANNERS -->
         <div id="finance-top-banners" class="max-w-4xl mx-auto px-3 pt-3 space-y-2 tab-transition">
@@ -293,8 +257,6 @@
                     </div>
 
                     <div class="flex items-center gap-1.5">
-                        <button onclick="haptic('light'); openTransferModal();" class="bg-zinc-900 text-blue-400 border border-blue-900/60 font-bold px-2.5 py-2 rounded-xl text-xs active:scale-95"><i class="fa-solid fa-arrow-right-arrow-left"></i> Transfer</button>
-                        <button onclick="haptic('light'); exportCSV();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold p-2 rounded-xl text-xs active:scale-95"><i class="fa-solid fa-file-csv"></i></button>
                         <button onclick="haptic('light'); openModal();" class="bg-gradient-to-r from-red-600 to-rose-700 text-white font-extrabold px-3 py-2 rounded-xl text-xs flex items-center gap-1 active:scale-95">
                             <i class="fa-solid fa-plus"></i> <span>Catat</span>
                         </button>
@@ -787,44 +749,6 @@
                 <button onclick="haptic('light'); startPomodoro();" class="bg-amber-600 text-white font-bold px-4 py-2 rounded-xl text-xs active:scale-95">Start Focus</button>
                 <button onclick="haptic('light'); stopPomodoro();" class="bg-zinc-800 text-slate-300 font-bold px-4 py-2 rounded-xl text-xs active:scale-95">Reset</button>
             </div>
-        </div>
-    </div>
-
-    <!-- MODAL TRANSFER ANTAR WALLET -->
-    <div id="transfer-modal-backdrop" class="fixed inset-0 bg-zinc-950/85 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
-        <div class="glass-card border border-blue-600/60 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-3 bottom-sheet">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <h3 class="text-xs font-black text-white flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-right-arrow-left text-blue-400"></i> Transfer Antar Wallet
-                </h3>
-                <button onclick="haptic('light'); closeTransferModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form onsubmit="handleTransferSubmit(event)" class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Dari Wallet</label>
-                    <select id="trans-from" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
-                        <option value="bank">Bank Utama</option>
-                        <option value="cash">Cash / Dompet</option>
-                        <option value="ewallet">E-Wallet</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Ke Wallet</label>
-                    <select id="trans-to" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
-                        <option value="cash">Cash / Dompet</option>
-                        <option value="bank">Bank Utama</option>
-                        <option value="ewallet">E-Wallet</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nominal Transfer (Rp)</label>
-                    <input type="number" id="trans-amount" required placeholder="50000" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl p-2.5 text-xs text-white">
-                </div>
-                <div class="pt-2 flex gap-2">
-                    <button type="button" onclick="haptic('light'); closeTransferModal();" class="w-1/2 bg-zinc-800 font-bold py-2 rounded-xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double')" class="w-1/2 bg-blue-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95">Proses Transfer</button>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -1345,10 +1269,6 @@
 
                 document.getElementById('gregorian-date-display').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
 
-                if (isAudioMuted) {
-                    document.getElementById('audio-mute-btn').innerHTML = `<i class="fa-solid fa-volume-xmark text-red-400"></i>`;
-                }
-
                 const savedTheme = localStorage.getItem('user_app_theme');
                 if (savedTheme && savedTheme !== 'default') document.body.classList.add(savedTheme);
 
@@ -1681,7 +1601,6 @@
 
             if (document.getElementById('nofap-streak-days')) document.getElementById('nofap-streak-days').innerText = `${days} Hari`;
             if (document.getElementById('nofap-streak-timer')) document.getElementById('nofap-streak-timer').innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit Clean`;
-            if (document.getElementById('glance-nofap-days')) document.getElementById('glance-nofap-days').innerText = `${days} Hari Clean`;
 
             if (days > nofapData.longestStreakDays) {
                 nofapData.longestStreakDays = days;
@@ -1943,7 +1862,6 @@
             const safeDailyVal = totalSystemMoney > 0 ? Math.floor(totalSystemMoney / daysLeft) : 0;
             document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
             document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
-            document.getElementById('glance-safe-limit').innerText = `${formatRupiah(safeDailyVal)} / hr`;
 
             const wishlistContainer = document.getElementById('wishlist-delay-list');
             wishlistContainer.innerHTML = '';
@@ -2101,15 +2019,6 @@
 
         function deleteTransaction(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('fin_transactions', JSON.stringify(transactions)); renderApp(); }
 
-        function exportCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,ID,Tanggal,Kategori,Deskripsi,Nominal,Metode\n";
-            transactions.forEach(t => { csvContent += `${t.id},${formatDateDDMMYYYY(t.date)},"${t.category}","${t.desc}",${t.amount},${t.method || 'Bank'}\n`; });
-            const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", `Keuangan_Ubay_${todayStr}.csv`);
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        }
-
         function setFastSholat(sholatName, val) {
             tempSholatStates[sholatName] = val;
             ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
@@ -2178,10 +2087,6 @@
 
                 const stToday = getSholatStats(todayRec);
                 const stYest = getSholatStats(yestRec);
-
-                if (document.getElementById('glance-sholat-status')) {
-                    document.getElementById('glance-sholat-status').innerText = `${stToday.jamaah}/5 Jamaah`;
-                }
 
                 const evalEl = document.getElementById('sholat-eval-status');
                 if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
