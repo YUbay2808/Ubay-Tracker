@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Gemini Sidebar & Main Dashboard v7.0</title>
+    <title id="html-title-tag">Ubay Progress - Gemini Sidebar & Main Dashboard v7.1 Pro</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -44,7 +44,7 @@
     <style>
         :root {
             --bg-gradient: radial-gradient(circle at 80% -20%, rgba(220, 38, 38, 0.2), transparent 45%), radial-gradient(circle at 10% 110%, rgba(16, 185, 129, 0.15), transparent 45%), #090a0f;
-            --glass-bg: linear-gradient(145deg, rgba(18, 20, 28, 0.9), rgba(12, 14, 20, 0.95));
+            --glass-bg: linear-gradient(145deg, rgba(18, 20, 28, 0.92), rgba(12, 14, 20, 0.96));
             --border-color: rgba(255, 255, 255, 0.08);
             --card-glow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
         }
@@ -188,7 +188,7 @@
         }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
+<body class="text-slate-100 min-h-screen pb-24 custom-scrollbar">
 
     <!-- LOCK SCREEN SYSTEM -->
     <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex-col items-center justify-center p-6 space-y-6">
@@ -218,7 +218,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-black text-white uppercase tracking-tight">Ubay Navigation</h3>
-                        <p class="text-[10px] text-red-400 font-bold">Gemini Sidebar Bar v7.0</p>
+                        <p class="text-[10px] text-red-400 font-bold">Gemini Sidebar Hub v7.1</p>
                     </div>
                 </div>
                 <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-2 active-press"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -314,19 +314,64 @@
         <!-- SECTION 0: MAIN DASHBOARD (BERISI KEUANGAN, SHOLAT, & NOFAP RINGKASAN UTAMA) -->
         <div id="section-main" class="tab-transition">
             <main class="max-w-4xl mx-auto px-4 pt-3 space-y-4">
-                <!-- Welcome Banner -->
-                <section class="oneui-card p-5 border-red-600/40 bg-gradient-to-br from-zinc-950 via-red-950/20 to-zinc-900 shadow-xl space-y-3">
+                
+                <!-- TOMBOL AKSI CEPAT (QUICK ACTION BUTTONS) -->
+                <section class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <button onclick="haptic('double'); openModal();" class="oneui-card p-3.5 border-red-500/50 hover:border-red-500 bg-gradient-to-br from-red-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-red-950/80 border border-red-600/60 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-receipt text-base"></i>
+                        </div>
+                        <div>
+                            <strong class="text-xs font-black text-white block">Catat Pengeluaran</strong>
+                            <span class="text-[9px] text-slate-400">Input transaksi kilat</span>
+                        </div>
+                    </button>
+
+                    <button onclick="haptic('double'); openSholatModal();" class="oneui-card p-3.5 border-emerald-500/50 hover:border-emerald-500 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-950/80 border border-emerald-600/60 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-mosque text-base"></i>
+                        </div>
+                        <div>
+                            <strong class="text-xs font-black text-white block">Check-in Sholat</strong>
+                            <span class="text-[9px] text-slate-400">Mutabaah harian</span>
+                        </div>
+                    </button>
+
+                    <button onclick="haptic('double'); checkInNoFap();" class="oneui-card p-3.5 border-amber-500/50 hover:border-amber-500 bg-gradient-to-br from-amber-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-950/80 border border-amber-600/60 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-fire text-base"></i>
+                        </div>
+                        <div>
+                            <strong class="text-xs font-black text-white block">Check-in Clean</strong>
+                            <span class="text-[9px] text-slate-400">Streak NoFap</span>
+                        </div>
+                    </button>
+
+                    <button onclick="haptic('heavy'); openPanicModal();" class="oneui-card p-3.5 border-rose-500/50 hover:border-rose-500 bg-gradient-to-br from-rose-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-rose-950/80 border border-rose-600/60 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform animate-pulse">
+                            <i class="fa-solid fa-shield-halved text-base"></i>
+                        </div>
+                        <div>
+                            <strong class="text-xs font-black text-white block">Emergency Panic</strong>
+                            <span class="text-[9px] text-slate-400">Box breathing</span>
+                        </div>
+                    </button>
+                </section>
+
+                <!-- Welcome Banner Beautified -->
+                <section class="oneui-card p-5 border-red-600/40 bg-gradient-to-br from-zinc-950 via-red-950/30 to-zinc-900 shadow-2xl space-y-3 relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-crown text-amber-400"></i> Main Comprehensive Dashboard
+                                <i class="fa-solid fa-crown text-amber-400"></i> Master Comprehensive Dashboard Pro
                             </span>
                             <h2 class="text-lg font-black text-white mt-1">Selamat Datang, Yuman Akbar Nurmana! ⚔️</h2>
                         </div>
-                        <span class="bg-red-950 text-red-300 border border-red-600/60 px-3 py-1 rounded-2xl text-xs font-extrabold font-money">Active Hub</span>
+                        <span class="bg-red-950 text-red-300 border border-red-600/60 px-3.5 py-1 rounded-2xl text-xs font-extrabold font-money shadow-md">Active Hub</span>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Semua progres Keuangan, Sholat Mutabaah, dan Brain Rewire NoFap Anda terangkum lengkap dalam satu layar utama real-time.
+                        Gunakan <strong class="text-red-400">Sidebar Kiri (Tombol Menu ☰ di Kiri Atas)</strong> untuk membuka halaman detail Keuangan, Sholat, atau NoFap secara mendalam.
                     </p>
                 </section>
 
@@ -336,7 +381,7 @@
                         <span class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-wallet text-emerald-400"></i> Ringkasan Keuangan Harian & Sistem
                         </span>
-                        <button onclick="haptic('light'); switchTab('finance');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-emerald-300 px-3 py-1 rounded-2xl font-bold active-press">Detail Keuangan &rarr;</button>
+                        <button onclick="haptic('light'); switchTab('finance');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-emerald-300 px-3.5 py-1.5 rounded-2xl font-bold active-press">Detail Keuangan &rarr;</button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -364,7 +409,7 @@
                         <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-mosque text-amber-400"></i> Ringkasan Spiritual & Sholat Hari Ini
                         </span>
-                        <button onclick="haptic('light'); switchTab('sholat');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-amber-300 px-3 py-1 rounded-2xl font-bold active-press">Detail Sholat &rarr;</button>
+                        <button onclick="haptic('light'); switchTab('sholat');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-amber-300 px-3.5 py-1.5 rounded-2xl font-bold active-press">Detail Sholat &rarr;</button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -392,7 +437,7 @@
                         <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-fire text-red-400"></i> Ringkasan NoFap & Brain Rewire
                         </span>
-                        <button onclick="haptic('light'); switchTab('nofap');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-red-300 px-3 py-1 rounded-2xl font-bold active-press">Detail NoFap &rarr;</button>
+                        <button onclick="haptic('light'); switchTab('nofap');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-red-300 px-3.5 py-1.5 rounded-2xl font-bold active-press">Detail NoFap &rarr;</button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs items-center">
@@ -408,7 +453,7 @@
                             <p class="text-xs text-slate-300 font-semibold leading-relaxed">
                                 Pikiran jernih dan fokus kerja FAT (Finance, Accounting, Tax) terjaga secara optimal. Tetap waspada jam rawan!
                             </p>
-                            <button onclick="haptic('double'); checkInNoFap();" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2 rounded-xl text-xs active-press shadow-md">
+                            <button onclick="haptic('double'); checkInNoFap();" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 rounded-xl text-xs active-press shadow-md">
                                 ✅ Check-in Clean Hari Ini
                             </button>
                         </div>
@@ -953,28 +998,6 @@
             </main>
         </div>
 
-        <!-- BOTTOM NAVIGATION BAR -->
-        <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-t border-white/5 pb-safe">
-            <div class="max-w-4xl mx-auto grid grid-cols-4 h-14">
-                <button id="nav-btn-main" onclick="haptic('light'); switchTab('main');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
-                    <i class="fa-solid fa-house text-base"></i>
-                    <span class="text-[10px] font-bold">Dashboard</span>
-                </button>
-                <button id="nav-btn-fin" onclick="haptic('light'); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
-                    <i class="fa-solid fa-wallet text-base"></i>
-                    <span class="text-[10px] font-bold">Keuangan</span>
-                </button>
-                <button id="nav-btn-sholat" onclick="haptic('light'); switchTab('sholat');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
-                    <i class="fa-solid fa-mosque text-base"></i>
-                    <span class="text-[10px] font-bold">Sholat</span>
-                </button>
-                <button id="nav-btn-nofap" onclick="haptic('light'); switchTab('nofap');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
-                    <i class="fa-solid fa-fire text-base"></i>
-                    <span class="text-[10px] font-bold">NoFap</span>
-                </button>
-            </div>
-        </nav>
-
         <!-- FOOTER -->
         <footer class="max-w-4xl mx-auto px-4 mt-8 pt-3 border-t border-zinc-800 text-center text-xs text-slate-500 flex justify-between items-center gap-2">
             <span id="footer-app-name">© 2026 Ubay Progress ⚔️</span>
@@ -984,7 +1007,7 @@
         </footer>
 
         <!-- FAB BUTTON -->
-        <div class="fixed bottom-16 right-4 z-40">
+        <div class="fixed bottom-6 right-4 z-40">
             <div id="fab-menu" class="hidden mb-2 space-y-2 flex flex-col items-end">
                 <button onclick="haptic('heavy'); switchTab('nofap'); openPanicModal(); toggleFab();" class="bg-amber-600 text-white font-bold px-4 py-2.5 rounded-2xl text-xs shadow-lg flex items-center gap-1.5 active-press">
                     <span>Emergency Panic</span> <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1429,7 +1452,7 @@
         let audioCtx = null;
         let tempSholatStates = { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending' };
 
-        let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
+        let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250050 };
 
         function openWalletEditModal() {
             document.getElementById('edit-wallet-cash').value = wallets.cash;
@@ -1555,7 +1578,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Gemini Sidebar & Main Dashboard v7.0`;
+            document.getElementById('html-title-tag').innerText = `${title} - Gemini Sidebar & Main Dashboard v7.1`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1575,6 +1598,7 @@
                     document.getElementById('app-apple-icon').href = savedIcon;
                 }
 
+                // Default buka langsung Main Dashboard
                 const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'main';
                 switchTab(lastActiveTab);
 
@@ -1662,30 +1686,18 @@
             nofapSec.classList.add('hidden');
             topBanners.classList.add('hidden');
 
-            const inactiveNav = "flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all";
-            const activeNav = "flex flex-col items-center justify-center space-y-1 text-red-500 font-black transition-all";
-
-            document.getElementById('nav-btn-main').className = inactiveNav;
-            document.getElementById('nav-btn-fin').className = inactiveNav;
-            document.getElementById('nav-btn-sholat').className = inactiveNav;
-            document.getElementById('nav-btn-nofap').className = inactiveNav;
-
             if (tab === 'main') {
                 mainSec.classList.remove('hidden');
-                document.getElementById('nav-btn-main').className = activeNav;
                 renderMainDashboardSummary();
             } else if (tab === 'finance') {
                 finSec.classList.remove('hidden');
                 topBanners.classList.remove('hidden');
-                document.getElementById('nav-btn-fin').className = activeNav;
                 renderApp();
             } else if (tab === 'sholat') {
                 sholatSec.classList.remove('hidden');
-                document.getElementById('nav-btn-sholat').className = activeNav;
                 renderSholatReports();
             } else if (tab === 'nofap') {
                 nofapSec.classList.remove('hidden');
-                document.getElementById('nav-btn-nofap').className = activeNav;
                 renderNoFapModule();
             }
         }
@@ -1885,6 +1897,7 @@
             renderNoFapModule();
             renderMainDashboardSummary();
             renderBrainCanvas();
+            alert("🔥 Masya Allah! Check-in Clean NoFap hari ini berhasil disimpan.");
         }
 
         function resetNoFap() {
@@ -2388,6 +2401,7 @@
             renderApp();
             renderMainDashboardSummary();
             closeModal();
+            alert("✅ Pengeluaran berhasil dicatat!");
         });
 
         function deleteTransaction(id) {
@@ -2472,6 +2486,7 @@
             renderSholatReports(); 
             renderMainDashboardSummary();
             closeSholatModal();
+            alert("🕌 Mutabaah Sholat berhasil disimpan!");
         });
 
         function getSholatStats(record) {
@@ -2723,7 +2738,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v7.0_${todayStr}.json`;
+            link.download = `Ubay_Backup_v7.1_${todayStr}.json`;
             link.click();
         }
 
@@ -2741,7 +2756,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v7.0 berhasil dipulihkan!");
+                    alert("📥 Data v7.1 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
