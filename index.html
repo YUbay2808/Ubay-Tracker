@@ -167,6 +167,17 @@
             box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
         }
 
+        .tahajud-chip {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1.25rem;
+        }
+        .tahajud-chip.active {
+            background: linear-gradient(135deg, #6366f1, #4338ca) !important;
+            color: #ffffff !important;
+            border-color: #818cf8 !important;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+        }
+
         .chip-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -460,6 +471,57 @@
                     </button>
                 </div>
 
+                <!-- NEW FITUR: CAPAIAN & KEUTAMAAN HARI INI (LOCKED DISPLAY SUMMARY) -->
+                <section id="today-spiritual-lock-summary" class="oneui-card p-4 border-amber-500/50 space-y-3 bg-gradient-to-br from-zinc-950 via-amber-950/20 to-zinc-900 shadow-xl">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
+                        <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-lock text-amber-400"></i> Capaian & Keutamaan Hari Ini (Locked)
+                        </span>
+                        <span class="text-[10px] font-extrabold text-slate-300 font-money" id="lock-summary-date">Hari Ini</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                        <!-- Lock Jamaah Wajib -->
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/50 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black text-emerald-400 uppercase flex items-center gap-1">
+                                    <i class="fa-solid fa-mosque"></i> Sholat Jamaah
+                                </span>
+                                <span id="lock-jamaah-count" class="bg-emerald-950 text-emerald-300 border border-emerald-600/60 text-[10px] px-2 py-0.5 rounded-full font-bold font-money">0/5 Jamaah</span>
+                            </div>
+                            <p id="lock-jamaah-virtue" class="text-[11px] text-slate-300 font-semibold leading-snug pt-1">
+                                Belum ada check-in sholat jamaah hari ini.
+                            </p>
+                        </div>
+
+                        <!-- Lock Dhuha -->
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/50 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black text-amber-400 uppercase flex items-center gap-1">
+                                    <i class="fa-solid fa-sun"></i> Sholat Dhuha
+                                </span>
+                                <span id="lock-dhuha-count" class="bg-amber-950 text-amber-300 border border-amber-600/60 text-[10px] px-2 py-0.5 rounded-full font-bold font-money">0 Rakaat</span>
+                            </div>
+                            <p id="lock-dhuha-virtue" class="text-[11px] text-slate-300 font-semibold leading-snug pt-1">
+                                Belum mencatat Dhuha hari ini.
+                            </p>
+                        </div>
+
+                        <!-- Lock Tahajud -->
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/50 space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black text-indigo-400 uppercase flex items-center gap-1">
+                                    <i class="fa-solid fa-moon"></i> Sholat Tahajud
+                                </span>
+                                <span id="lock-tahajud-count" class="bg-indigo-950 text-indigo-300 border border-indigo-600/60 text-[10px] px-2 py-0.5 rounded-full font-bold font-money">0 Rakaat</span>
+                            </div>
+                            <p id="lock-tahajud-virtue" class="text-[11px] text-slate-300 font-semibold leading-snug pt-1">
+                                Belum mencatat Tahajud hari ini.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- KEUTAMAAN SHOLAT BERJAMAAH SHOWCASE -->
                 <section class="oneui-card p-4 border-emerald-500/40 space-y-2.5 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900">
                     <div class="flex items-center justify-between border-b border-emerald-900/60 pb-2">
@@ -517,6 +579,32 @@
                     <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/50 space-y-1">
                         <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block" id="dhuha-virtue-title">✨ Keutamaan 2 Rakaat</span>
                         <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="dhuha-virtue-desc">"Sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)</p>
+                    </div>
+                </section>
+
+                <!-- DYNAMIC TAHAJUD MILESTONE TRACKER (FITUR BARU) -->
+                <section class="oneui-card p-4 border-indigo-500/40 space-y-3 bg-gradient-to-br from-indigo-950/30 via-zinc-950 to-zinc-900">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-black text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-moon text-indigo-400"></i> Keutamaan Sholat Tahajud
+                            </span>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat Tahajud hari ini:</p>
+                        </div>
+                        <span id="tahajud-selected-rakaat" class="text-xs font-black text-indigo-400 font-money bg-indigo-950/80 border border-indigo-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
+                    </div>
+
+                    <div class="grid grid-cols-5 gap-1.5 text-center text-xs">
+                        <button onclick="selectTahajudRakaat(2)" id="tahajud-chip-2" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">2</button>
+                        <button onclick="selectTahajudRakaat(4)" id="tahajud-chip-4" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">4</button>
+                        <button onclick="selectTahajudRakaat(6)" id="tahajud-chip-6" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">6</button>
+                        <button onclick="selectTahajudRakaat(8)" id="tahajud-chip-8" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">8</button>
+                        <button onclick="selectTahajudRakaat(12)" id="tahajud-chip-12" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">12</button>
+                    </div>
+
+                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-500/50 space-y-1">
+                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest block" id="tahajud-virtue-title">✨ Keutamaan Tahajud</span>
+                        <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="tahajud-virtue-desc">"Sholat yang paling utama setelah sholat fardu adalah sholat malam." (HR. Muslim)</p>
                     </div>
                 </section>
 
@@ -846,15 +934,24 @@
         const todayStr = getLocalTodayStr();
 
         const dhuhaVirtuesMap = {
-            2: { title: "✨ Keutamaan 2 Rakaat", desc: '"Cukup sebagai sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)' },
-            4: { title: "⚡ Keutamaan 4 Rakaat", desc: '"Allah SWT mencukupi kebutuhan & rezekimu di akhir hari." (HR. Abu Daud)' },
-            6: { title: "👑 Keutamaan 6 Rakaat", desc: '"Dicatat sebagai hamba yang selalu taat & kembali (Awabin)." (HR. Thabrani)' },
-            8: { title: "🛡️ Keutamaan 8 Rakaat", desc: '"Dicatat dalam kelompok hamba yang taat dan bertawakal penuh." (HR. Al-Hakim)' },
-            10: { title: "🏰 Keutamaan 10 Rakaat", desc: '"Dibangunkan pelindung dari dosa pada hari itu." (HR. Thabrani)' },
-            12: { title: "🕌 Keutamaan 12 Rakaat (Maksimal)", desc: '"Allah SWT akan membangunkan sebuah istana megah di Surga." (HR. Tirmidzi & Ibn Majah)' }
+            2: { title: "✨ Keutamaan 2 Rakaat Dhuha", desc: '"Cukup sebagai sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)' },
+            4: { title: "⚡ Keutamaan 4 Rakaat Dhuha", desc: '"Allah SWT mencukupi kebutuhan & rezekimu di akhir hari." (HR. Abu Daud)' },
+            6: { title: "👑 Keutamaan 6 Rakaat Dhuha", desc: '"Dicatat sebagai hamba yang selalu taat & kembali (Awabin)." (HR. Thabrani)' },
+            8: { title: "🛡️ Keutamaan 8 Rakaat Dhuha", desc: '"Dicatat dalam kelompok hamba yang taat dan bertawakal penuh." (HR. Al-Hakim)' },
+            10: { title: "🏰 Keutamaan 10 Rakaat Dhuha", desc: '"Dibangunkan pelindung dari dosa pada hari itu." (HR. Thabrani)' },
+            12: { title: "🕌 Keutamaan 12 Rakaat Dhuha (Maksimal)", desc: '"Allah SWT akan membangunkan sebuah istana megah di Surga." (HR. Tirmidzi & Ibn Majah)' }
+        };
+
+        const tahajudVirtuesMap = {
+            2: { title: "✨ Keutamaan 2 Rakaat Tahajud", desc: '"Doa di sepertiga malam terakhir diijabah & penghapus kebiasaan dosa." (HR. Muslim & Tirmidzi)' },
+            4: { title: "⚡ Keutamaan 4 Rakaat Tahajud", desc: '"Diangkat ke kedudukan terpuji (Maqaman Mahmuda)." (QS. Al-Isra: 79)' },
+            6: { title: "👑 Keutamaan 6 Rakaat Tahajud", desc: '"Dicatat sebagai hamba penghuni surga yang sedikit tidurnya di waktu malam." (QS. Adz-Dzariyat: 17-18)' },
+            8: { title: "🛡️ Keutamaan 8 Rakaat Tahajud", desc: '"Mengikuti sunnah utama Rasulullah SAW dalam Qiyamul Lail." (HR. Bukhari)' },
+            12: { title: "🏰 Keutamaan 12 Rakaat Tahajud", desc: '"Kemuliaan mukmin sejati & pembawa ketenangan jiwa yang sempurna."' }
         };
 
         let selectedDhuhaRakaatVal = 0;
+        let selectedTahajudRakaatVal = 0;
 
         function selectDhuhaRakaat(rakaat) {
             haptic('light');
@@ -888,6 +985,47 @@
                     isya: "Pending", 
                     dhuha: rakaat.toString(), 
                     tahajud: "0", 
+                    tilawah: "0", 
+                    sedekah: "0" 
+                });
+            }
+            localStorage.setItem('sholat_records', JSON.stringify(sholats));
+            renderSholatReports();
+            triggerConfetti();
+        }
+
+        function selectTahajudRakaat(rakaat) {
+            haptic('light');
+            selectedTahajudRakaatVal = rakaat;
+            document.getElementById('tahajud-selected-rakaat').innerText = `${rakaat} Rakaat`;
+
+            [2, 4, 6, 8, 12].forEach(r => {
+                const chip = document.getElementById(`tahajud-chip-${r}`);
+                if (chip) {
+                    if (r === rakaat) chip.classList.add('active');
+                    else chip.classList.remove('active');
+                }
+            });
+
+            const virtueInfo = tahajudVirtuesMap[rakaat];
+            if (virtueInfo) {
+                document.getElementById('tahajud-virtue-title').innerText = virtueInfo.title;
+                document.getElementById('tahajud-virtue-desc').innerText = virtueInfo.desc;
+            }
+
+            const idx = sholats.findIndex(x => x.date === todayStr);
+            if (idx >= 0) {
+                sholats[idx].tahajud = rakaat.toString();
+            } else {
+                sholats.push({ 
+                    date: todayStr, 
+                    subuh: "Pending", 
+                    dzuhur: "Pending", 
+                    ashar: "Pending", 
+                    maghrib: "Pending", 
+                    isya: "Pending", 
+                    dhuha: "0", 
+                    tahajud: rakaat.toString(), 
                     tilawah: "0", 
                     sedekah: "0" 
                 });
@@ -1890,7 +2028,8 @@
                 date: dStr,
                 ...tempSholatStates,
                 tilawah: document.getElementById('mutabaah-tilawah-slider').value,
-                dhuha: selectedDhuhaRakaatVal > 0 ? selectedDhuhaRakaatVal.toString() : (existingRec.dhuha || "0")
+                dhuha: selectedDhuhaRakaatVal > 0 ? selectedDhuhaRakaatVal.toString() : (existingRec.dhuha || "0"),
+                tahajud: selectedTahajudRakaatVal > 0 ? selectedTahajudRakaatVal.toString() : (existingRec.tahajud || "0")
             };
 
             if (idx >= 0) {
@@ -1938,6 +2077,55 @@
                 if (todayRec && todayRec.dhuha && parseInt(todayRec.dhuha) > 0) {
                     const r = parseInt(todayRec.dhuha);
                     selectDhuhaRakaatUI(r);
+                }
+
+                if (todayRec && todayRec.tahajud && parseInt(todayRec.tahajud) > 0) {
+                    const r = parseInt(todayRec.tahajud);
+                    selectTahajudRakaatUI(r);
+                }
+
+                // UPDATE CAPAIAN & KEUTAMAAN HARI INI (LOCKED STATE SUMMARY)
+                document.getElementById('lock-summary-date').innerText = `Tgl: ${formatDateDDMMYYYY(todayStr)}`;
+
+                // Jamaah Lock Update
+                const lockJamaahCountEl = document.getElementById('lock-jamaah-count');
+                const lockJamaahVirtueEl = document.getElementById('lock-jamaah-virtue');
+                lockJamaahCountEl.innerText = `${stToday.jamaah}/5 Jamaah`;
+
+                if (stToday.jamaah === 5) {
+                    lockJamaahVirtueEl.innerHTML = `<strong class="text-emerald-400">🔒 LOCKED: 5/5 Perfect Jamaah!</strong><br>Pahala 27x lipat + garansi pembebasan dari api neraka & sifat nifak!`;
+                } else if (stToday.jamaah >= 3) {
+                    lockJamaahVirtueEl.innerHTML = `<strong class="text-emerald-400">🔒 LOCKED: ${stToday.jamaah}/5 Jamaah!</strong><br>Pahala 27x lipat mendominasi hari ini. Setiap langkah menghapus dosa.`;
+                } else if (stToday.jamaah > 0) {
+                    lockJamaahVirtueEl.innerHTML = `<strong class="text-emerald-400">🔒 LOCKED: ${stToday.jamaah}/5 Jamaah!</strong><br>Mendapatkan keutamaan 27 derajat dibanding sholat sendiri.`;
+                } else {
+                    lockJamaahVirtueEl.innerText = "Belum ada check-in sholat jamaah hari ini. Yuk ke masjid!";
+                }
+
+                // Dhuha Lock Update
+                const lockDhuhaCountEl = document.getElementById('lock-dhuha-count');
+                const lockDhuhaVirtueEl = document.getElementById('lock-dhuha-virtue');
+                const dhuhaRk = stToday.dhuha;
+                lockDhuhaCountEl.innerText = `${dhuhaRk} Rakaat`;
+
+                if (dhuhaRk > 0) {
+                    const info = dhuhaVirtuesMap[dhuhaRk] || { title: `✨ Dhuha ${dhuhaRk} Rakaat`, desc: 'Keberkahan & kecukupan rezeki dari Allah SWT.' };
+                    lockDhuhaVirtueEl.innerHTML = `<strong class="text-amber-400">🔒 LOCKED: ${dhuhaRk} Rakaat!</strong><br>${info.desc}`;
+                } else {
+                    lockDhuhaVirtueEl.innerText = "Belum mencatat Dhuha hari ini. Klik chip Dhuha di bawah!";
+                }
+
+                // Tahajud Lock Update
+                const lockTahajudCountEl = document.getElementById('lock-tahajud-count');
+                const lockTahajudVirtueEl = document.getElementById('lock-tahajud-virtue');
+                const tahajudRk = stToday.tahajud;
+                lockTahajudCountEl.innerText = `${tahajudRk} Rakaat`;
+
+                if (tahajudRk > 0) {
+                    const info = tahajudVirtuesMap[tahajudRk] || { title: `✨ Tahajud ${tahajudRk} Rakaat`, desc: 'Doa di sepertiga malam terakhir diijabah.' };
+                    lockTahajudVirtueEl.innerHTML = `<strong class="text-indigo-400">🔒 LOCKED: ${tahajudRk} Rakaat!</strong><br>${info.desc}`;
+                } else {
+                    lockTahajudVirtueEl.innerText = "Belum mencatat Tahajud hari ini. Pilih rakaat Tahajud di bawah!";
                 }
 
                 const evalEl = document.getElementById('sholat-eval-status');
@@ -1990,6 +2178,7 @@
                                         <span class="font-bold text-white font-sans">${formatDateDDMMYYYY(h.date)}</span>
                                         <div class="flex gap-1.5 font-sans">
                                             <span class="text-amber-400 font-bold bg-amber-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">☀️ Dhuha: ${h.dhuha || 0} Rk</span>
+                                            <span class="text-indigo-400 font-bold bg-indigo-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">🌙 Tahajud: ${h.tahajud || 0} Rk</span>
                                             <span class="text-red-400 font-bold bg-red-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">📖 Tilawah: ${h.tilawah || 0} Hal</span>
                                         </div>
                                     </div>
@@ -2021,6 +2210,24 @@
             if (virtueInfo) {
                 document.getElementById('dhuha-virtue-title').innerText = virtueInfo.title;
                 document.getElementById('dhuha-virtue-desc').innerText = virtueInfo.desc;
+            }
+        }
+
+        function selectTahajudRakaatUI(rakaat) {
+            selectedTahajudRakaatVal = rakaat;
+            document.getElementById('tahajud-selected-rakaat').innerText = `${rakaat} Rakaat`;
+            [2, 4, 6, 8, 12].forEach(r => {
+                const chip = document.getElementById(`tahajud-chip-${r}`);
+                if (chip) {
+                    if (r === rakaat) chip.classList.add('active');
+                    else chip.classList.remove('active');
+                }
+            });
+
+            const virtueInfo = tahajudVirtuesMap[rakaat];
+            if (virtueInfo) {
+                document.getElementById('tahajud-virtue-title').innerText = virtueInfo.title;
+                document.getElementById('tahajud-virtue-desc').innerText = virtueInfo.desc;
             }
         }
 
