@@ -231,7 +231,7 @@
                                 <span id="rank-badge" class="bg-red-950/90 text-red-300 border border-red-600/60 text-[9px] px-2.5 py-0.5 rounded-full font-bold shrink-0 font-money">Lvl 1</span>
                             </div>
                             <p class="text-[10px] text-red-400 font-bold mt-0.5" id="current-date-header">
-                                <span id="islamic-date-display" class="text-amber-400 mr-1">1 Safar 1448 H</span> • <span id="gregorian-date-display">Senin, 03/08/2026</span>
+                                <span id="islamic-date-display" class="text-amber-400 mr-1">3 Safar 1448 H</span> • <span id="gregorian-date-display">Minggu, 16/08/2026</span>
                             </p>
                         </div>
                     </div>
@@ -240,19 +240,35 @@
             </div>
         </nav>
 
-        <!-- FINANCE TOP BANNERS -->
+        <!-- FINANCE TOP BANNERS (Batas Aman & Sisa Harian Realtime) -->
         <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-2 tab-transition">
-            <section class="bg-gradient-to-r from-red-950/90 via-zinc-900/90 to-zinc-950 border border-red-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
-                <div>
-                    <h3 class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-shield-cat text-amber-400"></i> BATAS AMAN JAJAN HARIAN
-                    </h3>
-                    <p class="text-[11px] text-slate-300 mt-0.5">Sisa kuota hingga gajian (<span id="days-remaining-text" class="text-red-300 font-bold font-money">0 hari lagi</span>).</p>
-                </div>
-                <div class="bg-zinc-950/80 border border-red-600/50 px-3.5 py-2 rounded-2xl text-right shrink-0">
-                    <span id="safe-daily-limit" class="text-xs sm:text-sm font-black text-red-400 block font-money">Rp 0 / hari</span>
-                </div>
-            </section>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <!-- Batas Aman Jajan Harian (Total Sisa Dibagi Hari) -->
+                <section class="bg-gradient-to-r from-red-950/90 via-zinc-900/90 to-zinc-950 border border-red-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
+                    <div>
+                        <h3 class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-cat text-amber-400"></i> BATAS AMAN JAJAN HARIAN
+                        </h3>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Rata-rata hingga gajian (<span id="days-remaining-text" class="text-red-300 font-bold font-money">0 hari lagi</span>).</p>
+                    </div>
+                    <div class="bg-zinc-950/80 border border-red-600/50 px-3.5 py-2 rounded-2xl text-right shrink-0">
+                        <span id="safe-daily-limit" class="text-xs sm:text-sm font-black text-red-400 block font-money">Rp 0 / hari</span>
+                    </div>
+                </section>
+
+                <!-- Sisa Harian Hari Ini (Pagu Alokasi Hari Ini - Pengeluaran Hari Ini) -->
+                <section class="bg-gradient-to-r from-emerald-950/90 via-zinc-900/90 to-zinc-950 border border-emerald-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
+                    <div>
+                        <h3 class="text-[10px] font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-wallet text-amber-400"></i> SISA HARIAN HARI INI
+                        </h3>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Alokasi <span id="today-allowance-budget" class="text-emerald-300 font-bold font-money">Rp 50rb</span> - Terpakai <span id="today-spent-val" class="text-rose-400 font-bold font-money">Rp 0</span></p>
+                    </div>
+                    <div class="bg-zinc-950/80 border border-emerald-600/50 px-3.5 py-2 rounded-2xl text-right shrink-0">
+                        <span id="today-remaining-allowance" class="text-xs sm:text-sm font-black text-emerald-400 block font-money">Rp 50.000</span>
+                    </div>
+                </section>
+            </div>
         </div>
 
         <!-- SECTION 1: KEUANGAN -->
@@ -337,6 +353,7 @@
                     </div>
                 </section>
 
+                <!-- DASHBOARD PER HARI (DIKEMBALIKAN & DIPERTAHANKAN) -->
                 <section class="grid grid-cols-2 gap-2.5">
                     <div class="oneui-card p-4 space-y-1">
                         <span class="text-[10px] text-slate-400 font-semibold block">Hari Ini</span>
@@ -1392,7 +1409,7 @@
                 const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
                 applyCustomAppName(savedAppName);
 
-                document.getElementById('gregorian-date-display').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
+                document.getElementById('gregorian-date-display').innerText = `Minggu, ${formatDateDDMMYYYY(todayStr)}`;
 
                 const savedTheme = localStorage.getItem('user_app_theme');
                 if (savedTheme && savedTheme !== 'default') document.body.classList.add(savedTheme);
@@ -1990,6 +2007,13 @@
             document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
             document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
 
+            // Hitung Sisa Harian Hari Ini (Alokasi 50rb dikurangi pengeluaran hari ini, nilai tidak boleh negatif atau bertambah jika hemat)
+            const todayAllowanceBudget = 50000;
+            const todayRemaining = Math.max(0, todayAllowanceBudget - todayTotal);
+            document.getElementById('today-allowance-budget').innerText = formatRupiah(todayAllowanceBudget);
+            document.getElementById('today-spent-val').innerText = formatRupiah(todayTotal);
+            document.getElementById('today-remaining-allowance').innerText = formatRupiah(todayRemaining);
+
             const wishlistContainer = document.getElementById('wishlist-delay-list');
             wishlistContainer.innerHTML = '';
             if (impulsiveWishlist.length === 0) {
@@ -2307,7 +2331,6 @@
                     sedekahEl.innerText = sedekahToday > 0 ? `${formatRupiah(sedekahToday)} Hari Ini` : `Rp 0 Hari Ini`;
                 }
 
-                // UPDATE CAPAIAN & KEUTAMAAN HARI INI (LOCKED STATE SUMMARY)
                 document.getElementById('lock-summary-date').innerText = `Tgl: ${formatDateDDMMYYYY(todayStr)}`;
 
                 const lockJamaahCountEl = document.getElementById('lock-jamaah-count');
