@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - One UI Tactile v6.3</title>
+    <title id="html-title-tag">Ubay Progress - One UI v6.4 Fix</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -34,8 +34,7 @@
                         themeOled: '#000000',
                         themeEmerald: '#10b981',
                         oneUiBg: '#090a0f',
-                        oneUiCard: '#12141c',
-                        oneUiCardHover: '#181b26'
+                        oneUiCard: '#12141c'
                     }
                 }
             }
@@ -100,7 +99,7 @@
             box-shadow: var(--card-glow); 
             backdrop-filter: blur(20px);
             border-radius: 2rem;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease;
         }
 
         .tab-transition { transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out; }
@@ -205,7 +204,7 @@
 
     <!-- APP MAIN CONTENT CONTAINER -->
     <div id="app-main-content">
-        <!-- TOP NAVIGATION BAR WITH ONE UI STYLE -->
+        <!-- TOP NAVIGATION BAR -->
         <nav class="bg-zinc-950/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-30 shadow-2xl">
             <div class="max-w-4xl mx-auto px-4 py-3 space-y-2">
                 <div class="flex items-center justify-between gap-2">
@@ -248,7 +247,6 @@
         <!-- SECTION 1: KEUANGAN -->
         <div id="section-finance" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-4 pt-3 space-y-4">
-                <!-- SMART FAST INPUT BAR & PRESET CHIPS -->
                 <section class="oneui-card p-4 space-y-3 border-red-600/30">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-red-400 uppercase flex items-center gap-1.5 tracking-wider">
@@ -264,7 +262,6 @@
                         <button type="submit" onclick="haptic('double')" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-black px-4 py-3 rounded-2xl text-xs shrink-0 active-press shadow-md">Simpan</button>
                     </form>
 
-                    <!-- QUICK CHIPS -->
                     <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-0.5 no-scrollbar">
                         <button type="button" onclick="quickFillChip('Makan & Belanja Dapur Harian', 'Kopi')" class="chip-btn text-amber-300">☕ Kopi</button>
                         <button type="button" onclick="quickFillChip('Bensin / Transportasi / Tol', 'Bensin Motor')" class="chip-btn text-blue-300">⛽ Bensin</button>
@@ -275,7 +272,6 @@
                 </section>
 
                 <div class="flex justify-between items-center gap-2">
-                    <!-- SIKLUS GAJIAN PER TANGGAL 28 -->
                     <div class="oneui-card px-3.5 py-2 flex items-center gap-2 border-zinc-800">
                         <span class="text-xs text-slate-400"><i class="fa-solid fa-calendar-check text-red-400"></i></span>
                         <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs font-black text-red-400 focus:outline-none cursor-pointer">
@@ -464,7 +460,7 @@
                     </button>
                 </div>
 
-                <!-- KEUTAMAAN SHOLAT BERJAMAAH SHOWCASE (ONE UI CARD) -->
+                <!-- KEUTAMAAN SHOLAT BERJAMAAH SHOWCASE -->
                 <section class="oneui-card p-4 border-emerald-500/40 space-y-2.5 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900">
                     <div class="flex items-center justify-between border-b border-emerald-900/60 pb-2">
                         <span class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
@@ -497,7 +493,7 @@
                     </div>
                 </section>
 
-                <!-- DYNAMIC DHUHA MILESTONE TRACKER (2 S/D 12 RAKAAT) -->
+                <!-- DYNAMIC DHUHA MILESTONE TRACKER -->
                 <section class="oneui-card p-4 border-amber-500/40 space-y-3 bg-gradient-to-br from-amber-950/30 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center">
                         <div>
@@ -509,7 +505,6 @@
                         <span id="dhuha-selected-rakaat" class="text-xs font-black text-amber-400 font-money bg-amber-950/80 border border-amber-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
                     </div>
 
-                    <!-- MILESTONE CHIPS -->
                     <div class="grid grid-cols-6 gap-1.5 text-center text-xs">
                         <button onclick="selectDhuhaRakaat(2)" id="dhuha-chip-2" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">2</button>
                         <button onclick="selectDhuhaRakaat(4)" id="dhuha-chip-4" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">4</button>
@@ -519,7 +514,6 @@
                         <button onclick="selectDhuhaRakaat(12)" id="dhuha-chip-12" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">12</button>
                     </div>
 
-                    <!-- VIRTUE DISPLAY BOX -->
                     <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/50 space-y-1">
                         <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block" id="dhuha-virtue-title">✨ Keutamaan 2 Rakaat</span>
                         <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="dhuha-virtue-desc">"Sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)</p>
@@ -715,7 +709,7 @@
             </main>
         </div>
 
-        <!-- BOTTOM NAVIGATION BAR (ONE UI STYLE) -->
+        <!-- BOTTOM NAVIGATION BAR -->
         <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-t border-white/5 pb-safe">
             <div class="max-w-4xl mx-auto grid grid-cols-3 h-14">
                 <button id="nav-btn-fin" onclick="haptic('light'); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
@@ -840,6 +834,17 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
+        // LOKAL TIMEZONE FIX FUNCTION
+        function getLocalTodayStr() {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        const todayStr = getLocalTodayStr();
+
         const dhuhaVirtuesMap = {
             2: { title: "✨ Keutamaan 2 Rakaat", desc: '"Cukup sebagai sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)' },
             4: { title: "⚡ Keutamaan 4 Rakaat", desc: '"Allah SWT mencukupi kebutuhan & rezekimu di akhir hari." (HR. Abu Daud)' },
@@ -870,11 +875,22 @@
                 document.getElementById('dhuha-virtue-desc').innerText = virtueInfo.desc;
             }
 
-            const todayRec = sholats.find(x => x.date === todayStr);
-            if (todayRec) {
-                todayRec.dhuha = rakaat.toString();
+            const idx = sholats.findIndex(x => x.date === todayStr);
+            if (idx >= 0) {
+                sholats[idx].dhuha = rakaat.toString();
             } else {
-                sholats.push({ date: todayStr, subuh: "Pending", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: rakaat.toString(), tahajud: "0", tilawah: "0", sedekah: "0" });
+                sholats.push({ 
+                    date: todayStr, 
+                    subuh: "Pending", 
+                    dzuhur: "Pending", 
+                    ashar: "Pending", 
+                    maghrib: "Pending", 
+                    isya: "Pending", 
+                    dhuha: rakaat.toString(), 
+                    tahajud: "0", 
+                    tilawah: "0", 
+                    sedekah: "0" 
+                });
             }
             localStorage.setItem('sholat_records', JSON.stringify(sholats));
             renderSholatReports();
@@ -895,8 +911,6 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').catch(err => console.log('SW err:', err));
         }
-
-        const todayStr = new Date().toISOString().split('T')[0];
 
         function formatDateDDMMYYYY(dateString) {
             if (!dateString) return '';
@@ -1059,7 +1073,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - One UI v6.3`;
+            document.getElementById('html-title-tag').innerText = `${title} - One UI v6.4 Fix`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1093,6 +1107,9 @@
                 initGyroCompass();
                 renderBrainCanvas();
                 renderUrgeRadar();
+
+                // Listen date change in sholat modal
+                document.getElementById('input-sholat-date').addEventListener('change', (e) => loadSholatModalData(e.target.value));
             }, 10);
         });
 
@@ -1817,6 +1834,11 @@
 
         function setFastSholat(sholatName, val) {
             tempSholatStates[sholatName] = val;
+            setFastSholatUI(sholatName, val);
+            haptic('light');
+        }
+
+        function setFastSholatUI(sholatName, val) {
             ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
                 const btn = document.getElementById(`btn-${sholatName}-${opt}`);
                 if (btn) {
@@ -1824,32 +1846,58 @@
                     else btn.classList.remove('selected');
                 }
             });
-            haptic('light');
         }
 
         function updateTilawahVal(val) {
             document.getElementById('tilawah-slider-val').innerText = `${val} Halaman`;
         }
 
-        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [
-            { date: "2026-08-01", subuh: "Munfarid", dzuhur: "Jamaah", ashar: "Pending", maghrib: "Pending", isya: "Pending", dhuha: "4", tahajud: "4", tilawah: "10", sedekah: "20000" }
-        ];
+        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
 
         function openSholatModal() { 
             document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); 
-            document.getElementById('input-sholat-date').value = todayStr; 
+            const dateInput = document.getElementById('input-sholat-date');
+            dateInput.value = todayStr; 
+            loadSholatModalData(todayStr);
         }
+
+        function loadSholatModalData(dStr) {
+            const rec = sholats.find(x => x.date === dStr) || { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending', tilawah: 0 };
+            tempSholatStates = {
+                subuh: rec.subuh || 'Pending',
+                dzuhur: rec.dzuhur || 'Pending',
+                ashar: rec.ashar || 'Pending',
+                maghrib: rec.maghrib || 'Pending',
+                isya: rec.isya || 'Pending'
+            };
+            ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'].forEach(s => {
+                setFastSholatUI(s, tempSholatStates[s]);
+            });
+            document.getElementById('mutabaah-tilawah-slider').value = rec.tilawah || 0;
+            document.getElementById('tilawah-slider-val').innerText = `${rec.tilawah || 0} Halaman`;
+        }
+
         function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
 
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const dStr = document.getElementById('input-sholat-date').value;
-            let existing = { date: dStr, ...tempSholatStates };
-            existing.tilawah = document.getElementById('mutabaah-tilawah-slider').value;
-            existing.dhuha = selectedDhuhaRakaatVal.toString();
-
             const idx = sholats.findIndex(h => h.date === dStr);
-            if (idx >= 0) sholats[idx] = existing; else sholats.push(existing);
+            const existingRec = idx >= 0 ? sholats[idx] : {};
+            
+            const updatedRec = {
+                ...existingRec,
+                date: dStr,
+                ...tempSholatStates,
+                tilawah: document.getElementById('mutabaah-tilawah-slider').value,
+                dhuha: selectedDhuhaRakaatVal > 0 ? selectedDhuhaRakaatVal.toString() : (existingRec.dhuha || "0")
+            };
+
+            if (idx >= 0) {
+                sholats[idx] = updatedRec;
+            } else {
+                sholats.push(updatedRec);
+            }
 
             localStorage.setItem('sholat_records', JSON.stringify(sholats)); 
             renderSholatReports(); 
@@ -1878,28 +1926,36 @@
                 const todayRec = sholats.find(x => x.date === todayStr);
                 const nowD = new Date();
                 const yestD = new Date(); yestD.setDate(nowD.getDate() - 1);
-                const yestStr = yestD.toISOString().split('T')[0];
+                const yestYear = yestD.getFullYear();
+                const yestMonth = String(yestD.getMonth() + 1).padStart(2, '0');
+                const yestDay = String(yestD.getDate()).padStart(2, '0');
+                const yestStr = `${yestYear}-${yestMonth}-${yestDay}`;
                 const yestRec = sholats.find(x => x.date === yestStr);
 
                 const stToday = getSholatStats(todayRec);
                 const stYest = getSholatStats(yestRec);
 
-                if (todayRec && todayRec.dhuha) {
+                if (todayRec && todayRec.dhuha && parseInt(todayRec.dhuha) > 0) {
                     const r = parseInt(todayRec.dhuha);
                     selectDhuhaRakaatUI(r);
                 }
 
                 const evalEl = document.getElementById('sholat-eval-status');
-                if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
-                else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
-                else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
+                if (evalEl) {
+                    if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
+                    else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
+                    else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
+                }
 
                 const heatmapEl = document.getElementById('prayer-heatmap');
                 if (heatmapEl) {
                     heatmapEl.innerHTML = '';
                     for (let i = 29; i >= 0; i--) {
                         const d = new Date(); d.setDate(nowD.getDate() - i);
-                        const dStr = d.toISOString().split('T')[0];
+                        const year = d.getFullYear();
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const dStr = `${year}-${month}-${day}`;
                         const formattedDisplayDate = formatDateDDMM(dStr);
                         const fullFormattedDate = formatDateDDMMYYYY(dStr);
                         const rec = sholats.find(x => x.date === dStr);
@@ -1920,25 +1976,31 @@
                 }
 
                 const cardsList = document.getElementById('sholat-cards-list'); 
-                cardsList.innerHTML = '';
-                sholats.sort((a, b) => new Date(b.date) - new Date(a.date));
+                if (cardsList) {
+                    cardsList.innerHTML = '';
+                    const sortedSholats = [...sholats].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                sholats.forEach(h => {
-                    cardsList.innerHTML += `
-                        <div class="oneui-card border border-zinc-800 p-4 rounded-2xl space-y-2 font-money">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white font-sans">${formatDateDDMMYYYY(h.date)}</span>
-                                <div class="flex gap-1.5 font-sans">
-                                    <span class="text-amber-400 font-bold bg-amber-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">☀️ Dhuha: ${h.dhuha || 0} Rk</span>
-                                    <span class="text-red-400 font-bold bg-red-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">📖 Tilawah: ${h.tilawah || 0} Hal</span>
+                    if (sortedSholats.length === 0) {
+                        cardsList.innerHTML = `<div class="text-center p-3 text-slate-500 text-xs italic">Belum ada catatan sholat.</div>`;
+                    } else {
+                        sortedSholats.forEach(h => {
+                            cardsList.innerHTML += `
+                                <div class="oneui-card border border-zinc-800 p-4 rounded-2xl space-y-2 font-money">
+                                    <div class="flex justify-between items-center text-xs">
+                                        <span class="font-bold text-white font-sans">${formatDateDDMMYYYY(h.date)}</span>
+                                        <div class="flex gap-1.5 font-sans">
+                                            <span class="text-amber-400 font-bold bg-amber-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">☀️ Dhuha: ${h.dhuha || 0} Rk</span>
+                                            <span class="text-red-400 font-bold bg-red-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">📖 Tilawah: ${h.tilawah || 0} Hal</span>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
+                                        ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950/90 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block uppercase font-bold text-[8px] font-sans">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s] || 'Pending'}</strong></div>`).join('')}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
-                                ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950/90 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block uppercase font-bold text-[8px] font-sans">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s]}</strong></div>`).join('')}
-                            </div>
-                        </div>
-                    `;
-                });
+                            `;
+                        });
+                    }
+                }
             } catch (err) {
                 console.log("Sholat report error:", err);
             }
@@ -1979,7 +2041,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v6.3_${todayStr}.json`;
+            link.download = `Ubay_Backup_v6.4_${todayStr}.json`;
             link.click();
         }
 
@@ -1997,7 +2059,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v6.3 berhasil dipulihkan!");
+                    alert("📥 Data v6.4 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
