@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - One UI v6.4 Fix</title>
+    <title id="html-title-tag">Ubay Progress - Gemini Sidebar & Main Dashboard v7.0</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -53,20 +53,6 @@
         body.bg-dzuhur { background: radial-gradient(circle at top, #0284c7, #090a0f) !important; }
         body.bg-maghrib { background: radial-gradient(circle at top, #c2410c, #090a0f) !important; }
         body.bg-isya { background: radial-gradient(circle at top, #311042, #000000) !important; }
-
-        body.theme-oled {
-            --bg-gradient: none;
-            background-color: #000000 !important;
-            --glass-bg: #09090b;
-            --border-color: #27272a;
-            --card-glow: none;
-        }
-
-        body.theme-emerald {
-            --bg-gradient: radial-gradient(circle at 80% -20%, rgba(16, 185, 129, 0.25), transparent 45%), #061712;
-            --glass-bg: linear-gradient(145deg, rgba(6, 78, 59, 0.85), rgba(12, 14, 20, 0.9));
-            --border-color: rgba(16, 185, 129, 0.3);
-        }
 
         html.app-unlocked #app-lock-screen { display: none !important; }
         html.app-unlocked #app-main-content { display: block !important; }
@@ -192,6 +178,14 @@
 
         .active-press { transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1); }
         .active-press:active { transform: scale(0.94); filter: brightness(1.15); }
+
+        /* GEMINI SIDEBAR DRAWER STYLING */
+        #left-sidebar {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #sidebar-overlay {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-32 custom-scrollbar">
@@ -213,6 +207,49 @@
         </div>
     </div>
 
+    <!-- GEMINI SIDEBAR DRAWER (SISI KIRI) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden opacity-0" onclick="toggleSidebar()"></div>
+    <aside id="left-sidebar" class="fixed inset-y-0 left-0 w-72 bg-zinc-950 border-r border-white/10 z-50 flex flex-col justify-between p-5 transform -translate-x-full shadow-2xl">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl overflow-hidden border border-red-500 bg-red-950 flex items-center justify-center">
+                        <img id="sidebar-app-icon" src="https://i.ibb.co.com/8K6N33h/image.jpg" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-white uppercase tracking-tight">Ubay Navigation</h3>
+                        <p class="text-[10px] text-red-400 font-bold">Gemini Sidebar Bar v7.0</p>
+                    </div>
+                </div>
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-2 active-press"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-2 text-xs font-bold">
+                <button onclick="haptic('light'); switchTab('main'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
+                    <i class="fa-solid fa-house text-amber-400 w-5 text-center"></i> Main Dashboard
+                </button>
+                <button onclick="haptic('light'); switchTab('finance'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
+                    <i class="fa-solid fa-wallet text-red-400 w-5 text-center"></i> Keuangan Detail
+                </button>
+                <button onclick="haptic('light'); switchTab('sholat'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
+                    <i class="fa-solid fa-mosque text-emerald-400 w-5 text-center"></i> Sholat & Spiritual Hub
+                </button>
+                <button onclick="haptic('light'); switchTab('nofap'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
+                    <i class="fa-solid fa-fire text-amber-400 w-5 text-center"></i> NoFap & Brain Rewire
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-2 pt-4 border-t border-white/10 text-xs">
+            <button onclick="haptic('light'); backupJSON(); toggleSidebar();" class="w-full bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-4 py-2.5 rounded-2xl font-bold flex items-center justify-center gap-2 active-press">
+                <i class="fa-solid fa-download text-red-400"></i> Backup JSON Data
+            </button>
+            <div class="text-center text-[10px] text-slate-500 pt-1">
+                Ubay Progress © 2026 • Secure & Private
+            </div>
+        </div>
+    </aside>
+
     <!-- APP MAIN CONTENT CONTAINER -->
     <div id="app-main-content">
         <!-- TOP NAVIGATION BAR -->
@@ -220,6 +257,11 @@
             <div class="max-w-4xl mx-auto px-4 py-3 space-y-2">
                 <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-3 min-w-0">
+                        <!-- SIDEBAR TOGGLER HAMBURGER -->
+                        <button onclick="haptic('light'); toggleSidebar();" class="w-11 h-11 rounded-[1.25rem] bg-zinc-900 border border-white/10 text-red-400 flex items-center justify-center shrink-0 active-press shadow-md" title="Buka Sidebar">
+                            <i class="fa-solid fa-bars text-base"></i>
+                        </button>
+
                         <div onclick="haptic('light'); document.getElementById('app-icon-input').click();" class="w-11 h-11 rounded-[1.25rem] overflow-hidden border border-red-500/80 shadow-md shadow-red-950 bg-red-950 flex items-center justify-center shrink-0 relative cursor-pointer active-press" title="Ganti Icon">
                             <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover">
                         </div>
@@ -240,10 +282,9 @@
             </div>
         </nav>
 
-        <!-- FINANCE TOP BANNERS (Batas Aman & Sisa Harian Realtime) -->
-        <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-2 tab-transition">
+        <!-- FINANCE TOP BANNERS -->
+        <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-2 tab-transition hidden">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <!-- Batas Aman Jajan Harian (Total Sisa Dibagi Hari) -->
                 <section class="bg-gradient-to-r from-red-950/90 via-zinc-900/90 to-zinc-950 border border-red-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
                     <div>
                         <h3 class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -256,7 +297,6 @@
                     </div>
                 </section>
 
-                <!-- Sisa Harian Hari Ini (Pagu Alokasi Hari Ini - Pengeluaran Hari Ini) -->
                 <section class="bg-gradient-to-r from-emerald-950/90 via-zinc-900/90 to-zinc-950 border border-emerald-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
                     <div>
                         <h3 class="text-[10px] font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -269,6 +309,112 @@
                     </div>
                 </section>
             </div>
+        </div>
+
+        <!-- SECTION 0: MAIN DASHBOARD (BERISI KEUANGAN, SHOLAT, & NOFAP RINGKASAN UTAMA) -->
+        <div id="section-main" class="tab-transition">
+            <main class="max-w-4xl mx-auto px-4 pt-3 space-y-4">
+                <!-- Welcome Banner -->
+                <section class="oneui-card p-5 border-red-600/40 bg-gradient-to-br from-zinc-950 via-red-950/20 to-zinc-900 shadow-xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-crown text-amber-400"></i> Main Comprehensive Dashboard
+                            </span>
+                            <h2 class="text-lg font-black text-white mt-1">Selamat Datang, Yuman Akbar Nurmana! ⚔️</h2>
+                        </div>
+                        <span class="bg-red-950 text-red-300 border border-red-600/60 px-3 py-1 rounded-2xl text-xs font-extrabold font-money">Active Hub</span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Semua progres Keuangan, Sholat Mutabaah, dan Brain Rewire NoFap Anda terangkum lengkap dalam satu layar utama real-time.
+                    </p>
+                </section>
+
+                <!-- KEUANGAN DASHBOARD MINI (Uang Harian Aman, Terpakai, Sisa Hari Ini) -->
+                <section class="oneui-card p-4 border-emerald-500/40 space-y-3 bg-gradient-to-br from-emerald-950/20 via-zinc-950 to-zinc-900">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                        <span class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-wallet text-emerald-400"></i> Ringkasan Keuangan Harian & Sistem
+                        </span>
+                        <button onclick="haptic('light'); switchTab('finance');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-emerald-300 px-3 py-1 rounded-2xl font-bold active-press">Detail Keuangan &rarr;</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1">
+                            <span class="text-[10px] text-slate-400 font-bold block">🛡️ Uang Harian Aman (Safe Limit)</span>
+                            <strong id="main-safe-daily" class="text-amber-400 font-black text-sm block font-money">Rp 0</strong>
+                            <span class="text-[9px] text-slate-500 block">Batas rata-rata sisa hari</span>
+                        </div>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1">
+                            <span class="text-[10px] text-slate-400 font-bold block">💸 Terpakai Hari Ini</span>
+                            <strong id="main-spent-today" class="text-rose-400 font-black text-sm block font-money">Rp 0</strong>
+                            <span class="text-[9px] text-slate-500 block">Total pengeluaran hari ini</span>
+                        </div>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1 bg-emerald-950/10">
+                            <span class="text-[10px] text-emerald-400 font-black block uppercase">✨ Sisa Hari Ini (Remaining)</span>
+                            <strong id="main-remaining-today" class="text-emerald-300 font-black text-sm block font-money">Rp 50.000</strong>
+                            <span class="text-[9px] text-emerald-400/80 block">Alokasi 50rb - Terpakai</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SHOLAT & SPIRITUAL DASHBOARD MINI (Dhuha, Jamaah, Tahajud) -->
+                <section class="oneui-card p-4 border-amber-500/40 space-y-3 bg-gradient-to-br from-amber-950/20 via-zinc-950 to-zinc-900">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                        <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-mosque text-amber-400"></i> Ringkasan Spiritual & Sholat Hari Ini
+                        </span>
+                        <button onclick="haptic('light'); switchTab('sholat');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-amber-300 px-3 py-1 rounded-2xl font-bold active-press">Detail Sholat &rarr;</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1">
+                            <span class="text-[10px] text-emerald-400 font-black block uppercase"><i class="fa-solid fa-people-group mr-1"></i> Sholat Jamaah Wajib</span>
+                            <strong id="main-jamaah-status" class="text-white font-black text-sm block">0 / 5 Waktu</strong>
+                            <span id="main-jamaah-desc" class="text-[9px] text-slate-400 block">Belum ada check-in jamaah</span>
+                        </div>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-amber-600/50 space-y-1">
+                            <span class="text-[10px] text-amber-400 font-black block uppercase"><i class="fa-solid fa-sun mr-1"></i> Sholat Dhuha</span>
+                            <strong id="main-dhuha-status" class="text-amber-300 font-black text-sm block">0 Rakaat</strong>
+                            <span id="main-dhuha-desc" class="text-[9px] text-slate-400 block">Belum mencatat dhuha</span>
+                        </div>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-indigo-600/50 space-y-1">
+                            <span class="text-[10px] text-indigo-400 font-black block uppercase"><i class="fa-solid fa-moon mr-1"></i> Sholat Tahajud</span>
+                            <strong id="main-tahajud-status" class="text-indigo-300 font-black text-sm block">0 Rakaat</strong>
+                            <span id="main-tahajud-desc" class="text-[9px] text-slate-400 block">Belum mencatat tahajud</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- NOFAP & BRAIN REWIRE DASHBOARD MINI (Sudah Berjalan Berapa Hari) -->
+                <section class="oneui-card p-4 border-red-500/40 space-y-3 bg-gradient-to-br from-red-950/20 via-zinc-950 to-zinc-900">
+                    <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
+                        <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-fire text-red-400"></i> Ringkasan NoFap & Brain Rewire
+                        </span>
+                        <button onclick="haptic('light'); switchTab('nofap');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-red-300 px-3 py-1 rounded-2xl font-bold active-press">Detail NoFap &rarr;</button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs items-center">
+                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-red-600/50 space-y-1 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase font-bold block">🔥 Streak Clean Berjalan</span>
+                            <div id="main-nofap-days" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-400 font-money">
+                                0 Hari
+                            </div>
+                            <span id="main-nofap-timer" class="text-[10px] text-slate-300 font-money block">00 Jam : 00 Menit</span>
+                        </div>
+                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-zinc-800 space-y-2">
+                            <span class="text-[10px] font-black text-amber-400 uppercase block">⭐ Status Mental & Synapse</span>
+                            <p class="text-xs text-slate-300 font-semibold leading-relaxed">
+                                Pikiran jernih dan fokus kerja FAT (Finance, Accounting, Tax) terjaga secara optimal. Tetap waspada jam rawan!
+                            </p>
+                            <button onclick="haptic('double'); checkInNoFap();" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2 rounded-xl text-xs active-press shadow-md">
+                                ✅ Check-in Clean Hari Ini
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
 
         <!-- SECTION 1: KEUANGAN -->
@@ -318,7 +464,7 @@
                 <section class="oneui-card p-4 flex justify-between items-center gap-2 border-red-900/30">
                     <div>
                         <div class="flex items-center gap-2">
-                            <h2 class="text-base font-black text-white">Halo, Ubay</h2>
+                            <h2 class="text-base font-black text-white">Halo, Yuman</h2>
                             <span id="financial-health-score" class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-bold font-money">Health: 88/100</span>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-1">Siklus Gajian (Tgl 28): <strong id="cycle-label-display" class="text-red-400">28 Jul - 27 Ags</strong></p>
@@ -353,7 +499,6 @@
                     </div>
                 </section>
 
-                <!-- DASHBOARD PER HARI (DIKEMBALIKAN & DIPERTAHANKAN) -->
                 <section class="grid grid-cols-2 gap-2.5">
                     <div class="oneui-card p-4 space-y-1">
                         <span class="text-[10px] text-slate-400 font-semibold block">Hari Ini</span>
@@ -498,7 +643,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
-                        <!-- Lock Jamaah Wajib -->
                         <div class="bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/50 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-emerald-400 uppercase flex items-center gap-1">
@@ -511,7 +655,6 @@
                             </p>
                         </div>
 
-                        <!-- Lock Dhuha -->
                         <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/50 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-amber-400 uppercase flex items-center gap-1">
@@ -524,7 +667,6 @@
                             </p>
                         </div>
 
-                        <!-- Lock Tahajud -->
                         <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/50 space-y-1">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-indigo-400 uppercase flex items-center gap-1">
@@ -539,7 +681,6 @@
                     </div>
                 </section>
 
-                <!-- KEUTAMAAN SHOLAT BERJAMAAH SHOWCASE -->
                 <section class="oneui-card p-4 border-emerald-500/40 space-y-2.5 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900">
                     <div class="flex items-center justify-between border-b border-emerald-900/60 pb-2">
                         <span class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
@@ -572,7 +713,6 @@
                     </div>
                 </section>
 
-                <!-- DYNAMIC DHUHA MILESTONE TRACKER -->
                 <section class="oneui-card p-4 border-amber-500/40 space-y-3 bg-gradient-to-br from-amber-950/30 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center">
                         <div>
@@ -599,7 +739,6 @@
                     </div>
                 </section>
 
-                <!-- DYNAMIC TAHAJUD MILESTONE TRACKER -->
                 <section class="oneui-card p-4 border-indigo-500/40 space-y-3 bg-gradient-to-br from-indigo-950/30 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center">
                         <div>
@@ -816,7 +955,11 @@
 
         <!-- BOTTOM NAVIGATION BAR -->
         <nav class="fixed bottom-0 inset-x-0 z-40 bg-zinc-950/90 backdrop-blur-xl border-t border-white/5 pb-safe">
-            <div class="max-w-4xl mx-auto grid grid-cols-3 h-14">
+            <div class="max-w-4xl mx-auto grid grid-cols-4 h-14">
+                <button id="nav-btn-main" onclick="haptic('light'); switchTab('main');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
+                    <i class="fa-solid fa-house text-base"></i>
+                    <span class="text-[10px] font-bold">Dashboard</span>
+                </button>
                 <button id="nav-btn-fin" onclick="haptic('light'); switchTab('finance');" class="flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all">
                     <i class="fa-solid fa-wallet text-base"></i>
                     <span class="text-[10px] font-bold">Keuangan</span>
@@ -1061,7 +1204,6 @@
                     <span class="text-xs font-bold text-emerald-400 block uppercase">🕌 Sholat Wajib (<span class="text-emerald-300 font-black">+20 XP Jamaah</span>)</span>
                     
                     <div id="fast-sholat-container" class="space-y-2 text-xs">
-                        <!-- Subuh -->
                         <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
                             <span class="font-bold text-slate-200 w-16">Subuh</span>
                             <div class="flex gap-1">
@@ -1070,7 +1212,6 @@
                                 <button type="button" onclick="setFastSholat('subuh', 'Tidak')" id="btn-subuh-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <!-- Dzuhur -->
                         <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
                             <span class="font-bold text-slate-200 w-16">Dzuhur</span>
                             <div class="flex gap-1">
@@ -1079,7 +1220,6 @@
                                 <button type="button" onclick="setFastSholat('dzuhur', 'Tidak')" id="btn-dzuhur-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <!-- Ashar -->
                         <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
                             <span class="font-bold text-slate-200 w-16">Ashar</span>
                             <div class="flex gap-1">
@@ -1088,7 +1228,6 @@
                                 <button type="button" onclick="setFastSholat('ashar', 'Tidak')" id="btn-ashar-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <!-- Maghrib -->
                         <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
                             <span class="font-bold text-slate-200 w-16">Maghrib</span>
                             <div class="flex gap-1">
@@ -1097,7 +1236,6 @@
                                 <button type="button" onclick="setFastSholat('maghrib', 'Tidak')" id="btn-maghrib-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <!-- Isya -->
                         <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
                             <span class="font-bold text-slate-200 w-16">Isya</span>
                             <div class="flex gap-1">
@@ -1158,6 +1296,21 @@
         let selectedTahajudRakaatVal = 0;
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
 
+        function toggleSidebar() {
+            const sidebar = document.getElementById('left-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            } else {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                sidebar.classList.remove('-translate-x-full');
+            }
+        }
+
         function selectDhuhaRakaat(rakaat) {
             haptic('light');
             selectedDhuhaRakaatVal = rakaat;
@@ -1197,6 +1350,7 @@
             }
             localStorage.setItem('sholat_records', JSON.stringify(sholats));
             renderSholatReports();
+            renderMainDashboardSummary();
             triggerConfetti();
         }
 
@@ -1239,6 +1393,7 @@
             }
             localStorage.setItem('sholat_records', JSON.stringify(sholats));
             renderSholatReports();
+            renderMainDashboardSummary();
             triggerConfetti();
         }
 
@@ -1296,6 +1451,7 @@
             localStorage.setItem('fin_wallets', JSON.stringify(wallets));
             closeWalletEditModal();
             renderApp();
+            renderMainDashboardSummary();
             triggerConfetti();
         }
 
@@ -1399,7 +1555,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - One UI v6.4 Fix`;
+            document.getElementById('html-title-tag').innerText = `${title} - Gemini Sidebar & Main Dashboard v7.0`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1411,17 +1567,15 @@
 
                 document.getElementById('gregorian-date-display').innerText = `Minggu, ${formatDateDDMMYYYY(todayStr)}`;
 
-                const savedTheme = localStorage.getItem('user_app_theme');
-                if (savedTheme && savedTheme !== 'default') document.body.classList.add(savedTheme);
-
                 const savedIcon = localStorage.getItem('user_app_icon');
                 if (savedIcon) {
                     document.getElementById('nav-app-icon-img').src = savedIcon;
+                    document.getElementById('sidebar-app-icon').src = savedIcon;
                     document.getElementById('app-favicon').href = savedIcon;
                     document.getElementById('app-apple-icon').href = savedIcon;
                 }
 
-                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
+                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'main';
                 switchTab(lastActiveTab);
 
                 initFastingTracker();
@@ -1434,6 +1588,7 @@
                 renderBrainCanvas();
                 renderUrgeRadar();
                 renderSholatReports();
+                renderMainDashboardSummary();
 
                 document.getElementById('input-sholat-date').addEventListener('change', (e) => loadSholatModalData(e.target.value));
             }, 10);
@@ -1483,6 +1638,7 @@
                 const base64String = e.target.result;
                 localStorage.setItem('user_app_icon', base64String);
                 document.getElementById('nav-app-icon-img').src = base64String;
+                document.getElementById('sidebar-app-icon').src = base64String;
                 document.getElementById('app-favicon').href = base64String;
                 document.getElementById('app-apple-icon').href = base64String;
             };
@@ -1494,11 +1650,13 @@
         function switchTab(tab) {
             localStorage.setItem('master_hub_active_tab', tab);
 
+            const mainSec = document.getElementById('section-main');
             const finSec = document.getElementById('section-finance');
             const sholatSec = document.getElementById('section-sholat');
             const nofapSec = document.getElementById('section-nofap');
             const topBanners = document.getElementById('finance-top-banners');
 
+            mainSec.classList.add('hidden');
             finSec.classList.add('hidden');
             sholatSec.classList.add('hidden');
             nofapSec.classList.add('hidden');
@@ -1507,11 +1665,16 @@
             const inactiveNav = "flex flex-col items-center justify-center space-y-1 text-slate-400 hover:text-white transition-all";
             const activeNav = "flex flex-col items-center justify-center space-y-1 text-red-500 font-black transition-all";
 
+            document.getElementById('nav-btn-main').className = inactiveNav;
             document.getElementById('nav-btn-fin').className = inactiveNav;
             document.getElementById('nav-btn-sholat').className = inactiveNav;
             document.getElementById('nav-btn-nofap').className = inactiveNav;
 
-            if (tab === 'finance') {
+            if (tab === 'main') {
+                mainSec.classList.remove('hidden');
+                document.getElementById('nav-btn-main').className = activeNav;
+                renderMainDashboardSummary();
+            } else if (tab === 'finance') {
                 finSec.classList.remove('hidden');
                 topBanners.classList.remove('hidden');
                 document.getElementById('nav-btn-fin').className = activeNav;
@@ -1553,13 +1716,15 @@
 
         function initPrayerCountdown() {
             const prayerTimesGrid = document.getElementById('prayer-times-grid');
-            prayerTimesGrid.innerHTML = `
-                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
-                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
-                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
-                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-emerald-500/80 bg-emerald-950/40"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
-                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
-            `;
+            if (prayerTimesGrid) {
+                prayerTimesGrid.innerHTML = `
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-emerald-500/80 bg-emerald-950/40"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
+                `;
+            }
 
             setInterval(() => {
                 const now = new Date();
@@ -1661,10 +1826,10 @@
             const btn = document.getElementById('fasting-btn');
 
             if (savedFasting === 'done') {
-                statusEl.innerText = "Hari ini: 🎉 Puasa Sunnah Terlaksana!";
-                btn.innerText = "✅ Puasa Terpenuhi";
+                if (statusEl) statusEl.innerText = "Hari ini: 🎉 Puasa Sunnah Terlaksana!";
+                if (btn) btn.innerText = "✅ Puasa Terpenuhi";
             } else {
-                statusEl.innerText = isPuasaRecommended ? "Hari ini: Rekomendasi Puasa Sunnah (Senin/Kamis)" : "Hari ini: Hari Biasa";
+                if (statusEl) statusEl.innerText = isPuasaRecommended ? "Hari ini: Rekomendasi Puasa Sunnah (Senin/Kamis)" : "Hari ini: Hari Biasa";
             }
         }
 
@@ -1718,6 +1883,7 @@
             localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
             triggerConfetti();
             renderNoFapModule();
+            renderMainDashboardSummary();
             renderBrainCanvas();
         }
 
@@ -1728,6 +1894,7 @@
                 nofapData.startDate = new Date().toISOString();
                 localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
                 renderNoFapModule();
+                renderMainDashboardSummary();
                 renderBrainCanvas();
             }
         }
@@ -1746,6 +1913,9 @@
             if (document.getElementById('nofap-streak-days')) document.getElementById('nofap-streak-days').innerText = `${days} Hari`;
             if (document.getElementById('nofap-streak-timer')) document.getElementById('nofap-streak-timer').innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit Clean`;
 
+            if (document.getElementById('main-nofap-days')) document.getElementById('main-nofap-days').innerText = `${days} Hari`;
+            if (document.getElementById('main-nofap-timer')) document.getElementById('main-nofap-timer').innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit`;
+
             if (days > nofapData.longestStreakDays) {
                 nofapData.longestStreakDays = days;
                 localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
@@ -1761,24 +1931,27 @@
             else if (daysClean >= 14) badgeName = "Lvl 3 - Warrior 🔥";
             else if (daysClean >= 7) badgeName = "Lvl 2 - Focus Cadet 🛡️";
 
-            document.getElementById('nofap-badge-top').innerText = badgeName;
+            const badgeTop = document.getElementById('nofap-badge-top');
+            if (badgeTop) badgeTop.innerText = badgeName;
 
             const historyList = document.getElementById('nofap-history-list');
-            historyList.innerHTML = '';
-            [...nofapData.history].reverse().forEach(item => {
-                const isClean = item.status === 'Clean';
-                historyList.innerHTML += `
-                    <div class="bg-zinc-950/90 p-3 rounded-2xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs font-money">
-                        <div>
-                            <span class="font-bold text-white block">${formatDateDDMMYYYY(item.date)}</span>
-                            <span class="text-[10px] text-slate-400 font-sans">${item.note || '-'}</span>
+            if (historyList) {
+                historyList.innerHTML = '';
+                [...nofapData.history].reverse().forEach(item => {
+                    const isClean = item.status === 'Clean';
+                    historyList.innerHTML += `
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs font-money">
+                            <div>
+                                <span class="font-bold text-white block">${formatDateDDMMYYYY(item.date)}</span>
+                                <span class="text-[10px] text-slate-400 font-sans">${item.note || '-'}</span>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-xl text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'} font-sans">
+                                ${isClean ? '✅ Clean' : '⚠️ Reset'}
+                            </span>
                         </div>
-                        <span class="px-2.5 py-0.5 rounded-xl text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'} font-sans">
-                            ${isClean ? '✅ Clean' : '⚠️ Reset'}
-                        </span>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
         }
 
         let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7700000, side: 0 };
@@ -1870,6 +2043,7 @@
             localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
             closeDebtModal();
             renderApp();
+            renderMainDashboardSummary();
         }
 
         function toggleDebtStatus(id) {
@@ -1879,6 +2053,7 @@
             if (d.status === 'Lunas') d.remainingMonths = 0;
             localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
             renderApp();
+            renderMainDashboardSummary();
         }
 
         function deleteDebtItem(id) {
@@ -1886,6 +2061,7 @@
                 debtItems = debtItems.filter(x => x.id !== id);
                 localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
                 renderApp();
+                renderMainDashboardSummary();
             }
         }
 
@@ -1930,7 +2106,7 @@
             incomeData.salary = parseFloat(document.getElementById('input-salary').value) || 0;
             incomeData.side = parseFloat(document.getElementById('input-side').value) || 0;
             localStorage.setItem('fin_income', JSON.stringify(incomeData));
-            renderApp(); closeIncomeModal();
+            renderApp(); renderMainDashboardSummary(); closeIncomeModal();
         });
 
         document.getElementById('ai-parser-form').addEventListener('submit', function(e) {
@@ -1959,8 +2135,55 @@
 
             document.getElementById('ai-parser-input').value = '';
             renderApp();
+            renderMainDashboardSummary();
             playSoundEffect('cash');
         });
+
+        function renderMainDashboardSummary() {
+            const totalSystemMoney = wallets.cash + wallets.bank + wallets.ewallet;
+            const nextPayday = new Date("2026-08-28");
+            const now = new Date();
+            const diffTime = nextPayday - now;
+            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            const safeDailyVal = totalSystemMoney > 0 ? Math.floor(totalSystemMoney / daysLeft) : 0;
+
+            let todayTotal = 0;
+            transactions.forEach(t => {
+                if (t.date === todayStr) todayTotal += t.amount;
+            });
+
+            const todayAllowanceBudget = 50000;
+            const todayRemaining = Math.max(0, todayAllowanceBudget - todayTotal);
+
+            if (document.getElementById('main-safe-daily')) document.getElementById('main-safe-daily').innerText = formatRupiah(safeDailyVal);
+            if (document.getElementById('main-spent-today')) document.getElementById('main-spent-today').innerText = formatRupiah(todayTotal);
+            if (document.getElementById('main-remaining-today')) document.getElementById('main-remaining-today').innerText = formatRupiah(todayRemaining);
+
+            // Sholat summary on main dashboard
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
+            const todayRec = sholats.find(x => x.date === todayStr);
+            const stToday = getSholatStats(todayRec);
+
+            if (document.getElementById('main-jamaah-status')) {
+                document.getElementById('main-jamaah-status').innerText = `${stToday.jamaah} / 5 Waktu`;
+                document.getElementById('main-jamaah-desc').innerText = stToday.jamaah === 5 ? "Sempurna 5 Waktu Jamaah! 🌟" : (stToday.jamaah > 0 ? `${stToday.jamaah} waktu tercatat jamaah` : "Belum ada check-in jamaah");
+            }
+
+            if (document.getElementById('main-dhuha-status')) {
+                const dhuhaRk = stToday.dhuha;
+                document.getElementById('main-dhuha-status').innerText = `${dhuhaRk} Rakaat`;
+                document.getElementById('main-dhuha-desc').innerText = dhuhaRk > 0 ? "Keberkahan & rezeki mengalir" : "Belum mencatat dhuha";
+            }
+
+            if (document.getElementById('main-tahajud-status')) {
+                const tahajudRk = stToday.tahajud;
+                document.getElementById('main-tahajud-status').innerText = `${tahajudRk} Rakaat`;
+                document.getElementById('main-tahajud-desc').innerText = tahajudRk > 0 ? "Qiyamul Lail diijabah" : "Belum mencatat tahajud";
+            }
+
+            // NoFap summary on main dashboard
+            updateNoFapTimer();
+        }
 
         function renderApp() {
             const totalIncome = incomeData.salary + incomeData.side;
@@ -2007,7 +2230,6 @@
             document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
             document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
 
-            // Hitung Sisa Harian Hari Ini (Alokasi 50rb dikurangi pengeluaran hari ini, nilai tidak boleh negatif atau bertambah jika hemat)
             const todayAllowanceBudget = 50000;
             const todayRemaining = Math.max(0, todayAllowanceBudget - todayTotal);
             document.getElementById('today-allowance-budget').innerText = formatRupiah(todayAllowanceBudget);
@@ -2128,6 +2350,7 @@
 
             renderCharts(categoryTotals);
             updateGamificationLevel();
+            renderMainDashboardSummary();
         }
 
         function renderCharts(categoryTotals) {
@@ -2162,10 +2385,17 @@
             transactions.push(newTrans);
             localStorage.setItem('fin_transactions', JSON.stringify(transactions));
 
-            renderApp(); closeModal();
+            renderApp();
+            renderMainDashboardSummary();
+            closeModal();
         });
 
-        function deleteTransaction(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('fin_transactions', JSON.stringify(transactions)); renderApp(); }
+        function deleteTransaction(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+            renderApp();
+            renderMainDashboardSummary();
+        }
 
         function setFastSholat(sholatName, val) {
             tempSholatStates[sholatName] = val;
@@ -2240,6 +2470,7 @@
 
             localStorage.setItem('sholat_records', JSON.stringify(sholats)); 
             renderSholatReports(); 
+            renderMainDashboardSummary();
             closeSholatModal();
         });
 
@@ -2298,6 +2529,7 @@
             localStorage.setItem('sholat_records', JSON.stringify(sholats));
             renderApp();
             renderSholatReports();
+            renderMainDashboardSummary();
             triggerConfetti();
             alert("🤲 Alhamdulillah, Sedekah Subuh tercatat!");
         }
@@ -2491,7 +2723,7 @@
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v6.4_${todayStr}.json`;
+            link.download = `Ubay_Backup_v7.0_${todayStr}.json`;
             link.click();
         }
 
@@ -2509,7 +2741,7 @@
                     if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
                     if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
                     if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
-                    alert("📥 Data v6.4 berhasil dipulihkan!");
+                    alert("📥 Data v7.0 berhasil dipulihkan!");
                     location.reload();
                 } catch(err) { alert("❌ File JSON tidak valid."); }
             };
@@ -2526,10 +2758,11 @@
             });
             totalXP += (transactions.length * 2) + 30;
             let level = Math.floor(totalXP / 100) + 1;
-            document.getElementById('rank-badge').innerText = `Lvl ${level}`;
+            const badge = document.getElementById('rank-badge');
+            if (badge) badge.innerText = `Lvl ${level}`;
         }
 
-        renderApp();
+        renderMainDashboardSummary();
     </script>
 </body>
 </html>
