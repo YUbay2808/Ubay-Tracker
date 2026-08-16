@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - One UI v6.5 Virtues Lock</title>
+    <title id="html-title-tag">Ubay Progress - One UI v6.4 Fix</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090506">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
@@ -121,14 +121,6 @@
             box-shadow: 0 0 24px rgba(234, 179, 8, 0.5), inset 0 0 12px rgba(234, 179, 8, 0.3);
             border-color: #facc15 !important;
         }
-        .pulse-emerald-glow {
-            box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), inset 0 0 12px rgba(16, 185, 129, 0.3);
-            border-color: #34d399 !important;
-        }
-        .pulse-indigo-glow {
-            box-shadow: 0 0 24px rgba(99, 102, 241, 0.5), inset 0 0 12px rgba(99, 102, 241, 0.3);
-            border-color: #818cf8 !important;
-        }
 
         .live-dot {
             width: 8px;
@@ -164,21 +156,15 @@
             box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
         }
 
-        .milestone-chip {
+        .dhuha-chip {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 1.25rem;
         }
-        .milestone-chip.active-dhuha {
+        .dhuha-chip.active {
             background: linear-gradient(135deg, #f59e0b, #d97706) !important;
             color: #ffffff !important;
             border-color: #fabb23 !important;
             box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
-        }
-        .milestone-chip.active-tahajud {
-            background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
-            color: #ffffff !important;
-            border-color: #818cf8 !important;
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
         }
 
         .chip-btn {
@@ -358,6 +344,96 @@
                         <h3 class="text-base font-black text-emerald-300 font-money" id="sum-remaining">Rp 0</h3>
                     </div>
                 </section>
+
+                <section class="oneui-card p-4 border-amber-600/40 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[11px] font-black text-amber-400 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-hourglass-start"></i> Impulsive Wishlist
+                        </span>
+                        <button onclick="haptic('light'); addImpulsiveWishlist();" class="text-[10px] bg-amber-950/80 text-amber-300 border border-amber-600/40 px-3 py-1 rounded-2xl font-bold active-press">
+                            + Lock Wishlist
+                        </button>
+                    </div>
+                    <div id="wishlist-delay-list" class="space-y-2 text-xs"></div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-3 border-red-900/30">
+                    <div class="flex justify-between items-center border-b border-zinc-800/80 pb-2.5">
+                        <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-link-slash text-red-400"></i> Kelola Utang & Cicilan
+                        </h2>
+                        <div class="flex items-center gap-2">
+                            <span id="total-debt-sum" class="text-[10px] font-extrabold text-red-400 font-money">Total: Rp 0</span>
+                            <button onclick="haptic('light'); openAddDebtModal();" class="bg-red-950/80 text-red-300 border border-red-600/40 text-[10px] px-3 py-1 rounded-2xl font-bold active-press">+ Utang</button>
+                        </div>
+                    </div>
+                    <div id="debt-tracker-container" class="grid grid-cols-1 gap-2.5 text-xs"></div>
+                </section>
+
+                <section class="grid grid-cols-1 gap-3">
+                    <div class="oneui-card p-4 space-y-2 border-red-900/30">
+                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-chart-pie text-red-400 mr-1.5"></i> Proporsi Kategori</h2>
+                        <div class="relative h-48 flex justify-center items-center">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-3 border-red-900/30">
+                    <div class="flex justify-between items-center border-b border-zinc-800/80 pb-2.5">
+                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-list-check text-red-400 mr-1.5"></i> Monitoring Budget</h2>
+                        <button onclick="haptic('light'); openBudgetModal();" class="bg-zinc-800 text-red-400 px-3 py-1 rounded-2xl text-[10px] font-bold active-press">Edit Budget</button>
+                    </div>
+                    <div id="budget-cards-container" class="grid grid-cols-1 gap-2.5"></div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-3 border-red-900/30">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-800/80 pb-2.5">
+                        <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Transaksi
+                        </h2>
+                        
+                        <div class="flex items-center gap-1.5 w-full sm:w-auto">
+                            <select id="month-filter" onchange="renderApp()" class="bg-zinc-950 border border-zinc-700 rounded-2xl px-3 py-1.5 text-xs text-white focus:outline-none">
+                                <option value="ALL">Semua Bulan</option>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Maret</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Juni</option>
+                                <option value="07">Juli</option>
+                                <option value="08">Agustus</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+
+                            <input type="text" id="search-input" onkeyup="renderApp()" placeholder="Cari..." class="bg-zinc-950 border border-zinc-700 rounded-2xl px-3 py-1.5 text-xs text-white flex-1 sm:w-28 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-zinc-950/80 text-slate-400 uppercase text-[10px] font-bold">
+                                <tr>
+                                    <th class="p-2.5">Tgl</th>
+                                    <th class="p-2.5">Catatan</th>
+                                    <th class="p-2.5">Nominal</th>
+                                    <th class="p-2.5 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table" class="divide-y divide-zinc-800/60 font-money"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="history-toggle-container" class="text-center pt-1 hidden">
+                        <button onclick="haptic('light'); toggleShowAllHistory();" id="history-toggle-btn" class="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-red-400 text-xs font-bold px-4 py-2 rounded-2xl transition-all active-press">
+                            Lihat Semua Transaksi 👇
+                        </button>
+                    </div>
+                </section>
             </main>
         </div>
 
@@ -384,44 +460,35 @@
                     </button>
                 </div>
 
-                <!-- 🔒 SUMMARY LOCK BANNER HARI INI (JAMAAH, DHUHA & TAHAJUD) -->
-                <section class="oneui-card p-4 border-emerald-500/50 space-y-3 bg-gradient-to-br from-zinc-950 via-zinc-900 to-emerald-950/40 shadow-xl">
-                    <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <!-- KEUTAMAAN SHOLAT BERJAMAAH SHOWCASE -->
+                <section class="oneui-card p-4 border-emerald-500/40 space-y-2.5 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900">
+                    <div class="flex items-center justify-between border-b border-emerald-900/60 pb-2">
                         <span class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-lock text-amber-400"></i> Progress & Keutamaan Hari Ini
+                            <i class="fa-solid fa-people-group text-amber-400"></i> Keutamaan Sholat Jamaah
                         </span>
-                        <span class="bg-emerald-950 text-emerald-300 border border-emerald-600/50 text-[9px] px-2.5 py-0.5 rounded-full font-bold">Terisi Otomatis</span>
+                        <span class="bg-emerald-950 text-emerald-300 border border-emerald-600/50 text-[10px] px-2.5 py-0.5 rounded-full font-bold">27x Lipat Pahala</span>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
-                        <!-- Lock Jamaah -->
-                        <div id="lock-card-jamaah" class="bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/40 space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-black text-emerald-400 uppercase tracking-wider">🕌 Sholat Jamaah</span>
-                                <span id="lock-jamaah-badge" class="text-[10px] font-black text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded-full font-money">0/5 Waktu</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                            <i class="fa-solid fa-award text-amber-400 text-lg shrink-0"></i>
+                            <div>
+                                <strong class="text-white block text-[11px]">27 Derajat</strong>
+                                <span class="text-[9px] text-slate-400 block">Lebih utama dibanding munfarid (sendiri).</span>
                             </div>
-                            <strong id="lock-jamaah-title" class="text-white block text-[11px] font-bold">Belum Ada Check-in</strong>
-                            <p id="lock-jamaah-desc" class="text-[10px] text-slate-400 italic font-medium leading-tight">Mendapatkan 27 derajat kemuliaan &amp; penghapus dosa langkah kaki ke masjid.</p>
                         </div>
-
-                        <!-- Lock Dhuha -->
-                        <div id="lock-card-dhuha" class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/40 space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider">☀️ Sholat Dhuha</span>
-                                <span id="lock-dhuha-badge" class="text-[10px] font-black text-amber-300 bg-amber-950 px-2 py-0.5 rounded-full font-money">0 Rakaat</span>
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                            <i class="fa-solid fa-person-walking-arrow-right text-emerald-400 text-lg shrink-0"></i>
+                            <div>
+                                <strong class="text-white block text-[11px]">Pelebur Dosa</strong>
+                                <span class="text-[9px] text-slate-400 block">Setiap langkah kaki menghapus kesalahan.</span>
                             </div>
-                            <strong id="lock-dhuha-title" class="text-white block text-[11px] font-bold">Hari Ini: Belum Dhuha</strong>
-                            <p id="lock-dhuha-desc" class="text-[10px] text-slate-400 italic font-medium leading-tight">Sedekah 360 persendian tubuh manusia. (HR. Muslim)</p>
                         </div>
-
-                        <!-- Lock Tahajud -->
-                        <div id="lock-card-tahajud" class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/40 space-y-1">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[10px] font-black text-indigo-400 uppercase tracking-wider">🌌 Sholat Tahajud</span>
-                                <span id="lock-tahajud-badge" class="text-[10px] font-black text-indigo-300 bg-indigo-950 px-2 py-0.5 rounded-full font-money">0 Rakaat</span>
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                            <i class="fa-solid fa-shield-halved text-blue-400 text-lg shrink-0"></i>
+                            <div>
+                                <strong class="text-white block text-[11px]">Bebas Nifak</strong>
+                                <span class="text-[9px] text-slate-400 block">40 hari tak ketinggalan takbir pertama.</span>
                             </div>
-                            <strong id="lock-tahajud-title" class="text-white block text-[11px] font-bold">Hari Ini: Belum Tahajud</strong>
-                            <p id="lock-tahajud-desc" class="text-[10px] text-slate-400 italic font-medium leading-tight">Diangkat ke tempat terpuji (Maqam Mahmudah) &amp; doa diijabah sepertiga malam.</p>
                         </div>
                     </div>
                 </section>
@@ -431,51 +498,25 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-sun text-amber-400"></i> Track Rakaat Dhuha
+                                <i class="fa-solid fa-sun text-amber-400"></i> Keutamaan Sholat Dhuha
                             </span>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat Dhuha yang dikerjakan hari ini:</p>
+                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat yang dikerjakan hari ini:</p>
                         </div>
                         <span id="dhuha-selected-rakaat" class="text-xs font-black text-amber-400 font-money bg-amber-950/80 border border-amber-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
                     </div>
 
                     <div class="grid grid-cols-6 gap-1.5 text-center text-xs">
-                        <button onclick="selectDhuhaRakaat(2)" id="dhuha-chip-2" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">2</button>
-                        <button onclick="selectDhuhaRakaat(4)" id="dhuha-chip-4" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">4</button>
-                        <button onclick="selectDhuhaRakaat(6)" id="dhuha-chip-6" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">6</button>
-                        <button onclick="selectDhuhaRakaat(8)" id="dhuha-chip-8" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">8</button>
-                        <button onclick="selectDhuhaRakaat(10)" id="dhuha-chip-10" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">10</button>
-                        <button onclick="selectDhuhaRakaat(12)" id="dhuha-chip-12" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">12</button>
+                        <button onclick="selectDhuhaRakaat(2)" id="dhuha-chip-2" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">2</button>
+                        <button onclick="selectDhuhaRakaat(4)" id="dhuha-chip-4" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">4</button>
+                        <button onclick="selectDhuhaRakaat(6)" id="dhuha-chip-6" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">6</button>
+                        <button onclick="selectDhuhaRakaat(8)" id="dhuha-chip-8" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">8</button>
+                        <button onclick="selectDhuhaRakaat(10)" id="dhuha-chip-10" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">10</button>
+                        <button onclick="selectDhuhaRakaat(12)" id="dhuha-chip-12" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">12</button>
                     </div>
 
                     <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/50 space-y-1">
                         <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block" id="dhuha-virtue-title">✨ Keutamaan 2 Rakaat</span>
                         <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="dhuha-virtue-desc">"Sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)</p>
-                    </div>
-                </section>
-
-                <!-- DYNAMIC TAHAJUD MILESTONE TRACKER -->
-                <section class="oneui-card p-4 border-indigo-500/40 space-y-3 bg-gradient-to-br from-indigo-950/30 via-zinc-950 to-zinc-900">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-xs font-black text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-moon text-indigo-400"></i> Track Rakaat Tahajud
-                            </span>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat Tahajud semalam/subuh tadi:</p>
-                        </div>
-                        <span id="tahajud-selected-rakaat" class="text-xs font-black text-indigo-400 font-money bg-indigo-950/80 border border-indigo-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
-                    </div>
-
-                    <div class="grid grid-cols-5 gap-1.5 text-center text-xs">
-                        <button onclick="selectTahajudRakaat(2)" id="tahajud-chip-2" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">2</button>
-                        <button onclick="selectTahajudRakaat(4)" id="tahajud-chip-4" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">4</button>
-                        <button onclick="selectTahajudRakaat(8)" id="tahajud-chip-8" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">8</button>
-                        <button onclick="selectTahajudRakaat(11)" id="tahajud-chip-11" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">11</button>
-                        <button onclick="selectTahajudRakaat(12)" id="tahajud-chip-12" class="milestone-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">12</button>
-                    </div>
-
-                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-500/50 space-y-1">
-                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest block" id="tahajud-virtue-title">🌌 Keutamaan Tahajud</span>
-                        <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="tahajud-virtue-desc">"Sholat yang paling utama setelah sholat fardhu adalah sholat malam." (HR. Muslim)</p>
                     </div>
                 </section>
 
@@ -581,6 +622,89 @@
                             Reset
                         </button>
                     </div>
+                </section>
+
+                <section class="oneui-card p-4 text-center space-y-2 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-network-wired mr-1.5"></i> Synapse Network Map</span>
+                        <span id="synapse-power-text" class="text-[10px] font-bold text-emerald-400 font-money">Power: 10%</span>
+                    </div>
+                    <div class="relative h-40 w-full bg-zinc-950/90 rounded-2xl overflow-hidden border border-zinc-800 flex items-center justify-center">
+                        <canvas id="brainCanvas" class="w-full h-full"></canvas>
+                    </div>
+                </section>
+
+                <section class="oneui-card p-4 text-center space-y-2 border-red-900/40">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-red-400 uppercase tracking-wider"><i class="fa-solid fa-radar mr-1.5"></i> 24-Hour Urge Radar</span>
+                        <span class="text-[10px] font-bold text-red-400 font-money">Peak: 23:00 - 03:00</span>
+                    </div>
+                    <div class="relative h-44 w-full flex justify-center items-center">
+                        <canvas id="urgeRadarCanvas" class="w-44 h-44"></canvas>
+                    </div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-2.5 border-amber-600/40">
+                    <span class="text-xs font-black text-amber-400 uppercase block tracking-wider">⭐ Jurnal Refleksi Mental Harian</span>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Energy</span>
+                            <select id="mental-energy" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-amber-400 p-1 rounded-xl w-full text-center focus:outline-none">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Focus</span>
+                            <select id="mental-focus" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-blue-400 p-1 rounded-xl w-full text-center focus:outline-none">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
+                            <span class="text-[10px] text-slate-400 block mb-1">Mood</span>
+                            <select id="mental-mood" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-emerald-400 p-1 rounded-xl w-full text-center focus:outline-none">
+                                <option value="1">⭐ 1/5</option>
+                                <option value="2">⭐⭐ 2/5</option>
+                                <option value="3" selected>⭐⭐⭐ 3/5</option>
+                                <option value="4">⭐⭐⭐⭐ 4/5</option>
+                                <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-2 border-amber-600/40">
+                    <span class="text-xs font-black text-amber-400 uppercase block tracking-wider">🏆 Trophy Room</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div id="badge-7d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                            <strong class="block text-white text-[11px]">7 Days</strong>
+                            <span class="text-[9px] text-slate-400">Dopamine</span>
+                        </div>
+                        <div id="badge-14d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                            <strong class="block text-white text-[11px]">14 Days</strong>
+                            <span class="text-[9px] text-slate-400">Testosteron</span>
+                        </div>
+                        <div id="badge-30d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                            <strong class="block text-white text-[11px]">30 Days</strong>
+                            <span class="text-[9px] text-slate-400">Focus</span>
+                        </div>
+                        <div id="badge-90d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                            <strong class="block text-white text-[11px]">90 Days</strong>
+                            <span class="text-[9px] text-slate-400">Rewire</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="oneui-card p-4 space-y-3 border-red-900/40">
+                    <h3 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800/80 pb-2.5"><i class="fa-solid fa-list-check text-red-400 mr-1.5"></i> Log Clean</h3>
+                    <div id="nofap-history-list" class="space-y-2"></div>
                 </section>
             </main>
         </div>
@@ -710,6 +834,7 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
+        // LOKAL TIMEZONE FIX FUNCTION
         function getLocalTodayStr() {
             const d = new Date();
             const year = d.getFullYear();
@@ -721,24 +846,15 @@
         const todayStr = getLocalTodayStr();
 
         const dhuhaVirtuesMap = {
-            2: { title: "Hari Ini: 2 Rakaat Dhuha", desc: '"Cukup sebagai sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)' },
-            4: { title: "Hari Ini: 4 Rakaat Dhuha", desc: '"Allah SWT mencukupi kebutuhan & rezekimu di akhir hari." (HR. Abu Daud)' },
-            6: { title: "Hari Ini: 6 Rakaat Dhuha", desc: '"Dicatat sebagai hamba yang selalu taat & kembali (Awabin)." (HR. Thabrani)' },
-            8: { title: "Hari Ini: 8 Rakaat Dhuha", desc: '"Dicatat dalam kelompok hamba yang taat dan bertawakal penuh." (HR. Al-Hakim)' },
-            10: { title: "Hari Ini: 10 Rakaat Dhuha", desc: '"Dibangunkan pelindung dari dosa pada hari itu." (HR. Thabrani)' },
-            12: { title: "Hari Ini: 12 Rakaat Dhuha", desc: '"Allah SWT akan membangunkan sebuah istana megah di Surga." (HR. Tirmidzi & Ibn Majah)' }
-        };
-
-        const tahajudVirtuesMap = {
-            2: { title: "Hari Ini: 2 Rakaat Tahajud", desc: '"Tergolong hamba yang senantiasa berzikir kepada Allah di waktu malam."' },
-            4: { title: "Hari Ini: 4 Rakaat Tahajud", desc: '"Mendapatkan kedudukan terpuji (Maqam Mahmudah) di sisi Allah SWT."' },
-            8: { title: "Hari Ini: 8 Rakaat Tahajud", desc: '"Mengikuti sunnah utama Rasulullah SAW & pelebur dosa-dosa terdahulu."' },
-            11: { title: "Hari Ini: 11 Rakaat Tahajud", desc: '"Sunnah sempurna Rasulullah SAW + Witr, doa diijabah sepertiga malam."' },
-            12: { title: "Hari Ini: 12 Rakaat Tahajud", desc: '"Cahaya di kegelapan kubur & diangkat derajat keshalehan tertinggi."' }
+            2: { title: "✨ Keutamaan 2 Rakaat", desc: '"Cukup sebagai sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)' },
+            4: { title: "⚡ Keutamaan 4 Rakaat", desc: '"Allah SWT mencukupi kebutuhan & rezekimu di akhir hari." (HR. Abu Daud)' },
+            6: { title: "👑 Keutamaan 6 Rakaat", desc: '"Dicatat sebagai hamba yang selalu taat & kembali (Awabin)." (HR. Thabrani)' },
+            8: { title: "🛡️ Keutamaan 8 Rakaat", desc: '"Dicatat dalam kelompok hamba yang taat dan bertawakal penuh." (HR. Al-Hakim)' },
+            10: { title: "🏰 Keutamaan 10 Rakaat", desc: '"Dibangunkan pelindung dari dosa pada hari itu." (HR. Thabrani)' },
+            12: { title: "🕌 Keutamaan 12 Rakaat (Maksimal)", desc: '"Allah SWT akan membangunkan sebuah istana megah di Surga." (HR. Tirmidzi & Ibn Majah)' }
         };
 
         let selectedDhuhaRakaatVal = 0;
-        let selectedTahajudRakaatVal = 0;
 
         function selectDhuhaRakaat(rakaat) {
             haptic('light');
@@ -748,59 +864,37 @@
             [2, 4, 6, 8, 10, 12].forEach(r => {
                 const chip = document.getElementById(`dhuha-chip-${r}`);
                 if (chip) {
-                    if (r === rakaat) chip.classList.add('active-dhuha');
-                    else chip.classList.remove('active-dhuha');
+                    if (r === rakaat) chip.classList.add('active');
+                    else chip.classList.remove('active');
                 }
             });
 
             const virtueInfo = dhuhaVirtuesMap[rakaat];
             if (virtueInfo) {
-                document.getElementById('dhuha-virtue-title').innerText = `✨ Keutamaan ${rakaat} Rakaat`;
+                document.getElementById('dhuha-virtue-title').innerText = virtueInfo.title;
                 document.getElementById('dhuha-virtue-desc').innerText = virtueInfo.desc;
             }
 
-            saveTodaySholatField('dhuha', rakaat.toString());
-            triggerConfetti();
-        }
-
-        function selectTahajudRakaat(rakaat) {
-            haptic('light');
-            selectedTahajudRakaatVal = rakaat;
-            document.getElementById('tahajud-selected-rakaat').innerText = `${rakaat} Rakaat`;
-
-            [2, 4, 8, 11, 12].forEach(r => {
-                const chip = document.getElementById(`tahajud-chip-${r}`);
-                if (chip) {
-                    if (r === rakaat) chip.classList.add('active-tahajud');
-                    else chip.classList.remove('active-tahajud');
-                }
-            });
-
-            const virtueInfo = tahajudVirtuesMap[rakaat];
-            if (virtueInfo) {
-                document.getElementById('tahajud-virtue-title').innerText = `🌌 Keutamaan ${rakaat} Rakaat`;
-                document.getElementById('tahajud-virtue-desc').innerText = virtueInfo.desc;
-            }
-
-            saveTodaySholatField('tahajud', rakaat.toString());
-            triggerConfetti();
-        }
-
-        function saveTodaySholatField(field, value) {
             const idx = sholats.findIndex(x => x.date === todayStr);
             if (idx >= 0) {
-                sholats[idx][field] = value;
+                sholats[idx].dhuha = rakaat.toString();
             } else {
-                let newRec = { 
+                sholats.push({ 
                     date: todayStr, 
-                    subuh: "Pending", dzuhur: "Pending", ashar: "Pending", maghrib: "Pending", isya: "Pending", 
-                    dhuha: "0", tahajud: "0", tilawah: "0", sedekah: "0" 
-                };
-                newRec[field] = value;
-                sholats.push(newRec);
+                    subuh: "Pending", 
+                    dzuhur: "Pending", 
+                    ashar: "Pending", 
+                    maghrib: "Pending", 
+                    isya: "Pending", 
+                    dhuha: rakaat.toString(), 
+                    tahajud: "0", 
+                    tilawah: "0", 
+                    sedekah: "0" 
+                });
             }
             localStorage.setItem('sholat_records', JSON.stringify(sholats));
             renderSholatReports();
+            triggerConfetti();
         }
 
         document.addEventListener('touchstart', function (event) {
@@ -830,11 +924,38 @@
             return parts.length === 3 ? `${parts[2]}/${parts[1]}` : dateString;
         }
 
+        let currentThemeIndex = 0;
+        const themes = ['default', 'theme-oled', 'theme-emerald'];
+        let showAllHistory = false;
         let isAudioMuted = localStorage.getItem('app_audio_muted') === 'true';
         let audioCtx = null;
         let tempSholatStates = { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending' };
 
+        let sheetsWebAppUrl = localStorage.getItem('google_sheets_webapp_url') || '';
         let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
+
+        function openWalletEditModal() {
+            document.getElementById('edit-wallet-cash').value = wallets.cash;
+            document.getElementById('edit-wallet-bank').value = wallets.bank;
+            document.getElementById('edit-wallet-ewallet').value = wallets.ewallet;
+            document.getElementById('wallet-modal-backdrop').classList.remove('hidden');
+        }
+
+        function closeWalletEditModal() {
+            document.getElementById('wallet-modal-backdrop').classList.add('hidden');
+        }
+
+        function handleWalletEditSubmit(e) {
+            e.preventDefault();
+            wallets.cash = parseFloat(document.getElementById('edit-wallet-cash').value) || 0;
+            wallets.bank = parseFloat(document.getElementById('edit-wallet-bank').value) || 0;
+            wallets.ewallet = parseFloat(document.getElementById('edit-wallet-ewallet').value) || 0;
+
+            localStorage.setItem('fin_wallets', JSON.stringify(wallets));
+            closeWalletEditModal();
+            renderApp();
+            triggerConfetti();
+        }
 
         function haptic(type = 'light') {
             if (!("vibrate" in navigator)) return;
@@ -843,9 +964,206 @@
             else if (type === 'heavy') navigator.vibrate([60, 40, 60]);
         }
 
+        function getAudioContext() {
+            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            return audioCtx;
+        }
+
+        function playSoftTick() {
+            if (isAudioMuted) return;
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, ctx.currentTime);
+                gain.gain.setValueAtTime(0.02, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.start(); osc.stop(ctx.currentTime + 0.05);
+            } catch(e){}
+        }
+
+        function playSoundEffect(effect) {
+            if (isAudioMuted) return;
+            try {
+                const ctx = getAudioContext();
+                if (effect === 'cash') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(987.77, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1318.51, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 0.25);
+                } else if (effect === 'gong') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(110, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(55, ctx.currentTime + 0.8);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.start(); osc.stop(ctx.currentTime + 0.8);
+                } else if (effect === 'sword') {
+                    const bufferSize = ctx.sampleRate * 0.2;
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+                    const noise = ctx.createBufferSource();
+                    noise.buffer = buffer;
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.setValueAtTime(1000, ctx.currentTime);
+                    filter.frequency.exponentialRampToValueAtTime(3000, ctx.currentTime + 0.18);
+                    const gain = ctx.createGain();
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                    noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+                    noise.start();
+                }
+            } catch(e) { console.log('Audio err:', e); }
+        }
+
+        window.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                document.getElementById('app-main-content').classList.add('privacy-blur');
+            } else {
+                document.getElementById('app-main-content').classList.remove('privacy-blur');
+            }
+        });
+
+        function updateDynamicPrayerBackground() {
+            const hour = new Date().getHours();
+            document.body.classList.remove('bg-subuh', 'bg-dzuhur', 'bg-maghrib', 'bg-isya');
+
+            if (hour >= 4 && hour < 11) document.body.classList.add('bg-subuh');
+            else if (hour >= 11 && hour < 17) document.body.classList.add('bg-dzuhur');
+            else if (hour >= 17 && hour < 19) document.body.classList.add('bg-maghrib');
+            else document.body.classList.add('bg-isya');
+        }
+
+        function unlockApp() {
+            const inputPin = document.getElementById('lock-pin-input').value;
+            const currentPin = localStorage.getItem('user_security_pin') || 'ubay';
+            if (inputPin === currentPin) {
+                localStorage.setItem('app_unlocked_session', 'true');
+                document.documentElement.classList.remove('app-locked');
+                document.documentElement.classList.add('app-unlocked');
+                document.getElementById('lock-pin-input').value = '';
+            } else {
+                alert("❌ PIN Keamanan Salah!");
+            }
+        }
+
+        function customRenameAppName() {
+            const currentTitle = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
+            const newTitle = prompt("Masukkan Nama Baru untuk Aplikasi Kamu:", currentTitle);
+            if (newTitle && newTitle.trim() !== "") {
+                const cleaned = newTitle.trim();
+                localStorage.setItem('user_custom_app_title', cleaned);
+                applyCustomAppName(cleaned);
+            }
+        }
+
+        function applyCustomAppName(title) {
+            document.getElementById('display-app-title').innerText = title;
+            document.getElementById('lock-screen-app-name').innerText = title;
+            document.getElementById('html-title-tag').innerText = `${title} - One UI v6.4 Fix`;
+            document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                updateDynamicPrayerBackground();
+                const savedAppName = localStorage.getItem('user_custom_app_title') || 'Ubay Progress';
+                applyCustomAppName(savedAppName);
+
+                document.getElementById('gregorian-date-display').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
+
+                const savedTheme = localStorage.getItem('user_app_theme');
+                if (savedTheme && savedTheme !== 'default') document.body.classList.add(savedTheme);
+
+                const savedIcon = localStorage.getItem('user_app_icon');
+                if (savedIcon) {
+                    document.getElementById('nav-app-icon-img').src = savedIcon;
+                    document.getElementById('app-favicon').href = savedIcon;
+                    document.getElementById('app-apple-icon').href = savedIcon;
+                }
+
+                const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
+                switchTab(lastActiveTab);
+
+                initFastingTracker();
+                loadMentalCheck();
+                updateGamificationLevel();
+                setInterval(updateNoFapTimer, 1000);
+                checkPeakUrgeHours();
+                initPrayerCountdown();
+                initGyroCompass();
+                renderBrainCanvas();
+                renderUrgeRadar();
+
+                // Listen date change in sholat modal
+                document.getElementById('input-sholat-date').addEventListener('change', (e) => loadSholatModalData(e.target.value));
+            }, 10);
+        });
+
+        function checkPeakUrgeHours() {
+            const currentHour = new Date().getHours();
+            if (currentHour >= 23 || currentHour <= 3) {
+                const warnEl = document.getElementById('peak-urge-warning');
+                if (warnEl) warnEl.classList.remove('hidden');
+            }
+        }
+
+        function quickFillChip(cat, desc) {
+            openModal();
+            document.getElementById('exp-category').value = cat;
+            document.getElementById('exp-desc').value = desc;
+            document.getElementById('exp-amount').focus();
+            haptic('light');
+        }
+
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Browser HP kamu belum mendukung Voice Command.");
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('ai-parser-input').value = transcript;
+            };
+        }
+
         function triggerConfetti() {
             if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
         }
+
+        function handleAppIconUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                localStorage.setItem('user_app_icon', base64String);
+                document.getElementById('nav-app-icon-img').src = base64String;
+                document.getElementById('app-favicon').href = base64String;
+                document.getElementById('app-apple-icon').href = base64String;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function toggleFab() { document.getElementById('fab-menu').classList.toggle('hidden'); }
 
         function switchTab(tab) {
             localStorage.setItem('master_hub_active_tab', tab);
@@ -879,7 +1197,659 @@
             } else if (tab === 'nofap') {
                 nofapSec.classList.remove('hidden');
                 document.getElementById('nav-btn-nofap').className = activeNav;
+                renderNoFapModule();
             }
+        }
+
+        function initGyroCompass() {
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', function(e) {
+                    let alpha = e.alpha || 0;
+                    let compassRing = document.getElementById('compass-ring');
+                    let kiblatCard = document.getElementById('kiblat-card');
+                    let kiblatStatus = document.getElementById('kiblat-status');
+
+                    if (compassRing) {
+                        compassRing.style.transform = `rotate(${-alpha}deg)`;
+                        if (Math.abs(alpha - 295) < 8) {
+                            kiblatCard.classList.add('pulse-gold-glow');
+                            kiblatStatus.innerText = "✨ TEPAT MENGHADAP KIBLAT!";
+                            kiblatStatus.classList.add('text-amber-400');
+                        } else {
+                            kiblatCard.classList.remove('pulse-gold-glow');
+                            kiblatStatus.innerText = "Gerakkan HP kamu untuk mencocokkan arah Kiblat";
+                            kiblatStatus.classList.remove('text-amber-400');
+                        }
+                    }
+                }, true);
+            }
+        }
+
+        function initPrayerCountdown() {
+            const prayerTimesGrid = document.getElementById('prayer-times-grid');
+            prayerTimesGrid.innerHTML = `
+                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
+                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
+                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
+                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-emerald-500/80 bg-emerald-950/40"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
+                <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
+            `;
+
+            setInterval(() => {
+                const now = new Date();
+                const target = new Date(); target.setHours(18, 0, 0);
+                let diff = target - now;
+                if (diff < 0) diff = 0;
+
+                const hrs = Math.floor(diff / 3600000);
+                const mins = Math.floor((diff % 3600000) / 60000);
+                const secs = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('prayer-countdown-timer').innerText = 
+                    `${String(hrs).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
+            }, 1000);
+        }
+
+        let breathInterval = null;
+        function setBreathingRhythm(type) {
+            document.getElementById('btn-rhythm-box').className = type === 'box' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl";
+            document.getElementById('btn-rhythm-478').className = type === '478' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl";
+            
+            clearInterval(breathInterval);
+            let state = 0;
+            const ring = document.getElementById('breathing-ring');
+            const stateText = document.getElementById('breathing-state-text');
+
+            breathInterval = setInterval(() => {
+                playSoftTick();
+                if (type === 'box') {
+                    if (state === 0) { stateText.innerText = "Tarik"; ring.style.transform = "scale(1.35)"; state = 1; }
+                    else if (state === 1) { stateText.innerText = "Tahan"; state = 2; }
+                    else { stateText.innerText = "Hembuskan"; ring.style.transform = "scale(0.9)"; state = 0; }
+                }
+            }, 4000);
+        }
+
+        function renderBrainCanvas() {
+            const cvs = document.getElementById('brainCanvas');
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d');
+            cvs.width = cvs.offsetWidth; cvs.height = cvs.offsetHeight;
+
+            const daysClean = Math.floor((new Date() - new Date(nofapData.startDate)) / (1000 * 60 * 60 * 24));
+            const nodes = 25;
+            let points = [];
+            for (let i = 0; i < nodes; i++) {
+                points.push({ x: Math.random() * cvs.width, y: Math.random() * cvs.height });
+            }
+
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            ctx.strokeStyle = daysClean > 7 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.4)';
+            ctx.lineWidth = Math.min(daysClean, 5);
+
+            for (let i = 0; i < nodes; i++) {
+                for (let j = i + 1; j < nodes; j++) {
+                    const dist = Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y);
+                    if (dist < 70) {
+                        ctx.beginPath();
+                        ctx.moveTo(points[i].x, points[i].y);
+                        ctx.lineTo(points[j].x, points[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            document.getElementById('synapse-power-text').innerText = `Power: ${Math.min(daysClean * 10, 100)}%`;
+        }
+
+        function renderUrgeRadar() {
+            const cvs = document.getElementById('urgeRadarCanvas');
+            if (!cvs) return;
+            const ctx = cvs.getContext('2d');
+            cvs.width = 180; cvs.height = 180;
+            const cx = 90, cy = 90, r = 70;
+
+            ctx.clearRect(0,0,180,180);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#27272a';
+            ctx.lineWidth = 10;
+            ctx.stroke();
+
+            const startAngle = (23 / 24) * 2 * Math.PI - Math.PI/2;
+            const endAngle = (3 / 24) * 2 * Math.PI - Math.PI/2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, startAngle, endAngle);
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 12;
+            ctx.stroke();
+        }
+
+        function initFastingTracker() {
+            const dayOfWeek = new Date().getDay();
+            const isPuasaRecommended = (dayOfWeek === 1 || dayOfWeek === 4);
+            const savedFasting = localStorage.getItem(`fasting_${todayStr}`);
+
+            const statusEl = document.getElementById('fasting-today-status');
+            const btn = document.getElementById('fasting-btn');
+
+            if (savedFasting === 'done') {
+                statusEl.innerText = "Hari ini: 🎉 Puasa Sunnah Terlaksana!";
+                btn.innerText = "✅ Puasa Terpenuhi";
+            } else {
+                statusEl.innerText = isPuasaRecommended ? "Hari ini: Rekomendasi Puasa Sunnah (Senin/Kamis)" : "Hari ini: Hari Biasa";
+            }
+        }
+
+        function toggleFastingCheckin() {
+            localStorage.setItem(`fasting_${todayStr}`, 'done');
+            initFastingTracker();
+            triggerConfetti();
+            alert("✨ Masya Allah! Status Puasa Sunnah Tersimpan.");
+        }
+
+        function saveMentalCheck() {
+            const data = {
+                energy: document.getElementById('mental-energy').value,
+                focus: document.getElementById('mental-focus').value,
+                mood: document.getElementById('mental-mood').value
+            };
+            localStorage.setItem(`mental_check_${todayStr}`, JSON.stringify(data));
+        }
+
+        function loadMentalCheck() {
+            const saved = JSON.parse(localStorage.getItem(`mental_check_${todayStr}`));
+            if (saved) {
+                document.getElementById('mental-energy').value = saved.energy || "3";
+                document.getElementById('mental-focus').value = saved.focus || "3";
+                document.getElementById('mental-mood').value = saved.mood || "3";
+            }
+        }
+
+        let nofapData = JSON.parse(localStorage.getItem('nofap_streak_data')) || {
+            startDate: new Date().toISOString(),
+            longestStreakDays: 1,
+            history: [{ date: todayStr, status: "Clean", note: "Check-in Awal" }]
+        };
+
+        function openPanicModal() { 
+            document.getElementById('nofap-panic-modal').classList.remove('hidden');
+            setBreathingRhythm('box');
+        }
+        function closePanicModal() { 
+            clearInterval(breathInterval);
+            document.getElementById('nofap-panic-modal').classList.add('hidden'); 
+        }
+
+        function checkInNoFap() {
+            const existingIdx = nofapData.history.findIndex(x => x.date === todayStr);
+            if (existingIdx >= 0) {
+                nofapData.history[existingIdx].status = "Clean";
+            } else {
+                nofapData.history.push({ date: todayStr, status: "Clean", note: "Clean Day Check-in" });
+            }
+            localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            triggerConfetti();
+            renderNoFapModule();
+            renderBrainCanvas();
+        }
+
+        function resetNoFap() {
+            if (confirm("⚠️ Kamu yakin mau reset streak NoFap?")) {
+                const reason = prompt("Apa pemicu godaan tadi?") || "Tidak disebutkan";
+                nofapData.history.push({ date: todayStr, status: "Reset", note: `Pemicu: ${reason}` });
+                nofapData.startDate = new Date().toISOString();
+                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+                renderNoFapModule();
+                renderBrainCanvas();
+            }
+        }
+
+        function updateNoFapTimer() {
+            const start = new Date(nofapData.startDate);
+            const now = new Date();
+            const diffMs = now - start;
+            if (diffMs < 0) return;
+
+            const diffSecs = Math.floor(diffMs / 1000);
+            const days = Math.floor(diffSecs / (3600 * 24));
+            const hours = Math.floor((diffSecs % (3600 * 24)) / 3600);
+            const minutes = Math.floor((diffSecs % 3600) / 60);
+
+            if (document.getElementById('nofap-streak-days')) document.getElementById('nofap-streak-days').innerText = `${days} Hari`;
+            if (document.getElementById('nofap-streak-timer')) document.getElementById('nofap-streak-timer').innerText = `${String(hours).padStart(2, '0')} Jam : ${String(minutes).padStart(2, '0')} Menit Clean`;
+
+            if (days > nofapData.longestStreakDays) {
+                nofapData.longestStreakDays = days;
+                localStorage.setItem('nofap_streak_data', JSON.stringify(nofapData));
+            }
+        }
+
+        function renderNoFapModule() {
+            updateNoFapTimer();
+            const daysClean = Math.floor((new Date() - new Date(nofapData.startDate)) / (1000 * 60 * 60 * 24));
+            let badgeName = "Lvl 1 - Novice";
+            if (daysClean >= 90) badgeName = "Lvl 5 - Mind Master 👑";
+            else if (daysClean >= 30) badgeName = "Lvl 4 - Iron Will ⚔️";
+            else if (daysClean >= 14) badgeName = "Lvl 3 - Warrior 🔥";
+            else if (daysClean >= 7) badgeName = "Lvl 2 - Focus Cadet 🛡️";
+
+            document.getElementById('nofap-badge-top').innerText = badgeName;
+
+            const historyList = document.getElementById('nofap-history-list');
+            historyList.innerHTML = '';
+            [...nofapData.history].reverse().forEach(item => {
+                const isClean = item.status === 'Clean';
+                historyList.innerHTML += `
+                    <div class="bg-zinc-950/90 p-3 rounded-2xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs font-money">
+                        <div>
+                            <span class="font-bold text-white block">${formatDateDDMMYYYY(item.date)}</span>
+                            <span class="text-[10px] text-slate-400 font-sans">${item.note || '-'}</span>
+                        </div>
+                        <span class="px-2.5 py-0.5 rounded-xl text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'} font-sans">
+                            ${isClean ? '✅ Clean' : '⚠️ Reset'}
+                        </span>
+                    </div>
+                `;
+            });
+        }
+
+        let incomeData = JSON.parse(localStorage.getItem('fin_income')) || { salary: 7700000, side: 0 };
+        const defaultCategories = {
+            "Makan & Belanja Dapur Harian": { budget: 800000 },
+            "Bensin / Transportasi / Tol": { budget: 300000 },
+            "Listrik, Air, Wifi & Pulsa": { budget: 100000 },
+            "Orang Tua / Keluarga": { budget: 1500000 },
+            "Cicilan Utang & Kewajiban Bulanan": { budget: 3050000 },
+            "Tabungan / Dana Darurat": { budget: 2000000 },
+            "Investasi / Asuransi": { budget: 0 },
+            "Belanja Pribadi & Lain-Lain": { budget: 0 },
+            "Pengeluaran Tidak Tercatat": { budget: 0 },
+            "Hiburan, Hangout & Self-Reward": { budget: 0 }
+        };
+
+        let budgetCategories = JSON.parse(localStorage.getItem('fin_budgets')) || defaultCategories;
+
+        let debtItems = JSON.parse(localStorage.getItem('fin_debt_items')) || [
+            { id: 1, name: "Laptop", total: 1800000, monthlyPay: 650000, remainingMonths: 3, status: "Belum Lunas" },
+            { id: 2, name: "Renov Kamar", total: 8500000, monthlyPay: 500000, remainingMonths: 17, status: "Belum Lunas" },
+            { id: 3, name: "Pinjaman Teman", total: 1000000, monthlyPay: 300000, remainingMonths: 4, status: "Belum Lunas" }
+        ];
+
+        let impulsiveWishlist = JSON.parse(localStorage.getItem('fin_impulsive_wishlist')) || [];
+
+        const masterExcelData = [
+            { id: 1, date: "2026-07-29", category: "Orang Tua / Keluarga", desc: "Orang Tua", amount: 1600000, method: "Cash" },
+            { id: 2, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aogi", amount: 1300000, method: "Cash" },
+            { id: 3, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Aoga", amount: 1100000, method: "Cash" },
+            { id: 4, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Dewi", amount: 550000, method: "Cash" },
+            { id: 5, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Oka", amount: 100000, method: "Cash" },
+            { id: 6, date: "2026-07-29", category: "Cicilan Utang & Kewajiban Bulanan", desc: "Utang Putri", amount: 70000, method: "Cash" },
+            { id: 7, date: "2026-07-29", category: "Tabungan / Dana Darurat", desc: "Tabungan", amount: 1000000, method: "Mbanking" }
+        ];
+
+        let transactions = JSON.parse(localStorage.getItem('fin_transactions')) || masterExcelData;
+        let pieChartInstance = null;
+
+        function formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function toggleShowAllHistory() {
+            showAllHistory = !showAllHistory;
+            renderApp();
+        }
+
+        function openAddDebtModal() {
+            document.getElementById('debt-edit-id').value = '';
+            document.getElementById('debt-name').value = '';
+            document.getElementById('debt-total').value = '';
+            document.getElementById('debt-monthly').value = '';
+            document.getElementById('debt-months').value = '';
+            document.getElementById('debt-status').value = 'Belum Lunas';
+            document.getElementById('debt-modal-backdrop').classList.remove('hidden');
+        }
+
+        function editDebtItem(id) {
+            const d = debtItems.find(x => x.id === id);
+            if (!d) return;
+            document.getElementById('debt-edit-id').value = d.id;
+            document.getElementById('debt-name').value = d.name;
+            document.getElementById('debt-total').value = d.total;
+            document.getElementById('debt-monthly').value = d.monthlyPay;
+            document.getElementById('debt-months').value = d.remainingMonths;
+            document.getElementById('debt-status').value = d.status || 'Belum Lunas';
+            document.getElementById('debt-modal-backdrop').classList.remove('hidden');
+        }
+
+        function closeDebtModal() { document.getElementById('debt-modal-backdrop').classList.add('hidden'); }
+
+        function handleDebtSubmit(e) {
+            e.preventDefault();
+            const editId = document.getElementById('debt-edit-id').value;
+            const name = document.getElementById('debt-name').value.trim();
+            const total = parseFloat(document.getElementById('debt-total').value) || 0;
+            const monthlyPay = parseFloat(document.getElementById('debt-monthly').value) || 0;
+            const remainingMonths = parseInt(document.getElementById('debt-months').value) || 0;
+            const status = document.getElementById('debt-status').value;
+
+            if (editId) {
+                const idx = debtItems.findIndex(x => x.id == editId);
+                if (idx >= 0) debtItems[idx] = { id: parseInt(editId), name, total, monthlyPay, remainingMonths, status };
+            } else {
+                debtItems.push({ id: Date.now(), name, total, monthlyPay, remainingMonths, status });
+            }
+
+            localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
+            closeDebtModal();
+            renderApp();
+        }
+
+        function toggleDebtStatus(id) {
+            const d = debtItems.find(x => x.id === id);
+            if (!d) return;
+            d.status = d.status === 'Lunas' ? 'Belum Lunas' : 'Lunas';
+            if (d.status === 'Lunas') d.remainingMonths = 0;
+            localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
+            renderApp();
+        }
+
+        function deleteDebtItem(id) {
+            if (confirm("Hapus catatan utang ini?")) {
+                debtItems = debtItems.filter(x => x.id !== id);
+                localStorage.setItem('fin_debt_items', JSON.stringify(debtItems));
+                renderApp();
+            }
+        }
+
+        function addImpulsiveWishlist() {
+            const item = prompt("Masukkan wishlist:");
+            if (!item) return;
+            const price = parseFloat(prompt("Nominal harga (Rp):")) || 0;
+            impulsiveWishlist.push({ id: Date.now(), item, price, lockUntil: Date.now() + (72 * 3600 * 1000) });
+            localStorage.setItem('fin_impulsive_wishlist', JSON.stringify(impulsiveWishlist));
+            renderApp();
+        }
+
+        function openModal() { document.getElementById('modal-backdrop').classList.remove('hidden'); document.getElementById('exp-date').valueAsDate = new Date(); }
+        function closeModal() { document.getElementById('modal-backdrop').classList.add('hidden'); }
+        function openIncomeModal() { document.getElementById('income-modal-backdrop').classList.remove('hidden'); document.getElementById('input-salary').value = incomeData.salary; document.getElementById('input-side').value = incomeData.side; }
+        function closeIncomeModal() { document.getElementById('income-modal-backdrop').classList.add('hidden'); }
+
+        function openBudgetModal() {
+            const container = document.getElementById('budget-inputs-container');
+            container.innerHTML = '';
+            Object.keys(budgetCategories).forEach((cat, idx) => {
+                container.innerHTML += `
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">${cat}</label>
+                        <input type="number" id="budget-val-${idx}" data-cat="${cat}" value="${budgetCategories[cat].budget}" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white">
+                    </div>
+                `;
+            });
+            document.getElementById('budget-modal-backdrop').classList.remove('hidden');
+        }
+        function closeBudgetModal() { document.getElementById('budget-modal-backdrop').classList.add('hidden'); }
+
+        document.getElementById('budget-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            Object.keys(budgetCategories).forEach((cat, idx) => { budgetCategories[cat].budget = parseFloat(document.getElementById(`budget-val-${idx}`).value) || 0; });
+            localStorage.setItem('fin_budgets', JSON.stringify(budgetCategories));
+            renderApp(); closeBudgetModal();
+        });
+
+        document.getElementById('income-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            incomeData.salary = parseFloat(document.getElementById('input-salary').value) || 0;
+            incomeData.side = parseFloat(document.getElementById('input-side').value) || 0;
+            localStorage.setItem('fin_income', JSON.stringify(incomeData));
+            renderApp(); closeIncomeModal();
+        });
+
+        document.getElementById('ai-parser-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = document.getElementById('ai-parser-input').value.trim();
+            if (!text) return;
+
+            let amount = 0;
+            const matchNum = text.match(/(\d+)(k|rb)?/i);
+            if (matchNum) {
+                let num = parseInt(matchNum[1]);
+                amount = (matchNum[2] && (matchNum[2].toLowerCase() === 'k' || matchNum[2].toLowerCase() === 'rb')) ? num * 1000 : (num < 1000 ? num * 1000 : num);
+            } else return alert("Gagal membaca nominal.");
+
+            let category = "Belanja Pribadi & Lain-Lain";
+            let lower = text.toLowerCase();
+            if (lower.includes('bensin') || lower.includes('tol')) category = "Bensin / Transportasi / Tol";
+            else if (lower.includes('makan') || lower.includes('kopi') || lower.includes('nasgor')) category = "Makan & Belanja Dapur Harian";
+            
+            const newTrans = { id: Date.now(), date: todayStr, category, desc: text, amount, method: "Bank" };
+            transactions.push(newTrans);
+            
+            wallets.bank -= amount;
+            localStorage.setItem('fin_wallets', JSON.stringify(wallets));
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+
+            document.getElementById('ai-parser-input').value = '';
+            renderApp();
+            playSoundEffect('cash');
+        });
+
+        function renderApp() {
+            const totalIncome = incomeData.salary + incomeData.side;
+            document.getElementById('disp-salary').innerText = formatRupiah(incomeData.salary);
+            document.getElementById('disp-total-income').innerText = `Total: ${formatRupiah(totalIncome)}`;
+
+            document.getElementById('wallet-cash').innerText = formatRupiah(wallets.cash);
+            document.getElementById('wallet-bank').innerText = formatRupiah(wallets.bank);
+            document.getElementById('wallet-ewallet').innerText = formatRupiah(wallets.ewallet);
+
+            const totalSystemMoney = wallets.cash + wallets.bank + wallets.ewallet;
+
+            const selectedCycle = document.getElementById('cycle-selector').value;
+            let startDateStr = "2026-07-28", endDateStr = "2026-08-27", labelText = "28 Jul - 27 Ags", nextPayday = new Date("2026-08-28");
+            
+            if (selectedCycle === "2026-08") { 
+                startDateStr = "2026-08-28"; endDateStr = "2026-09-27"; labelText = "28 Ags - 27 Sep"; nextPayday = new Date("2026-09-28"); 
+            } else if (selectedCycle === "2026-09") {
+                startDateStr = "2026-09-28"; endDateStr = "2026-10-27"; labelText = "28 Sep - 27 Okt"; nextPayday = new Date("2026-10-28");
+            }
+            
+            document.getElementById('cycle-label-display').innerText = labelText;
+
+            const now = new Date();
+            let todayTotal = 0, weeklyTotal = 0, cycleTotal = 0;
+            let categoryTotals = {}; Object.keys(budgetCategories).forEach(c => categoryTotals[c] = 0);
+
+            transactions.forEach(t => {
+                if (t.date === todayStr) todayTotal += t.amount;
+                if (t.date >= startDateStr && t.date <= endDateStr) {
+                    cycleTotal += t.amount;
+                    if (categoryTotals[t.category] !== undefined) categoryTotals[t.category] += t.amount;
+                }
+            });
+
+            document.getElementById('sum-today').innerText = formatRupiah(todayTotal);
+            document.getElementById('sum-weekly').innerText = formatRupiah(weeklyTotal);
+            document.getElementById('sum-cycle').innerText = formatRupiah(cycleTotal);
+            document.getElementById('sum-remaining').innerText = formatRupiah(totalSystemMoney);
+
+            const diffTime = nextPayday - now;
+            const daysLeft = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+            const safeDailyVal = totalSystemMoney > 0 ? Math.floor(totalSystemMoney / daysLeft) : 0;
+            document.getElementById('days-remaining-text').innerText = `${daysLeft} hari lagi`;
+            document.getElementById('safe-daily-limit').innerText = `${formatRupiah(safeDailyVal)} / hari`;
+
+            const wishlistContainer = document.getElementById('wishlist-delay-list');
+            wishlistContainer.innerHTML = '';
+            if (impulsiveWishlist.length === 0) {
+                wishlistContainer.innerHTML = `<span class="text-slate-500 italic text-[10px]">Tidak ada wishlist terkunci.</span>`;
+            } else {
+                impulsiveWishlist.forEach(w => {
+                    wishlistContainer.innerHTML += `
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-zinc-800 flex justify-between items-center text-xs font-money">
+                            <div><strong class="text-white block font-sans">${w.item}</strong><span class="text-amber-400 font-bold">${formatRupiah(w.price)}</span></div>
+                            <span class="px-2.5 py-1 bg-amber-950 text-amber-300 rounded-xl font-bold text-[10px] font-sans">Wishlist</span>
+                        </div>
+                    `;
+                });
+            }
+
+            const debtContainer = document.getElementById('debt-tracker-container');
+            debtContainer.innerHTML = '';
+            let totalDebtAll = 0;
+            debtItems.forEach(d => {
+                if (d.status !== 'Lunas') totalDebtAll += d.total;
+                const isLunas = d.status === 'Lunas';
+                debtContainer.innerHTML += `
+                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border ${isLunas ? 'border-emerald-600/40 opacity-60' : 'border-zinc-800'} space-y-1.5 font-money">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-white font-sans">${d.name} ${isLunas ? '🎉' : ''}</span>
+                            <span class="font-bold ${isLunas ? 'text-emerald-400' : 'text-red-400'}">${formatRupiah(d.total)}</span>
+                        </div>
+                        <div class="text-[10px] text-slate-400 flex justify-between items-center font-sans">
+                            <span>Cicilan: ${formatRupiah(d.monthlyPay)}/bln</span>
+                            <span>Sisa: <strong>${d.remainingMonths} bln</strong></span>
+                        </div>
+                        <div class="flex justify-end gap-2 pt-1 border-t border-zinc-900 font-sans">
+                            <button onclick="haptic('light'); toggleDebtStatus(${d.id});" class="text-[10px] font-bold px-2 py-0.5 rounded-lg ${isLunas ? 'bg-amber-950 text-amber-300' : 'bg-emerald-950 text-emerald-300'}">
+                                ${isLunas ? 'Batal Lunas' : 'Tandai Lunas'}
+                            </button>
+                            <button onclick="haptic('light'); editDebtItem(${d.id});" class="text-slate-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <button onclick="haptic('light'); deleteDebtItem(${d.id});" class="text-slate-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('total-debt-sum').innerText = `Total: ${formatRupiah(totalDebtAll)}`;
+
+            const cardsContainer = document.getElementById('budget-cards-container');
+            cardsContainer.innerHTML = '';
+            Object.keys(budgetCategories).forEach(c => {
+                const b = budgetCategories[c].budget;
+                const s = categoryTotals[c] || 0;
+                const pct = b > 0 ? (s / b) * 100 : (s > 0 ? 100 : 0);
+                
+                cardsContainer.innerHTML += `
+                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-2">
+                        <div class="flex justify-between text-xs">
+                            <span class="font-bold text-slate-200 truncate">${c}</span>
+                            <span class="font-bold text-white font-money">${formatRupiah(s)}</span>
+                        </div>
+                        <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
+                            <div class="${pct >= 100 ? 'bg-red-600' : 'bg-emerald-500'} h-full rounded-full transition-all duration-300" style="width: ${Math.min(pct, 100)}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const historyTable = document.getElementById('history-table');
+            historyTable.innerHTML = '';
+
+            const selectedMonth = document.getElementById('month-filter').value;
+            const searchQ = document.getElementById('search-input').value.toLowerCase();
+
+            let filtered = transactions.filter(t => t.date >= startDateStr && t.date <= endDateStr).reverse();
+
+            if (selectedMonth !== 'ALL') {
+                filtered = filtered.filter(t => t.date.split('-')[1] === selectedMonth);
+            }
+
+            if (searchQ) {
+                filtered = filtered.filter(t => t.desc.toLowerCase().includes(searchQ) || t.category.toLowerCase().includes(searchQ));
+            }
+
+            const totalCount = filtered.length;
+            const toggleContainer = document.getElementById('history-toggle-container');
+            const toggleBtn = document.getElementById('history-toggle-btn');
+
+            if (totalCount > 5) {
+                toggleContainer.classList.remove('hidden');
+                toggleBtn.innerText = showAllHistory ? "Sembunyikan Transaksi 👆" : `Lihat Semua (${totalCount} Transaksi) 👇`;
+            } else {
+                toggleContainer.classList.add('hidden');
+            }
+
+            const displayList = showAllHistory ? filtered : filtered.slice(0, 5);
+
+            if (displayList.length === 0) {
+                historyTable.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500 italic font-sans">Tidak ada transaksi.</td></tr>`;
+            } else {
+                displayList.forEach(t => {
+                    historyTable.innerHTML += `
+                        <tr class="hover:bg-zinc-800/40">
+                            <td class="p-2.5 text-slate-400 font-bold text-[10px]">${formatDateDDMM(t.date)}</td>
+                            <td class="p-2.5 font-semibold text-slate-200 text-xs font-sans">
+                                <div>${t.desc}</div>
+                                <span class="text-[9px] text-slate-500">${t.category}</span>
+                            </td>
+                            <td class="p-2.5 font-bold text-red-400 text-xs">${formatRupiah(t.amount)}</td>
+                            <td class="p-2.5 text-center font-sans">
+                                <button onclick="haptic('light'); deleteTransaction(${t.id});" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            renderCharts(categoryTotals);
+            updateGamificationLevel();
+        }
+
+        function renderCharts(categoryTotals) {
+            const ctxPie = document.getElementById('categoryPieChart').getContext('2d');
+            if (pieChartInstance) pieChartInstance.destroy();
+            pieChartInstance = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: { labels: Object.keys(categoryTotals).filter(k => categoryTotals[k] > 0), datasets: [{ data: Object.values(categoryTotals).filter(v => v > 0), backgroundColor: ['#dc2626', '#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899'], borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#cbd5e1', font: { size: 10 } } } } }
+            });
+        }
+
+        document.getElementById('expense-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const method = document.getElementById('exp-method').value;
+            const amount = parseFloat(document.getElementById('exp-amount').value);
+
+            if (method === 'Cash') wallets.cash -= amount;
+            else if (method === 'Bank') wallets.bank -= amount;
+            else if (method === 'E-Wallet') wallets.ewallet -= amount;
+            localStorage.setItem('fin_wallets', JSON.stringify(wallets));
+
+            const newTrans = {
+                id: Date.now(),
+                date: document.getElementById('exp-date').value,
+                category: document.getElementById('exp-category').value,
+                desc: document.getElementById('exp-desc').value,
+                amount: amount,
+                method: method
+            };
+
+            transactions.push(newTrans);
+            localStorage.setItem('fin_transactions', JSON.stringify(transactions));
+
+            renderApp(); closeModal();
+        });
+
+        function deleteTransaction(id) { transactions = transactions.filter(t => t.id !== id); localStorage.setItem('fin_transactions', JSON.stringify(transactions)); renderApp(); }
+
+        function setFastSholat(sholatName, val) {
+            tempSholatStates[sholatName] = val;
+            setFastSholatUI(sholatName, val);
+            haptic('light');
+        }
+
+        function setFastSholatUI(sholatName, val) {
+            ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
+                const btn = document.getElementById(`btn-${sholatName}-${opt}`);
+                if (btn) {
+                    if (opt === val) btn.classList.add('selected');
+                    else btn.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateTilawahVal(val) {
+            document.getElementById('tilawah-slider-val').innerText = `${val} Halaman`;
         }
 
         let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
@@ -920,36 +1890,19 @@
                 date: dStr,
                 ...tempSholatStates,
                 tilawah: document.getElementById('mutabaah-tilawah-slider').value,
-                dhuha: selectedDhuhaRakaatVal > 0 ? selectedDhuhaRakaatVal.toString() : (existingRec.dhuha || "0"),
-                tahajud: selectedTahajudRakaatVal > 0 ? selectedTahajudRakaatVal.toString() : (existingRec.tahajud || "0")
+                dhuha: selectedDhuhaRakaatVal > 0 ? selectedDhuhaRakaatVal.toString() : (existingRec.dhuha || "0")
             };
 
-            if (idx >= 0) sholats[idx] = updatedRec; else sholats.push(updatedRec);
+            if (idx >= 0) {
+                sholats[idx] = updatedRec;
+            } else {
+                sholats.push(updatedRec);
+            }
 
             localStorage.setItem('sholat_records', JSON.stringify(sholats)); 
             renderSholatReports(); 
             closeSholatModal();
         });
-
-        function setFastSholat(sholatName, val) {
-            tempSholatStates[sholatName] = val;
-            setFastSholatUI(sholatName, val);
-            haptic('light');
-        }
-
-        function setFastSholatUI(sholatName, val) {
-            ['Jamaah', 'Munfarid', 'Tidak'].forEach(opt => {
-                const btn = document.getElementById(`btn-${sholatName}-${opt}`);
-                if (btn) {
-                    if (opt === val) btn.classList.add('selected');
-                    else btn.classList.remove('selected');
-                }
-            });
-        }
-
-        function updateTilawahVal(val) {
-            document.getElementById('tilawah-slider-val').innerText = `${val} Halaman`;
-        }
 
         function getSholatStats(record) {
             if (!record) return { jamaah: 0, munfarid: 0, dhuha: 0, tahajud: 0, tilawah: 0, sedekah: 0 };
@@ -971,71 +1924,57 @@
         function renderSholatReports() {
             try {
                 const todayRec = sholats.find(x => x.date === todayStr);
+                const nowD = new Date();
+                const yestD = new Date(); yestD.setDate(nowD.getDate() - 1);
+                const yestYear = yestD.getFullYear();
+                const yestMonth = String(yestD.getMonth() + 1).padStart(2, '0');
+                const yestDay = String(yestD.getDate()).padStart(2, '0');
+                const yestStr = `${yestYear}-${yestMonth}-${yestDay}`;
+                const yestRec = sholats.find(x => x.date === yestStr);
+
                 const stToday = getSholatStats(todayRec);
+                const stYest = getSholatStats(yestRec);
 
-                // UPDATE JAMAAH LOCK BANNER
-                const lockJamaahCard = document.getElementById('lock-card-jamaah');
-                const lockJamaahBadge = document.getElementById('lock-jamaah-badge');
-                const lockJamaahTitle = document.getElementById('lock-jamaah-title');
-                const lockJamaahDesc = document.getElementById('lock-jamaah-desc');
-
-                if (lockJamaahBadge) lockJamaahBadge.innerText = `${stToday.jamaah}/5 Waktu`;
-
-                if (stToday.jamaah > 0) {
-                    lockJamaahCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-emerald-500/80 pulse-emerald-glow space-y-1";
-                    lockJamaahTitle.innerText = `Hari Ini: ${stToday.jamaah} Waktu Jamaah 🎉`;
-                    lockJamaahDesc.innerText = `Mendapat ${stToday.jamaah * 27}x lipat derajat pahala &amp; ampunan dosa setiap langkah kaki.`;
-                } else {
-                    lockJamaahCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/40 space-y-1";
-                    lockJamaahTitle.innerText = `Hari Ini: Belum Check-in`;
-                    lockJamaahDesc.innerText = `Mendapatkan 27 derajat kemuliaan &amp; penghapus dosa langkah kaki ke masjid.`;
+                if (todayRec && todayRec.dhuha && parseInt(todayRec.dhuha) > 0) {
+                    const r = parseInt(todayRec.dhuha);
+                    selectDhuhaRakaatUI(r);
                 }
 
-                // UPDATE DHUHA LOCK BANNER
-                const lockDhuhaCard = document.getElementById('lock-card-dhuha');
-                const lockDhuhaBadge = document.getElementById('lock-dhuha-badge');
-                const lockDhuhaTitle = document.getElementById('lock-dhuha-title');
-                const lockDhuhaDesc = document.getElementById('lock-dhuha-desc');
-
-                const dhuhaRakaat = stToday.dhuha;
-                if (lockDhuhaBadge) lockDhuhaBadge.innerText = `${dhuhaRakaat} Rakaat`;
-
-                if (dhuhaRakaat > 0) {
-                    lockDhuhaCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/80 pulse-gold-glow space-y-1";
-                    const vDhuha = dhuhaVirtuesMap[dhuhaRakaat] || { title: `Hari Ini: ${dhuhaRakaat} Rakaat Dhuha`, desc: "Mengalirkan berkah rezeki &amp; sedekah persendian." };
-                    lockDhuhaTitle.innerText = vDhuha.title;
-                    lockDhuhaDesc.innerText = vDhuha.desc;
-
-                    selectDhuhaRakaatUI(dhuhaRakaat);
-                } else {
-                    lockDhuhaCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/40 space-y-1";
-                    lockDhuhaTitle.innerText = `Hari Ini: Belum Dhuha`;
-                    lockDhuhaDesc.innerText = `Sedekah 360 persendian tubuh manusia. (HR. Muslim)`;
+                const evalEl = document.getElementById('sholat-eval-status');
+                if (evalEl) {
+                    if (stToday.jamaah > stYest.jamaah) evalEl.innerHTML = `<span class="text-emerald-400 font-black">🟢 LEBIH BAIK! (+${stToday.jamaah - stYest.jamaah})</span>`;
+                    else if (stToday.jamaah < stYest.jamaah) evalEl.innerHTML = `<span class="text-red-400 font-black">🔴 TURUN DARI KEMARIN</span>`;
+                    else evalEl.innerHTML = `<span class="text-amber-400 font-black">🟡 STABIL ATAU SAMA</span>`;
                 }
 
-                // UPDATE TAHAJUD LOCK BANNER
-                const lockTahajudCard = document.getElementById('lock-card-tahajud');
-                const lockTahajudBadge = document.getElementById('lock-tahajud-badge');
-                const lockTahajudTitle = document.getElementById('lock-tahajud-title');
-                const lockTahajudDesc = document.getElementById('lock-tahajud-desc');
+                const heatmapEl = document.getElementById('prayer-heatmap');
+                if (heatmapEl) {
+                    heatmapEl.innerHTML = '';
+                    for (let i = 29; i >= 0; i--) {
+                        const d = new Date(); d.setDate(nowD.getDate() - i);
+                        const year = d.getFullYear();
+                        const month = String(d.getMonth() + 1).padStart(2, '0');
+                        const day = String(d.getDate()).padStart(2, '0');
+                        const dStr = `${year}-${month}-${day}`;
+                        const formattedDisplayDate = formatDateDDMM(dStr);
+                        const fullFormattedDate = formatDateDDMMYYYY(dStr);
+                        const rec = sholats.find(x => x.date === dStr);
+                        const st = getSholatStats(rec);
+                        
+                        let bgClass = "bg-zinc-900 border-zinc-800";
+                        if (st.jamaah >= 4) bgClass = "bg-emerald-500 border-emerald-400 pulse-gold-glow";
+                        else if (st.jamaah >= 2) bgClass = "bg-emerald-700 border-emerald-600";
+                        else if (rec) bgClass = "bg-red-800 border-red-700";
 
-                const tahajudRakaat = stToday.tahajud;
-                if (lockTahajudBadge) lockTahajudBadge.innerText = `${tahajudRakaat} Rakaat`;
-
-                if (tahajudRakaat > 0) {
-                    lockTahajudCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-indigo-500/80 pulse-indigo-glow space-y-1";
-                    const vTahajud = tahajudVirtuesMap[tahajudRakaat] || { title: `Hari Ini: ${tahajudRakaat} Rakaat Tahajud`, desc: "Diangkat ke Maqam Mahmudah (Kedudukan Terpuji)." };
-                    lockTahajudTitle.innerText = vTahajud.title;
-                    lockTahajudDesc.innerText = vTahajud.desc;
-
-                    selectTahajudRakaatUI(tahajudRakaat);
-                } else {
-                    lockTahajudCard.className = "bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/40 space-y-1";
-                    lockTahajudTitle.innerText = `Hari Ini: Belum Tahajud`;
-                    lockTahajudDesc.innerText = `Diangkat ke tempat terpuji (Maqam Mahmudah) &amp; doa diijabah sepertiga malam.`;
+                        heatmapEl.innerHTML += `
+                            <div title="Tanggal: ${fullFormattedDate} (${st.jamaah}/5 Jamaah)" class="flex flex-col items-center group cursor-pointer">
+                                <div class="h-6 w-full rounded-xl border ${bgClass} transition-all group-hover:scale-110"></div>
+                                <span class="text-[7px] text-slate-400 font-extrabold mt-1 group-hover:text-amber-400 font-money">${formattedDisplayDate}</span>
+                            </div>
+                        `;
+                    }
                 }
 
-                // RENDER CARDS LOG LIST
                 const cardsList = document.getElementById('sholat-cards-list'); 
                 if (cardsList) {
                     cardsList.innerHTML = '';
@@ -1050,9 +1989,8 @@
                                     <div class="flex justify-between items-center text-xs">
                                         <span class="font-bold text-white font-sans">${formatDateDDMMYYYY(h.date)}</span>
                                         <div class="flex gap-1.5 font-sans">
-                                            <span class="text-amber-400 font-bold bg-amber-950/80 px-2 py-0.5 rounded-lg text-[9px]">☀️ Dhuha: ${h.dhuha || 0} Rk</span>
-                                            <span class="text-indigo-400 font-bold bg-indigo-950/80 px-2 py-0.5 rounded-lg text-[9px]">🌌 Tahajud: ${h.tahajud || 0} Rk</span>
-                                            <span class="text-red-400 font-bold bg-red-950/80 px-2 py-0.5 rounded-lg text-[9px]">📖 ${h.tilawah || 0} Hal</span>
+                                            <span class="text-amber-400 font-bold bg-amber-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">☀️ Dhuha: ${h.dhuha || 0} Rk</span>
+                                            <span class="text-red-400 font-bold bg-red-950/80 px-2.5 py-0.5 rounded-lg text-[10px]">📖 Tilawah: ${h.tilawah || 0} Hal</span>
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
@@ -1074,44 +2012,74 @@
             [2, 4, 6, 8, 10, 12].forEach(r => {
                 const chip = document.getElementById(`dhuha-chip-${r}`);
                 if (chip) {
-                    if (r === rakaat) chip.classList.add('active-dhuha');
-                    else chip.classList.remove('active-dhuha');
+                    if (r === rakaat) chip.classList.add('active');
+                    else chip.classList.remove('active');
                 }
             });
-        }
 
-        function selectTahajudRakaatUI(rakaat) {
-            selectedTahajudRakaatVal = rakaat;
-            document.getElementById('tahajud-selected-rakaat').innerText = `${rakaat} Rakaat`;
-            [2, 4, 8, 11, 12].forEach(r => {
-                const chip = document.getElementById(`tahajud-chip-${r}`);
-                if (chip) {
-                    if (r === rakaat) chip.classList.add('active-tahajud');
-                    else chip.classList.remove('active-tahajud');
-                }
-            });
+            const virtueInfo = dhuhaVirtuesMap[rakaat];
+            if (virtueInfo) {
+                document.getElementById('dhuha-virtue-title').innerText = virtueInfo.title;
+                document.getElementById('dhuha-virtue-desc').innerText = virtueInfo.desc;
+            }
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('gregorian-date-display').innerText = `Senin, ${formatDateDDMMYYYY(todayStr)}`;
-            const lastActiveTab = localStorage.getItem('master_hub_active_tab') || 'finance';
-            switchTab(lastActiveTab);
-            document.getElementById('input-sholat-date').addEventListener('change', (e) => loadSholatModalData(e.target.value));
-        });
 
         function backupJSON() {
             const fullData = {
+                fin_income: incomeData,
+                fin_budgets: budgetCategories,
+                fin_transactions: transactions,
                 fin_wallets: wallets,
-                sholat_records: sholats
+                fin_debt_items: debtItems,
+                fin_impulsive_wishlist: impulsiveWishlist,
+                sholat_records: sholats,
+                nofap_streak_data: nofapData,
+                user_app_icon: localStorage.getItem('user_app_icon') || '',
+                user_custom_app_title: localStorage.getItem('user_custom_app_title') || 'Ubay Progress',
+                user_security_pin: localStorage.getItem('user_security_pin') || 'ubay'
             };
             const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = `Ubay_Backup_v6.5_${todayStr}.json`;
+            link.download = `Ubay_Backup_v6.4_${todayStr}.json`;
             link.click();
         }
 
-        function renderApp() {}
+        function restoreJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.fin_transactions) localStorage.setItem('fin_transactions', JSON.stringify(imported.fin_transactions));
+                    if (imported.sholat_records) localStorage.setItem('sholat_records', JSON.stringify(imported.sholat_records));
+                    if (imported.nofap_streak_data) localStorage.setItem('nofap_streak_data', JSON.stringify(imported.nofap_streak_data));
+                    if (imported.fin_income) localStorage.setItem('fin_income', JSON.stringify(imported.fin_income));
+                    if (imported.fin_budgets) localStorage.setItem('fin_budgets', JSON.stringify(imported.fin_budgets));
+                    if (imported.fin_wallets) localStorage.setItem('fin_wallets', JSON.stringify(imported.fin_wallets));
+                    if (imported.fin_debt_items) localStorage.setItem('fin_debt_items', JSON.stringify(imported.fin_debt_items));
+                    alert("📥 Data v6.4 berhasil dipulihkan!");
+                    location.reload();
+                } catch(err) { alert("❌ File JSON tidak valid."); }
+            };
+            reader.readAsText(file);
+        }
+
+        function updateGamificationLevel() {
+            let totalXP = 0;
+            sholats.forEach(s => {
+                ['subuh','dzuhur','ashar','maghrib','isya'].forEach(w => {
+                    if (s[w] === 'Jamaah') totalXP += 20;
+                    else if (s[w] === 'Munfarid') totalXP += 10;
+                });
+            });
+            totalXP += (transactions.length * 2) + 30;
+            let level = Math.floor(totalXP / 100) + 1;
+            document.getElementById('rank-badge').innerText = `Lvl ${level}`;
+        }
+
+        renderApp();
     </script>
 </body>
 </html>
