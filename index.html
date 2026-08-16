@@ -471,7 +471,7 @@
                     </button>
                 </div>
 
-                <!-- NEW FITUR: CAPAIAN & KEUTAMAAN HARI INI (LOCKED DISPLAY SUMMARY) -->
+                <!-- CAPAIAN & KEUTAMAAN HARI INI (LOCKED DISPLAY SUMMARY) -->
                 <section id="today-spiritual-lock-summary" class="oneui-card p-4 border-amber-500/50 space-y-3 bg-gradient-to-br from-zinc-950 via-amber-950/20 to-zinc-900 shadow-xl">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
                         <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -582,7 +582,7 @@
                     </div>
                 </section>
 
-                <!-- DYNAMIC TAHAJUD MILESTONE TRACKER (FITUR BARU) -->
+                <!-- DYNAMIC TAHAJUD MILESTONE TRACKER -->
                 <section class="oneui-card p-4 border-indigo-500/40 space-y-3 bg-gradient-to-br from-indigo-950/30 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center">
                         <div>
@@ -922,7 +922,6 @@
 
     <!-- SCRIPT UTAMA -->
     <script>
-        // LOKAL TIMEZONE FIX FUNCTION
         function getLocalTodayStr() {
             const d = new Date();
             const year = d.getFullYear();
@@ -952,6 +951,7 @@
 
         let selectedDhuhaRakaatVal = 0;
         let selectedTahajudRakaatVal = 0;
+        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
 
         function selectDhuhaRakaat(rakaat) {
             haptic('light');
@@ -972,6 +972,7 @@
                 document.getElementById('dhuha-virtue-desc').innerText = virtueInfo.desc;
             }
 
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
             const idx = sholats.findIndex(x => x.date === todayStr);
             if (idx >= 0) {
                 sholats[idx].dhuha = rakaat.toString();
@@ -1013,6 +1014,7 @@
                 document.getElementById('tahajud-virtue-desc').innerText = virtueInfo.desc;
             }
 
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
             const idx = sholats.findIndex(x => x.date === todayStr);
             if (idx >= 0) {
                 sholats[idx].tahajud = rakaat.toString();
@@ -1062,14 +1064,11 @@
             return parts.length === 3 ? `${parts[2]}/${parts[1]}` : dateString;
         }
 
-        let currentThemeIndex = 0;
-        const themes = ['default', 'theme-oled', 'theme-emerald'];
         let showAllHistory = false;
         let isAudioMuted = localStorage.getItem('app_audio_muted') === 'true';
         let audioCtx = null;
         let tempSholatStates = { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending' };
 
-        let sheetsWebAppUrl = localStorage.getItem('google_sheets_webapp_url') || '';
         let wallets = JSON.parse(localStorage.getItem('fin_wallets')) || { cash: 500000, bank: 3000000, ewallet: 250000 };
 
         function openWalletEditModal() {
@@ -1147,22 +1146,6 @@
                     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
                     osc.connect(gain); gain.connect(ctx.destination);
                     osc.start(); osc.stop(ctx.currentTime + 0.8);
-                } else if (effect === 'sword') {
-                    const bufferSize = ctx.sampleRate * 0.2;
-                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                    const data = buffer.getChannelData(0);
-                    for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-                    const noise = ctx.createBufferSource();
-                    noise.buffer = buffer;
-                    const filter = ctx.createBiquadFilter();
-                    filter.type = 'bandpass';
-                    filter.frequency.setValueAtTime(1000, ctx.currentTime);
-                    filter.frequency.exponentialRampToValueAtTime(3000, ctx.currentTime + 0.18);
-                    const gain = ctx.createGain();
-                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-                    noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
-                    noise.start();
                 }
             } catch(e) { console.log('Audio err:', e); }
         }
@@ -1245,8 +1228,8 @@
                 initGyroCompass();
                 renderBrainCanvas();
                 renderUrgeRadar();
+                renderSholatReports();
 
-                // Listen date change in sholat modal
                 document.getElementById('input-sholat-date').addEventListener('change', (e) => loadSholatModalData(e.target.value));
             }, 10);
         });
@@ -1383,8 +1366,10 @@
                 const mins = Math.floor((diff % 3600000) / 60000);
                 const secs = Math.floor((diff % 60000) / 1000);
 
-                document.getElementById('prayer-countdown-timer').innerText = 
-                    `${String(hrs).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
+                const countdownEl = document.getElementById('prayer-countdown-timer');
+                if (countdownEl) {
+                    countdownEl.innerText = `${String(hrs).padStart(2,'0')} : ${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}`;
+                }
             }, 1000);
         }
 
@@ -1990,8 +1975,6 @@
             document.getElementById('tilawah-slider-val').innerText = `${val} Halaman`;
         }
 
-        let sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
-
         function openSholatModal() { 
             document.getElementById('sholat-modal-backdrop').classList.remove('hidden'); 
             const dateInput = document.getElementById('input-sholat-date');
@@ -2000,7 +1983,8 @@
         }
 
         function loadSholatModalData(dStr) {
-            const rec = sholats.find(x => x.date === dStr) || { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending', tilawah: 0 };
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
+            const rec = sholats.find(x => x.date === dStr) || { subuh: 'Pending', dzuhur: 'Pending', ashar: 'Pending', maghrib: 'Pending', isya: 'Pending', tilawah: 0, dhuha: 0, tahajud: 0 };
             tempSholatStates = {
                 subuh: rec.subuh || 'Pending',
                 dzuhur: rec.dzuhur || 'Pending',
@@ -2012,7 +1996,10 @@
                 setFastSholatUI(s, tempSholatStates[s]);
             });
             document.getElementById('mutabaah-tilawah-slider').value = rec.tilawah || 0;
-            document.getElementById('tilawah-slider-val').innerText = `${rec.tilawah || 0} Halaman`;
+            updateTilawahVal(rec.tilawah || 0);
+            
+            selectDhuhaRakaatUI(parseInt(rec.dhuha) || 0);
+            selectTahajudRakaatUI(parseInt(rec.tahajud) || 0);
         }
 
         function closeSholatModal() { document.getElementById('sholat-modal-backdrop').classList.add('hidden'); }
@@ -2020,6 +2007,7 @@
         document.getElementById('sholat-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const dStr = document.getElementById('input-sholat-date').value;
+            sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
             const idx = sholats.findIndex(h => h.date === dStr);
             const existingRec = idx >= 0 ? sholats[idx] : {};
             
@@ -2062,6 +2050,7 @@
 
         function renderSholatReports() {
             try {
+                sholats = JSON.parse(localStorage.getItem('sholat_records')) || [];
                 const todayRec = sholats.find(x => x.date === todayStr);
                 const nowD = new Date();
                 const yestD = new Date(); yestD.setDate(nowD.getDate() - 1);
@@ -2075,19 +2064,16 @@
                 const stYest = getSholatStats(yestRec);
 
                 if (todayRec && todayRec.dhuha && parseInt(todayRec.dhuha) > 0) {
-                    const r = parseInt(todayRec.dhuha);
-                    selectDhuhaRakaatUI(r);
+                    selectDhuhaRakaatUI(parseInt(todayRec.dhuha));
                 }
 
                 if (todayRec && todayRec.tahajud && parseInt(todayRec.tahajud) > 0) {
-                    const r = parseInt(todayRec.tahajud);
-                    selectTahajudRakaatUI(r);
+                    selectTahajudRakaatUI(parseInt(todayRec.tahajud));
                 }
 
                 // UPDATE CAPAIAN & KEUTAMAAN HARI INI (LOCKED STATE SUMMARY)
                 document.getElementById('lock-summary-date').innerText = `Tgl: ${formatDateDDMMYYYY(todayStr)}`;
 
-                // Jamaah Lock Update
                 const lockJamaahCountEl = document.getElementById('lock-jamaah-count');
                 const lockJamaahVirtueEl = document.getElementById('lock-jamaah-virtue');
                 lockJamaahCountEl.innerText = `${stToday.jamaah}/5 Jamaah`;
@@ -2102,7 +2088,6 @@
                     lockJamaahVirtueEl.innerText = "Belum ada check-in sholat jamaah hari ini. Yuk ke masjid!";
                 }
 
-                // Dhuha Lock Update
                 const lockDhuhaCountEl = document.getElementById('lock-dhuha-count');
                 const lockDhuhaVirtueEl = document.getElementById('lock-dhuha-virtue');
                 const dhuhaRk = stToday.dhuha;
@@ -2115,7 +2100,6 @@
                     lockDhuhaVirtueEl.innerText = "Belum mencatat Dhuha hari ini. Klik chip Dhuha di bawah!";
                 }
 
-                // Tahajud Lock Update
                 const lockTahajudCountEl = document.getElementById('lock-tahajud-count');
                 const lockTahajudVirtueEl = document.getElementById('lock-tahajud-virtue');
                 const tahajudRk = stToday.tahajud;
