@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title id="html-title-tag">Ubay Progress - Gemini Sidebar & Main Dashboard v7.1 Pro</title>
+    <title id="html-title-tag">Ubay Progress - One UI System Hub v7.1 Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#090506">
+    <meta name="theme-color" content="#090a0f">
     <link id="app-favicon" rel="icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     <link id="app-apple-icon" rel="apple-touch-icon" href="https://i.ibb.co.com/8K6N33h/image.jpg">
     
@@ -43,8 +43,8 @@
 
     <style>
         :root {
-            --bg-gradient: radial-gradient(circle at 80% -20%, rgba(220, 38, 38, 0.2), transparent 45%), radial-gradient(circle at 10% 110%, rgba(16, 185, 129, 0.15), transparent 45%), #090a0f;
-            --glass-bg: linear-gradient(145deg, rgba(18, 20, 28, 0.92), rgba(12, 14, 20, 0.96));
+            --bg-gradient: radial-gradient(circle at 80% -20%, rgba(220, 38, 38, 0.15), transparent 45%), radial-gradient(circle at 10% 110%, rgba(16, 185, 129, 0.12), transparent 45%), #090a0f;
+            --glass-bg: linear-gradient(145deg, rgba(18, 20, 28, 0.95), rgba(12, 14, 20, 0.98));
             --border-color: rgba(255, 255, 255, 0.08);
             --card-glow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
         }
@@ -104,7 +104,7 @@
         }
 
         .pulse-gold-glow {
-            box-shadow: 0 0 24px rgba(234, 179, 8, 0.5), inset 0 0 12px rgba(234, 179, 8, 0.3);
+            box-shadow: 0 0 24px rgba(234, 179, 8, 0.4), inset 0 0 12px rgba(234, 179, 8, 0.2);
             border-color: #facc15 !important;
         }
 
@@ -179,7 +179,7 @@
         .active-press { transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1); }
         .active-press:active { transform: scale(0.94); filter: brightness(1.15); }
 
-        /* GEMINI SIDEBAR DRAWER STYLING */
+        /* ONE UI SIDEBAR DRAWER STYLING */
         #left-sidebar {
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
@@ -192,60 +192,60 @@
 
     <!-- LOCK SCREEN SYSTEM -->
     <div id="app-lock-screen" class="fixed inset-0 bg-black z-[9999] flex-col items-center justify-center p-6 space-y-6">
-        <div class="w-20 h-20 rounded-[2rem] bg-red-950/80 border-2 border-red-600 flex items-center justify-center shadow-2xl shadow-red-900/80">
-            <i class="fa-solid fa-shield-halved text-3xl text-red-400"></i>
+        <div class="w-20 h-20 rounded-[2rem] bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center shadow-2xl">
+            <i class="fa-solid fa-fingerprint text-3xl text-red-400"></i>
         </div>
         <div class="text-center space-y-1">
             <h2 class="text-xl font-black text-white uppercase tracking-wider" id="lock-screen-app-name">Ubay Progress</h2>
-            <p class="text-xs text-slate-400">Security Locked • Enter PIN</p>
+            <p class="text-xs text-zinc-400">Security Locked • Enter PIN</p>
         </div>
         <div class="space-y-4 w-full max-w-xs text-center">
-            <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900 border border-red-600/60 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest shadow-inner font-money">
+            <input type="password" id="lock-pin-input" maxlength="12" placeholder="Masukkan PIN..." class="w-full bg-zinc-900/90 border border-zinc-700 rounded-2xl p-4 text-center text-xl font-black text-white focus:outline-none tracking-widest shadow-inner font-money">
             <button onclick="haptic('heavy'); unlockApp();" class="w-full bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-extrabold py-3.5 rounded-2xl text-sm transition-all shadow-xl active-press">
-                <i class="fa-solid fa-key mr-1.5"></i> Buka Akses Security
+                <i class="fa-solid fa-lock-open mr-1.5"></i> Buka Akses
             </button>
         </div>
     </div>
 
-    <!-- GEMINI SIDEBAR DRAWER (SISI KIRI) -->
+    <!-- ONE UI SIDEBAR DRAWER (SISI KIRI) -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden opacity-0" onclick="toggleSidebar()"></div>
     <aside id="left-sidebar" class="fixed inset-y-0 left-0 w-72 bg-zinc-950 border-r border-white/10 z-50 flex flex-col justify-between p-5 transform -translate-x-full shadow-2xl">
         <div class="space-y-6">
             <div class="flex items-center justify-between border-b border-white/10 pb-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-2xl overflow-hidden border border-red-500 bg-red-950 flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-2xl overflow-hidden border border-zinc-700 bg-zinc-900 flex items-center justify-center shadow-inner">
                         <img id="sidebar-app-icon" src="https://i.ibb.co.com/8K6N33h/image.jpg" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h3 class="text-sm font-black text-white uppercase tracking-tight">Ubay Navigation</h3>
-                        <p class="text-[10px] text-red-400 font-bold">Gemini Sidebar Hub v7.1</p>
+                        <h3 class="text-sm font-black text-white uppercase tracking-tight">One UI Navigation</h3>
+                        <p class="text-[10px] text-zinc-400 font-bold">System Hub v7.1</p>
                     </div>
                 </div>
-                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-white p-2 active-press"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="toggleSidebar()" class="text-zinc-400 hover:text-white p-2 active-press"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
             <div class="space-y-2 text-xs font-bold">
                 <button onclick="haptic('light'); switchTab('main'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
-                    <i class="fa-solid fa-house text-amber-400 w-5 text-center"></i> Main Dashboard
+                    <i class="fa-solid fa-house-chimney text-amber-400 w-5 text-center"></i> Main Dashboard
                 </button>
                 <button onclick="haptic('light'); switchTab('finance'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
                     <i class="fa-solid fa-wallet text-red-400 w-5 text-center"></i> Keuangan Detail
                 </button>
                 <button onclick="haptic('light'); switchTab('sholat'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
-                    <i class="fa-solid fa-mosque text-emerald-400 w-5 text-center"></i> Sholat & Spiritual Hub
+                    <i class="fa-solid fa-kaaba text-emerald-400 w-5 text-center"></i> Sholat & Spiritual Hub
                 </button>
                 <button onclick="haptic('light'); switchTab('nofap'); toggleSidebar();" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 text-white border border-zinc-800 transition-all active-press">
-                    <i class="fa-solid fa-fire text-amber-400 w-5 text-center"></i> NoFap & Brain Rewire
+                    <i class="fa-solid fa-fire-flame-curved text-amber-400 w-5 text-center"></i> NoFap & Brain Rewire
                 </button>
             </div>
         </div>
 
         <div class="space-y-2 pt-4 border-t border-white/10 text-xs">
-            <button onclick="haptic('light'); backupJSON(); toggleSidebar();" class="w-full bg-zinc-900 hover:bg-zinc-800 text-slate-300 border border-zinc-800 px-4 py-2.5 rounded-2xl font-bold flex items-center justify-center gap-2 active-press">
-                <i class="fa-solid fa-download text-red-400"></i> Backup JSON Data
+            <button onclick="haptic('light'); backupJSON(); toggleSidebar();" class="w-full bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 px-4 py-2.5 rounded-2xl font-bold flex items-center justify-center gap-2 active-press shadow-sm">
+                <i class="fa-solid fa-cloud-arrow-down text-red-400"></i> Backup JSON Data
             </button>
-            <div class="text-center text-[10px] text-slate-500 pt-1">
-                Ubay Progress © 2026 • Secure & Private
+            <div class="text-center text-[10px] text-zinc-500 pt-1">
+                One UI Pro © 2026 • Secure & Private
             </div>
         </div>
     </aside>
@@ -259,10 +259,10 @@
                     <div class="flex items-center gap-3 min-w-0">
                         <!-- SIDEBAR TOGGLER HAMBURGER -->
                         <button onclick="haptic('light'); toggleSidebar();" class="w-11 h-11 rounded-[1.25rem] bg-zinc-900 border border-white/10 text-red-400 flex items-center justify-center shrink-0 active-press shadow-md" title="Buka Sidebar">
-                            <i class="fa-solid fa-bars text-base"></i>
+                            <i class="fa-solid fa-bars-staggered text-base"></i>
                         </button>
 
-                        <div onclick="haptic('light'); document.getElementById('app-icon-input').click();" class="w-11 h-11 rounded-[1.25rem] overflow-hidden border border-red-500/80 shadow-md shadow-red-950 bg-red-950 flex items-center justify-center shrink-0 relative cursor-pointer active-press" title="Ganti Icon">
+                        <div onclick="haptic('light'); document.getElementById('app-icon-input').click();" class="w-11 h-11 rounded-[1.25rem] overflow-hidden border border-zinc-700 shadow-md bg-zinc-900 flex items-center justify-center shrink-0 relative cursor-pointer active-press" title="Ganti Icon">
                             <img id="nav-app-icon-img" src="https://i.ibb.co.com/8K6N33h/image.jpg" alt="App Icon" class="w-full h-full object-cover">
                         </div>
                         <input type="file" id="app-icon-input" accept="image/*" class="hidden" onchange="handleAppIconUpload(event)">
@@ -270,9 +270,9 @@
                         <div class="truncate">
                             <div class="flex items-center gap-2 truncate">
                                 <h1 onclick="customRenameAppName()" class="text-base font-black text-white uppercase truncate cursor-pointer tracking-tight" id="display-app-title">Ubay Progress</h1> 
-                                <span id="rank-badge" class="bg-red-950/90 text-red-300 border border-red-600/60 text-[9px] px-2.5 py-0.5 rounded-full font-bold shrink-0 font-money">Lvl 1</span>
+                                <span id="rank-badge" class="bg-zinc-900 text-red-300 border border-zinc-700 text-[9px] px-2.5 py-0.5 rounded-full font-bold shrink-0 font-money shadow-sm">Lvl 1</span>
                             </div>
-                            <p class="text-[10px] text-red-400 font-bold mt-0.5" id="current-date-header">
+                            <p class="text-[10px] text-zinc-400 font-bold mt-0.5" id="current-date-header">
                                 <span id="islamic-date-display" class="text-amber-400 mr-1">3 Safar 1448 H</span> • <span id="gregorian-date-display">Minggu, 16/08/2026</span>
                             </p>
                         </div>
@@ -285,10 +285,10 @@
         <!-- FINANCE TOP BANNERS -->
         <div id="finance-top-banners" class="max-w-4xl mx-auto px-4 pt-3 space-y-2 tab-transition hidden">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <section class="bg-gradient-to-r from-red-950/90 via-zinc-900/90 to-zinc-950 border border-red-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
+                <section class="bg-gradient-to-r from-red-950/80 via-zinc-900/90 to-zinc-950 border border-red-500/30 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
                     <div>
                         <h3 class="text-[10px] font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-shield-cat text-amber-400"></i> BATAS AMAN JAJAN HARIAN
+                            <i class="fa-solid fa-shield-halved text-amber-400"></i> BATAS AMAN JAJAN HARIAN
                         </h3>
                         <p class="text-[11px] text-slate-300 mt-0.5">Rata-rata hingga gajian (<span id="days-remaining-text" class="text-red-300 font-bold font-money">0 hari lagi</span>).</p>
                     </div>
@@ -297,7 +297,7 @@
                     </div>
                 </section>
 
-                <section class="bg-gradient-to-r from-emerald-950/90 via-zinc-900/90 to-zinc-950 border border-emerald-500/40 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
+                <section class="bg-gradient-to-r from-emerald-950/80 via-zinc-900/90 to-zinc-950 border border-emerald-500/30 rounded-[1.75rem] p-3.5 flex justify-between items-center gap-2 shadow-lg backdrop-blur-md">
                     <div>
                         <h3 class="text-[10px] font-black text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-wallet text-amber-400"></i> SISA HARIAN HARI INI
@@ -317,62 +317,45 @@
                 
                 <!-- TOMBOL AKSI CEPAT (QUICK ACTION BUTTONS) -->
                 <section class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                    <button onclick="haptic('double'); openModal();" class="oneui-card p-3.5 border-red-500/50 hover:border-red-500 bg-gradient-to-br from-red-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
-                        <div class="w-10 h-10 rounded-2xl bg-red-950/80 border border-red-600/60 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
+                    <button onclick="haptic('double'); openModal();" class="oneui-card p-3.5 border-red-500/40 hover:border-red-500 bg-gradient-to-br from-red-950/30 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform shadow-inner">
                             <i class="fa-solid fa-receipt text-base"></i>
                         </div>
                         <div>
                             <strong class="text-xs font-black text-white block">Catat Pengeluaran</strong>
-                            <span class="text-[9px] text-slate-400">Input transaksi kilat</span>
+                            <span class="text-[9px] text-zinc-400">Input transaksi kilat</span>
                         </div>
                     </button>
 
-                    <button onclick="haptic('double'); openSholatModal();" class="oneui-card p-3.5 border-emerald-500/50 hover:border-emerald-500 bg-gradient-to-br from-emerald-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
-                        <div class="w-10 h-10 rounded-2xl bg-emerald-950/80 border border-emerald-600/60 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-mosque text-base"></i>
+                    <button onclick="haptic('double'); openSholatModal();" class="oneui-card p-3.5 border-emerald-500/40 hover:border-emerald-500 bg-gradient-to-br from-emerald-950/30 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform shadow-inner">
+                            <i class="fa-solid fa-kaaba text-base"></i>
                         </div>
                         <div>
                             <strong class="text-xs font-black text-white block">Check-in Sholat</strong>
-                            <span class="text-[9px] text-slate-400">Mutabaah harian</span>
+                            <span class="text-[9px] text-zinc-400">Mutabaah harian</span>
                         </div>
                     </button>
 
-                    <button onclick="haptic('double'); checkInNoFap();" class="oneui-card p-3.5 border-amber-500/50 hover:border-amber-500 bg-gradient-to-br from-amber-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
-                        <div class="w-10 h-10 rounded-2xl bg-amber-950/80 border border-amber-600/60 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-fire text-base"></i>
+                    <button onclick="haptic('double'); checkInNoFap();" class="oneui-card p-3.5 border-amber-500/40 hover:border-amber-500 bg-gradient-to-br from-amber-950/30 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform shadow-inner">
+                            <i class="fa-solid fa-fire-flame-curved text-base"></i>
                         </div>
                         <div>
                             <strong class="text-xs font-black text-white block">Check-in Clean</strong>
-                            <span class="text-[9px] text-slate-400">Streak NoFap</span>
+                            <span class="text-[9px] text-zinc-400">Streak NoFap</span>
                         </div>
                     </button>
 
-                    <button onclick="haptic('heavy'); openPanicModal();" class="oneui-card p-3.5 border-rose-500/50 hover:border-rose-500 bg-gradient-to-br from-rose-950/40 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
-                        <div class="w-10 h-10 rounded-2xl bg-rose-950/80 border border-rose-600/60 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform animate-pulse">
-                            <i class="fa-solid fa-shield-halved text-base"></i>
+                    <button onclick="haptic('heavy'); openPanicModal();" class="oneui-card p-3.5 border-rose-500/40 hover:border-rose-500 bg-gradient-to-br from-rose-950/30 via-zinc-950 to-zinc-900 flex flex-col items-center text-center space-y-2 active-press shadow-lg group">
+                        <div class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform shadow-inner animate-pulse">
+                            <i class="fa-solid fa-shield-heart text-base"></i>
                         </div>
                         <div>
                             <strong class="text-xs font-black text-white block">Emergency Panic</strong>
-                            <span class="text-[9px] text-slate-400">Box breathing</span>
+                            <span class="text-[9px] text-zinc-400">Box breathing</span>
                         </div>
                     </button>
-                </section>
-
-                <!-- Welcome Banner Beautified -->
-                <section class="oneui-card p-5 border-red-600/40 bg-gradient-to-br from-zinc-950 via-red-950/30 to-zinc-900 shadow-2xl space-y-3 relative overflow-hidden">
-                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-red-600/10 rounded-full blur-2xl pointer-events-none"></div>
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                                <i class="fa-solid fa-crown text-amber-400"></i> Master Comprehensive Dashboard Pro
-                            </span>
-                            <h2 class="text-lg font-black text-white mt-1">Selamat Datang, Yuman Akbar Nurmana! ⚔️</h2>
-                        </div>
-                        <span class="bg-red-950 text-red-300 border border-red-600/60 px-3.5 py-1 rounded-2xl text-xs font-extrabold font-money shadow-md">Active Hub</span>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Gunakan <strong class="text-red-400">Sidebar Kiri (Tombol Menu ☰ di Kiri Atas)</strong> untuk membuka halaman detail Keuangan, Sholat, atau NoFap secara mendalam.
-                    </p>
                 </section>
 
                 <!-- KEUANGAN DASHBOARD MINI (Uang Harian Aman, Terpakai, Sisa Hari Ini) -->
@@ -385,17 +368,17 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1">
-                            <span class="text-[10px] text-slate-400 font-bold block">🛡️ Uang Harian Aman (Safe Limit)</span>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-zinc-400 font-bold block">🛡️ Uang Harian Aman (Safe Limit)</span>
                             <strong id="main-safe-daily" class="text-amber-400 font-black text-sm block font-money">Rp 0</strong>
-                            <span class="text-[9px] text-slate-500 block">Batas rata-rata sisa hari</span>
+                            <span class="text-[9px] text-zinc-500 block">Batas rata-rata sisa hari</span>
                         </div>
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1">
-                            <span class="text-[10px] text-slate-400 font-bold block">💸 Terpakai Hari Ini</span>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-zinc-400 font-bold block">💸 Terpakai Hari Ini</span>
                             <strong id="main-spent-today" class="text-rose-400 font-black text-sm block font-money">Rp 0</strong>
-                            <span class="text-[9px] text-slate-500 block">Total pengeluaran hari ini</span>
+                            <span class="text-[9px] text-zinc-500 block">Total pengeluaran hari ini</span>
                         </div>
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1 bg-emerald-950/10">
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1 bg-emerald-950/10 shadow-sm">
                             <span class="text-[10px] text-emerald-400 font-black block uppercase">✨ Sisa Hari Ini (Remaining)</span>
                             <strong id="main-remaining-today" class="text-emerald-300 font-black text-sm block font-money">Rp 50.000</strong>
                             <span class="text-[9px] text-emerald-400/80 block">Alokasi 50rb - Terpakai</span>
@@ -407,26 +390,26 @@
                 <section class="oneui-card p-4 border-amber-500/40 space-y-3 bg-gradient-to-br from-amber-950/20 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                         <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-mosque text-amber-400"></i> Ringkasan Spiritual & Sholat Hari Ini
+                            <i class="fa-solid fa-kaaba text-amber-400"></i> Ringkasan Spiritual & Sholat Hari Ini
                         </span>
                         <button onclick="haptic('light'); switchTab('sholat');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-amber-300 px-3.5 py-1.5 rounded-2xl font-bold active-press">Detail Sholat &rarr;</button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1">
-                            <span class="text-[10px] text-emerald-400 font-black block uppercase"><i class="fa-solid fa-people-group mr-1"></i> Sholat Jamaah Wajib</span>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-emerald-600/50 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-emerald-400 font-black block uppercase"><i class="fa-solid fa-people-roof mr-1"></i> Sholat Jamaah Wajib</span>
                             <strong id="main-jamaah-status" class="text-white font-black text-sm block">0 / 5 Waktu</strong>
-                            <span id="main-jamaah-desc" class="text-[9px] text-slate-400 block">Belum ada check-in jamaah</span>
+                            <span id="main-jamaah-desc" class="text-[9px] text-zinc-400 block">Belum ada check-in jamaah</span>
                         </div>
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-amber-600/50 space-y-1">
-                            <span class="text-[10px] text-amber-400 font-black block uppercase"><i class="fa-solid fa-sun mr-1"></i> Sholat Dhuha</span>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-amber-600/50 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-amber-400 font-black block uppercase"><i class="fa-solid fa-sun-plant-wilt mr-1"></i> Sholat Dhuha</span>
                             <strong id="main-dhuha-status" class="text-amber-300 font-black text-sm block">0 Rakaat</strong>
-                            <span id="main-dhuha-desc" class="text-[9px] text-slate-400 block">Belum mencatat dhuha</span>
+                            <span id="main-dhuha-desc" class="text-[9px] text-zinc-400 block">Belum mencatat dhuha</span>
                         </div>
-                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-indigo-600/50 space-y-1">
-                            <span class="text-[10px] text-indigo-400 font-black block uppercase"><i class="fa-solid fa-moon mr-1"></i> Sholat Tahajud</span>
+                        <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-indigo-600/50 space-y-1 shadow-sm">
+                            <span class="text-[10px] text-indigo-400 font-black block uppercase"><i class="fa-solid fa-moon-stars mr-1"></i> Sholat Tahajud</span>
                             <strong id="main-tahajud-status" class="text-indigo-300 font-black text-sm block">0 Rakaat</strong>
-                            <span id="main-tahajud-desc" class="text-[9px] text-slate-400 block">Belum mencatat tahajud</span>
+                            <span id="main-tahajud-desc" class="text-[9px] text-zinc-400 block">Belum mencatat tahajud</span>
                         </div>
                     </div>
                 </section>
@@ -435,22 +418,22 @@
                 <section class="oneui-card p-4 border-red-500/40 space-y-3 bg-gradient-to-br from-red-950/20 via-zinc-950 to-zinc-900">
                     <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                         <span class="text-xs font-black text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-fire text-red-400"></i> Ringkasan NoFap & Brain Rewire
+                            <i class="fa-solid fa-fire-flame-curved text-red-400"></i> Ringkasan NoFap & Brain Rewire
                         </span>
                         <button onclick="haptic('light'); switchTab('nofap');" class="text-[10px] bg-zinc-900 border border-zinc-700 text-red-300 px-3.5 py-1.5 rounded-2xl font-bold active-press">Detail NoFap &rarr;</button>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs items-center">
-                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-red-600/50 space-y-1 text-center">
-                            <span class="text-[10px] text-slate-400 uppercase font-bold block">🔥 Streak Clean Berjalan</span>
+                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-red-600/50 space-y-1 text-center shadow-sm">
+                            <span class="text-[10px] text-zinc-400 uppercase font-bold block">🔥 Streak Clean Berjalan</span>
                             <div id="main-nofap-days" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-amber-400 font-money">
                                 0 Hari
                             </div>
-                            <span id="main-nofap-timer" class="text-[10px] text-slate-300 font-money block">00 Jam : 00 Menit</span>
+                            <span id="main-nofap-timer" class="text-[10px] text-zinc-300 font-money block">00 Jam : 00 Menit</span>
                         </div>
-                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-zinc-800 space-y-2">
+                        <div class="bg-zinc-950/90 p-4 rounded-2xl border border-zinc-800 space-y-2 shadow-sm">
                             <span class="text-[10px] font-black text-amber-400 uppercase block">⭐ Status Mental & Synapse</span>
-                            <p class="text-xs text-slate-300 font-semibold leading-relaxed">
+                            <p class="text-xs text-zinc-300 font-semibold leading-relaxed">
                                 Pikiran jernih dan fokus kerja FAT (Finance, Accounting, Tax) terjaga secara optimal. Tetap waspada jam rawan!
                             </p>
                             <button onclick="haptic('double'); checkInNoFap();" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 rounded-xl text-xs active-press shadow-md">
@@ -468,15 +451,15 @@
                 <section class="oneui-card p-4 space-y-3 border-red-600/30">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-black text-red-400 uppercase flex items-center gap-1.5 tracking-wider">
-                            <i class="fa-solid fa-bolt text-amber-400"></i> Fast Input & Smart Chips
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Fast Input & Smart Chips
                         </span>
-                        <button onclick="haptic('light'); startVoiceRecognition();" class="bg-red-950/90 border border-red-600/60 text-red-300 text-[10px] px-3 py-1 rounded-2xl font-bold active-press flex items-center gap-1">
-                            <i class="fa-solid fa-microphone text-amber-400"></i> Voice AI
+                        <button onclick="haptic('light'); startVoiceRecognition();" class="bg-zinc-900 border border-zinc-700 text-red-300 text-[10px] px-3 py-1 rounded-2xl font-bold active-press flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-microphone-lines text-amber-400"></i> Voice AI
                         </button>
                     </div>
 
                     <form id="ai-parser-form" class="flex gap-2">
-                        <input type="text" id="ai-parser-input" placeholder="Tulis contoh: Kopi 18k / Bensin 20k" class="flex-1 bg-zinc-950/90 border border-zinc-700/80 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-red-500 transition-all">
+                        <input type="text" id="ai-parser-input" placeholder="Tulis contoh: Kopi 18k / Bensin 20k" class="flex-1 bg-zinc-950/90 border border-zinc-700/80 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-red-500 transition-all shadow-inner">
                         <button type="submit" onclick="haptic('double')" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 text-white font-black px-4 py-3 rounded-2xl text-xs shrink-0 active-press shadow-md">Simpan</button>
                     </form>
 
@@ -491,7 +474,7 @@
 
                 <div class="flex justify-between items-center gap-2">
                     <div class="oneui-card px-3.5 py-2 flex items-center gap-2 border-zinc-800">
-                        <span class="text-xs text-slate-400"><i class="fa-solid fa-calendar-check text-red-400"></i></span>
+                        <span class="text-xs text-zinc-400"><i class="fa-solid fa-calendar-days text-red-400"></i></span>
                         <select id="cycle-selector" onchange="renderApp()" class="bg-transparent text-xs font-black text-red-400 focus:outline-none cursor-pointer">
                             <option value="2026-07" class="bg-zinc-900 text-slate-200">28 Jul - 27 Ags 2026</option>
                             <option value="2026-08" class="bg-zinc-900 text-slate-200">28 Ags - 27 Sep 2026</option>
@@ -510,35 +493,35 @@
                     <div>
                         <div class="flex items-center gap-2">
                             <h2 class="text-base font-black text-white">Halo, Yuman</h2>
-                            <span id="financial-health-score" class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-bold font-money">Health: 88/100</span>
+                            <span id="financial-health-score" class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-600/60 px-2.5 py-0.5 rounded-full font-bold font-money shadow-sm">Health: 88/100</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1">Siklus Gajian (Tgl 28): <strong id="cycle-label-display" class="text-red-400">28 Jul - 27 Ags</strong></p>
+                        <p class="text-[10px] text-zinc-400 mt-1">Siklus Gajian (Tgl 28): <strong id="cycle-label-display" class="text-red-400">28 Jul - 27 Ags</strong></p>
                     </div>
-                    <div class="flex items-center gap-2 bg-zinc-950/90 border border-zinc-800/80 p-2.5 rounded-2xl">
+                    <div class="flex items-center gap-2 bg-zinc-950/90 border border-zinc-800/80 p-2.5 rounded-2xl shadow-inner">
                         <div class="text-right">
-                            <div class="text-[10px] text-slate-400">Gaji: <strong class="text-slate-200 font-money" id="disp-salary">Rp 0</strong></div>
+                            <div class="text-[10px] text-zinc-400">Gaji: <strong class="text-slate-200 font-money" id="disp-salary">Rp 0</strong></div>
                             <div class="text-xs font-black text-red-400 font-money" id="disp-total-income">Total: Rp 0</div>
                         </div>
-                        <button onclick="haptic('light'); openIncomeModal();" class="bg-zinc-800 text-red-400 p-2 rounded-xl text-xs active-press" title="Edit Gaji"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="haptic('light'); openIncomeModal();" class="bg-zinc-800 text-red-400 p-2 rounded-xl text-xs active-press shadow-sm" title="Edit Gaji"><i class="fa-solid fa-pen-to-square"></i></button>
                     </div>
                 </section>
 
                 <section class="space-y-2">
                     <div class="flex justify-between items-center px-1">
                         <span class="text-[10px] font-black text-slate-300 uppercase tracking-wider">💳 Rincian Wallet Real</span>
-                        <button onclick="haptic('light'); openWalletEditModal();" class="text-[10px] font-bold text-amber-400 bg-zinc-900/90 border border-amber-600/40 px-3 py-1 rounded-2xl active-press"><i class="fa-solid fa-pen mr-1"></i>Edit Wallet</button>
+                        <button onclick="haptic('light'); openWalletEditModal();" class="text-[10px] font-bold text-amber-400 bg-zinc-900/90 border border-amber-600/40 px-3 py-1 rounded-2xl active-press shadow-sm"><i class="fa-solid fa-pen-to-square mr-1"></i>Edit Wallet</button>
                     </div>
                     <div class="grid grid-cols-3 gap-2.5 text-center text-xs">
                         <div class="oneui-card p-3 border-zinc-800/80 relative">
-                            <span class="text-[9px] text-slate-400 font-bold block">💵 Cash</span>
+                            <span class="text-[9px] text-zinc-400 font-bold block">💵 Cash</span>
                             <strong id="wallet-cash" class="text-emerald-400 font-black text-xs block mt-1 font-money">Rp 0</strong>
                         </div>
                         <div class="oneui-card p-3 border-zinc-800/80 relative">
-                            <span class="text-[9px] text-slate-400 font-bold block">🏦 Bank Utama</span>
+                            <span class="text-[9px] text-zinc-400 font-bold block">🏦 Bank Utama</span>
                             <strong id="wallet-bank" class="text-blue-400 font-black text-xs block mt-1 font-money">Rp 0</strong>
                         </div>
                         <div class="oneui-card p-3 border-zinc-800/80 relative">
-                            <span class="text-[9px] text-slate-400 font-bold block">📱 E-Wallet</span>
+                            <span class="text-[9px] text-zinc-400 font-bold block">📱 E-Wallet</span>
                             <strong id="wallet-ewallet" class="text-amber-400 font-black text-xs block mt-1 font-money">Rp 0</strong>
                         </div>
                     </div>
@@ -546,15 +529,15 @@
 
                 <section class="grid grid-cols-2 gap-2.5">
                     <div class="oneui-card p-4 space-y-1">
-                        <span class="text-[10px] text-slate-400 font-semibold block">Hari Ini</span>
+                        <span class="text-[10px] text-zinc-400 font-semibold block">Hari Ini</span>
                         <h3 class="text-base font-black text-amber-400 font-money" id="sum-today">Rp 0</h3>
                     </div>
                     <div class="oneui-card p-4 space-y-1">
-                        <span class="text-[10px] text-slate-400 font-semibold block">7 Hari Terakhir</span>
+                        <span class="text-[10px] text-zinc-400 font-semibold block">7 Hari Terakhir</span>
                         <h3 class="text-base font-black text-blue-400 font-money" id="sum-weekly">Rp 0</h3>
                     </div>
                     <div class="oneui-card p-4 space-y-1">
-                        <span class="text-[10px] text-slate-400 font-semibold block">Terpakai Siklus Ini</span>
+                        <span class="text-[10px] text-zinc-400 font-semibold block">Terpakai Siklus Ini</span>
                         <h3 class="text-base font-black text-rose-400 font-money" id="sum-cycle">Rp 0</h3>
                     </div>
                     <div id="sum-remaining-card" class="oneui-card p-4 space-y-1 border-emerald-600/50">
@@ -566,9 +549,9 @@
                 <section class="oneui-card p-4 border-amber-600/40 space-y-3">
                     <div class="flex justify-between items-center">
                         <span class="text-[11px] font-black text-amber-400 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-hourglass-start"></i> Impulsive Wishlist
+                            <i class="fa-solid fa-hourglass-half"></i> Impulsive Wishlist
                         </span>
-                        <button onclick="haptic('light'); addImpulsiveWishlist();" class="text-[10px] bg-amber-950/80 text-amber-300 border border-amber-600/40 px-3 py-1 rounded-2xl font-bold active-press">
+                        <button onclick="haptic('light'); addImpulsiveWishlist();" class="text-[10px] bg-amber-950/80 text-amber-300 border border-amber-600/40 px-3 py-1 rounded-2xl font-bold active-press shadow-sm">
                             + Lock Wishlist
                         </button>
                     </div>
@@ -578,11 +561,11 @@
                 <section class="oneui-card p-4 space-y-3 border-red-900/30">
                     <div class="flex justify-between items-center border-b border-zinc-800/80 pb-2.5">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-link-slash text-red-400"></i> Kelola Utang & Cicilan
+                            <i class="fa-solid fa-file-invoice-dollar text-red-400"></i> Kelola Utang & Cicilan
                         </h2>
                         <div class="flex items-center gap-2">
                             <span id="total-debt-sum" class="text-[10px] font-extrabold text-red-400 font-money">Total: Rp 0</span>
-                            <button onclick="haptic('light'); openAddDebtModal();" class="bg-red-950/80 text-red-300 border border-red-600/40 text-[10px] px-3 py-1 rounded-2xl font-bold active-press">+ Utang</button>
+                            <button onclick="haptic('light'); openAddDebtModal();" class="bg-red-950/80 text-red-300 border border-red-600/40 text-[10px] px-3 py-1 rounded-2xl font-bold active-press shadow-sm">+ Utang</button>
                         </div>
                     </div>
                     <div id="debt-tracker-container" class="grid grid-cols-1 gap-2.5 text-xs"></div>
@@ -599,8 +582,8 @@
 
                 <section class="oneui-card p-4 space-y-3 border-red-900/30">
                     <div class="flex justify-between items-center border-b border-zinc-800/80 pb-2.5">
-                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-list-check text-red-400 mr-1.5"></i> Monitoring Budget</h2>
-                        <button onclick="haptic('light'); openBudgetModal();" class="bg-zinc-800 text-red-400 px-3 py-1 rounded-2xl text-[10px] font-bold active-press">Edit Budget</button>
+                        <h2 class="text-xs font-black text-slate-200 uppercase"><i class="fa-solid fa-sliders text-red-400 mr-1.5"></i> Monitoring Budget</h2>
+                        <button onclick="haptic('light'); openBudgetModal();" class="bg-zinc-800 text-red-400 px-3 py-1 rounded-2xl text-[10px] font-bold active-press shadow-sm">Edit Budget</button>
                     </div>
                     <div id="budget-cards-container" class="grid grid-cols-1 gap-2.5"></div>
                 </section>
@@ -608,7 +591,7 @@
                 <section class="oneui-card p-4 space-y-3 border-red-900/30">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-zinc-800/80 pb-2.5">
                         <h2 class="text-xs font-black text-slate-200 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-receipt text-red-400"></i> Riwayat Transaksi
+                            <i class="fa-solid fa-clock-rotate-left text-red-400"></i> Riwayat Transaksi
                         </h2>
                         
                         <div class="flex items-center gap-1.5 w-full sm:w-auto">
@@ -634,7 +617,7 @@
 
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-300">
-                            <thead class="bg-zinc-950/80 text-slate-400 uppercase text-[10px] font-bold">
+                            <thead class="bg-zinc-950/80 text-zinc-400 uppercase text-[10px] font-bold">
                                 <tr>
                                     <th class="p-2.5">Tgl</th>
                                     <th class="p-2.5">Catatan</th>
@@ -647,7 +630,7 @@
                     </div>
 
                     <div id="history-toggle-container" class="text-center pt-1 hidden">
-                        <button onclick="haptic('light'); toggleShowAllHistory();" id="history-toggle-btn" class="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-red-400 text-xs font-bold px-4 py-2 rounded-2xl transition-all active-press">
+                        <button onclick="haptic('light'); toggleShowAllHistory();" id="history-toggle-btn" class="bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-red-400 text-xs font-bold px-4 py-2 rounded-2xl transition-all active-press shadow-sm">
                             Lihat Semua Transaksi 👇
                         </button>
                     </div>
@@ -657,16 +640,16 @@
 
         <!-- SECTION 2: SHOLAT & MUTABAAH HUB -->
         <div id="section-sholat" class="hidden tab-transition">
-            <div class="bg-gradient-to-r from-emerald-950/90 via-zinc-950 to-zinc-900 border-b border-emerald-600/40 p-3 text-center text-xs flex justify-between items-center px-5 sticky top-14 z-20 shadow-lg backdrop-blur-md">
+            <div class="bg-gradient-to-r from-emerald-950/80 via-zinc-950 to-zinc-900 border-b border-emerald-600/40 p-3 text-center text-xs flex justify-between items-center px-5 sticky top-14 z-20 shadow-lg backdrop-blur-md">
                 <span id="next-prayer-title" class="font-black text-emerald-400 uppercase text-[11px] flex items-center gap-1.5"><i class="fa-solid fa-bell text-amber-400"></i> Menuju Maghrib</span>
-                <span id="prayer-countdown-timer" class="font-black text-white text-xs bg-emerald-950/90 px-3.5 py-1 rounded-2xl border border-emerald-600/60 font-money">00 : 00 : 00</span>
+                <span id="prayer-countdown-timer" class="font-black text-white text-xs bg-emerald-950/90 px-3.5 py-1 rounded-2xl border border-emerald-600/60 font-money shadow-sm">00 : 00 : 00</span>
             </div>
 
             <main class="max-w-4xl mx-auto px-4 pt-3 space-y-4">
                 <div class="flex justify-between items-center gap-2">
                     <div>
                         <h2 class="text-base font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-mosque text-emerald-400"></i> Spiritual Hub
+                            <i class="fa-solid fa-kaaba text-emerald-400"></i> Spiritual Hub
                         </h2>
                         <div class="flex items-center gap-1.5 text-[10px] text-slate-300 mt-0.5">
                             <span class="live-dot"></span>
@@ -688,10 +671,10 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
-                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/50 space-y-1">
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-emerald-600/50 space-y-1 shadow-sm">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-emerald-400 uppercase flex items-center gap-1">
-                                    <i class="fa-solid fa-mosque"></i> Sholat Jamaah
+                                    <i class="fa-solid fa-kaaba"></i> Sholat Jamaah
                                 </span>
                                 <span id="lock-jamaah-count" class="bg-emerald-950 text-emerald-300 border border-emerald-600/60 text-[10px] px-2 py-0.5 rounded-full font-bold font-money">0/5 Jamaah</span>
                             </div>
@@ -700,7 +683,7 @@
                             </p>
                         </div>
 
-                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/50 space-y-1">
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-600/50 space-y-1 shadow-sm">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-amber-400 uppercase flex items-center gap-1">
                                     <i class="fa-solid fa-sun"></i> Sholat Dhuha
@@ -712,7 +695,7 @@
                             </p>
                         </div>
 
-                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/50 space-y-1">
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-600/50 space-y-1 shadow-sm">
                             <div class="flex justify-between items-center">
                                 <span class="text-[10px] font-black text-indigo-400 uppercase flex items-center gap-1">
                                     <i class="fa-solid fa-moon"></i> Sholat Tahajud
@@ -734,25 +717,25 @@
                         <span class="bg-emerald-950 text-emerald-300 border border-emerald-600/50 text-[10px] px-2.5 py-0.5 rounded-full font-bold">27x Lipat Pahala</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5 shadow-sm">
                             <i class="fa-solid fa-award text-amber-400 text-lg shrink-0"></i>
                             <div>
                                 <strong class="text-white block text-[11px]">27 Derajat</strong>
-                                <span class="text-[9px] text-slate-400 block">Lebih utama dibanding munfarid (sendiri).</span>
+                                <span class="text-[9px] text-zinc-400 block">Lebih utama dibanding munfarid (sendiri).</span>
                             </div>
                         </div>
-                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5 shadow-sm">
                             <i class="fa-solid fa-person-walking-arrow-right text-emerald-400 text-lg shrink-0"></i>
                             <div>
                                 <strong class="text-white block text-[11px]">Pelebur Dosa</strong>
-                                <span class="text-[9px] text-slate-400 block">Setiap langkah kaki menghapus kesalahan.</span>
+                                <span class="text-[9px] text-zinc-400 block">Setiap langkah kaki menghapus kesalahan.</span>
                             </div>
                         </div>
-                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5">
+                        <div class="bg-zinc-950/80 p-2.5 rounded-2xl border border-emerald-900/50 flex items-center gap-2.5 shadow-sm">
                             <i class="fa-solid fa-shield-halved text-blue-400 text-lg shrink-0"></i>
                             <div>
                                 <strong class="text-white block text-[11px]">Bebas Nifak</strong>
-                                <span class="text-[9px] text-slate-400 block">40 hari tak ketinggalan takbir pertama.</span>
+                                <span class="text-[9px] text-zinc-400 block">40 hari tak ketinggalan takbir pertama.</span>
                             </div>
                         </div>
                     </div>
@@ -764,21 +747,21 @@
                             <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                                 <i class="fa-solid fa-sun text-amber-400"></i> Keutamaan Sholat Dhuha
                             </span>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat yang dikerjakan hari ini:</p>
+                            <p class="text-[10px] text-zinc-400 mt-0.5">Pilih rakaat yang dikerjakan hari ini:</p>
                         </div>
-                        <span id="dhuha-selected-rakaat" class="text-xs font-black text-amber-400 font-money bg-amber-950/80 border border-amber-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
+                        <span id="dhuha-selected-rakaat" class="text-xs font-black text-amber-400 font-money bg-amber-950/80 border border-amber-600/60 px-3 py-1 rounded-2xl shadow-sm">0 Rakaat</span>
                     </div>
 
                     <div class="grid grid-cols-6 gap-1.5 text-center text-xs">
-                        <button onclick="selectDhuhaRakaat(2)" id="dhuha-chip-2" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">2</button>
-                        <button onclick="selectDhuhaRakaat(4)" id="dhuha-chip-4" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">4</button>
-                        <button onclick="selectDhuhaRakaat(6)" id="dhuha-chip-6" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">6</button>
-                        <button onclick="selectDhuhaRakaat(8)" id="dhuha-chip-8" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">8</button>
-                        <button onclick="selectDhuhaRakaat(10)" id="dhuha-chip-10" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">10</button>
-                        <button onclick="selectDhuhaRakaat(12)" id="dhuha-chip-12" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60">12</button>
+                        <button onclick="selectDhuhaRakaat(2)" id="dhuha-chip-2" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">2</button>
+                        <button onclick="selectDhuhaRakaat(4)" id="dhuha-chip-4" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">4</button>
+                        <button onclick="selectDhuhaRakaat(6)" id="dhuha-chip-6" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">6</button>
+                        <button onclick="selectDhuhaRakaat(8)" id="dhuha-chip-8" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">8</button>
+                        <button onclick="selectDhuhaRakaat(10)" id="dhuha-chip-10" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">10</button>
+                        <button onclick="selectDhuhaRakaat(12)" id="dhuha-chip-12" class="dhuha-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-amber-500/60 shadow-sm">12</button>
                     </div>
 
-                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/50 space-y-1">
+                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-amber-500/50 space-y-1 shadow-sm">
                         <span class="text-[10px] font-black text-amber-400 uppercase tracking-widest block" id="dhuha-virtue-title">✨ Keutamaan 2 Rakaat</span>
                         <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="dhuha-virtue-desc">"Sedekah untuk 360 persendian tubuh manusia." (HR. Muslim)</p>
                     </div>
@@ -790,20 +773,20 @@
                             <span class="text-xs font-black text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
                                 <i class="fa-solid fa-moon text-indigo-400"></i> Keutamaan Sholat Tahajud
                             </span>
-                            <p class="text-[10px] text-slate-400 mt-0.5">Pilih rakaat Tahajud hari ini:</p>
+                            <p class="text-[10px] text-zinc-400 mt-0.5">Pilih rakaat Tahajud hari ini:</p>
                         </div>
-                        <span id="tahajud-selected-rakaat" class="text-xs font-black text-indigo-400 font-money bg-indigo-950/80 border border-indigo-600/60 px-3 py-1 rounded-2xl">0 Rakaat</span>
+                        <span id="tahajud-selected-rakaat" class="text-xs font-black text-indigo-400 font-money bg-indigo-950/80 border border-indigo-600/60 px-3 py-1 rounded-2xl shadow-sm">0 Rakaat</span>
                     </div>
 
                     <div class="grid grid-cols-5 gap-1.5 text-center text-xs">
-                        <button onclick="selectTahajudRakaat(2)" id="tahajud-chip-2" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">2</button>
-                        <button onclick="selectTahajudRakaat(4)" id="tahajud-chip-4" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">4</button>
-                        <button onclick="selectTahajudRakaat(6)" id="tahajud-chip-6" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">6</button>
-                        <button onclick="selectTahajudRakaat(8)" id="tahajud-chip-8" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">8</button>
-                        <button onclick="selectTahajudRakaat(12)" id="tahajud-chip-12" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60">12</button>
+                        <button onclick="selectTahajudRakaat(2)" id="tahajud-chip-2" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60 shadow-sm">2</button>
+                        <button onclick="selectTahajudRakaat(4)" id="tahajud-chip-4" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60 shadow-sm">4</button>
+                        <button onclick="selectTahajudRakaat(6)" id="tahajud-chip-6" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60 shadow-sm">6</button>
+                        <button onclick="selectTahajudRakaat(8)" id="tahajud-chip-8" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60 shadow-sm">8</button>
+                        <button onclick="selectTahajudRakaat(12)" id="tahajud-chip-12" class="tahajud-chip p-2 bg-zinc-950/90 border border-zinc-800 font-bold text-slate-300 hover:border-indigo-500/60 shadow-sm">12</button>
                     </div>
 
-                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-500/50 space-y-1">
+                    <div class="bg-zinc-950/90 p-3 rounded-2xl border border-indigo-500/50 space-y-1 shadow-sm">
                         <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest block" id="tahajud-virtue-title">✨ Keutamaan Tahajud</span>
                         <p class="text-xs text-slate-200 italic font-semibold leading-relaxed" id="tahajud-virtue-desc">"Sholat yang paling utama setelah sholat fardu adalah sholat malam." (HR. Muslim)</p>
                     </div>
@@ -815,7 +798,7 @@
                             <span class="text-[10px] font-black text-amber-400 uppercase block tracking-wider">🌙 Fasting Sunnah</span>
                             <span id="fasting-today-status" class="text-xs text-slate-200 font-bold block mt-0.5">Senin/Kamis</span>
                         </div>
-                        <button onclick="haptic('double'); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950/90 border border-amber-500/60 text-amber-300 px-3 py-1.5 rounded-2xl text-xs font-bold pulse-gold-glow active-press">
+                        <button onclick="haptic('double'); toggleFastingCheckin();" id="fasting-btn" class="bg-amber-950/90 border border-amber-500/60 text-amber-300 px-3 py-1.5 rounded-2xl text-xs font-bold pulse-gold-glow active-press shadow-sm">
                             Niat Puasa
                         </button>
                     </div>
@@ -831,7 +814,7 @@
                     </div>
                 </section>
 
-                <section class="bg-zinc-950/80 p-4 rounded-[1.75rem] border border-emerald-900/50 space-y-2.5 backdrop-blur-md">
+                <section class="bg-zinc-950/80 p-4 rounded-[1.75rem] border border-emerald-900/50 space-y-2.5 backdrop-blur-md shadow-md">
                     <span class="text-[10px] font-black text-emerald-400 uppercase block tracking-wider">🕌 Jadwal Sholat Realtime</span>
                     <div id="prayer-times-grid" class="grid grid-cols-5 gap-2 text-center text-xs font-money"></div>
                 </section>
@@ -842,14 +825,14 @@
                         <span id="kiblat-degree" class="text-xs font-black text-amber-400 font-money">295° NW</span>
                     </div>
                     <div class="relative w-32 h-32 mx-auto flex items-center justify-center py-2">
-                        <div id="compass-ring" class="w-28 h-28 rounded-full border-2 border-dashed border-emerald-500 flex items-center justify-center transition-transform duration-200">
+                        <div id="compass-ring" class="w-28 h-28 rounded-full border-2 border-dashed border-emerald-500 flex items-center justify-center transition-transform duration-200 shadow-inner">
                             <i id="compass-needle" class="fa-solid fa-location-arrow text-3xl text-emerald-400 transform -rotate-45"></i>
                         </div>
                     </div>
-                    <p id="kiblat-status" class="text-[10px] text-slate-400 font-bold">Gerakkan HP kamu untuk mencocokkan arah Kiblat</p>
+                    <p id="kiblat-status" class="text-[10px] text-zinc-400 font-bold">Gerakkan HP kamu untuk mencocokkan arah Kiblat</p>
                 </section>
 
-                <div id="sholat-trend-banner" class="bg-zinc-950/90 p-4 rounded-[1.75rem] border border-emerald-600/40 flex justify-between items-center">
+                <div id="sholat-trend-banner" class="bg-zinc-950/90 p-4 rounded-[1.75rem] border border-emerald-600/40 flex justify-between items-center shadow-md">
                     <span class="text-xs font-bold text-slate-300">Trend Sholat Jamaah</span>
                     <span id="sholat-eval-status" class="text-xs font-black text-emerald-400">LEBIH BAIK (+1)</span>
                 </div>
@@ -857,13 +840,13 @@
                 <section class="oneui-card p-4 space-y-2 border-emerald-900/40">
                     <div class="flex justify-between items-center">
                         <span class="text-[10px] font-black text-slate-200 uppercase tracking-wider">🟢 30-Day Glowing Heatmap Grid</span>
-                        <span class="text-[9px] text-slate-400">Glow = 5 Time Full Jamaah</span>
+                        <span class="text-[9px] text-zinc-400">Glow = 5 Time Full Jamaah</span>
                     </div>
                     <div id="prayer-heatmap" class="heatmap-grid pt-1"></div>
                 </section>
 
                 <section class="oneui-card p-4 space-y-3 border-emerald-900/40">
-                    <h2 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800/80 pb-2.5"><i class="fa-solid fa-list-check text-emerald-400 mr-1.5"></i> Log Check-in Sholat</h2>
+                    <h2 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800/80 pb-2.5"><i class="fa-solid fa-clipboard-list text-emerald-400 mr-1.5"></i> Log Check-in Sholat</h2>
                     <div id="sholat-cards-list" class="space-y-2"></div>
                 </section>
             </main>
@@ -872,12 +855,12 @@
         <!-- SECTION 3: NOFAP & BRAIN REWIRE HUB -->
         <div id="section-nofap" class="hidden tab-transition">
             <main class="max-w-4xl mx-auto px-4 pt-3 space-y-4">
-                <section class="bg-gradient-to-r from-red-950/90 via-zinc-950 to-zinc-900 border border-red-600/50 p-4 rounded-[1.75rem] space-y-1 backdrop-blur-md">
+                <section class="bg-gradient-to-r from-red-950/80 via-zinc-950 to-zinc-900 border border-red-600/50 p-4 rounded-[1.75rem] space-y-1 backdrop-blur-md shadow-md">
                     <span class="text-[9px] font-black text-amber-400 uppercase tracking-widest block">🔥 Daily Mindset Quote</span>
                     <p id="daily-affirmation-text" class="text-xs text-slate-200 italic font-semibold leading-relaxed">"Disiplin adalah memilih antara apa yang kamu inginkan sekarang dengan apa yang paling kamu inginkan nanti."</p>
                 </section>
 
-                <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border border-red-600 p-4 rounded-[1.75rem] text-xs text-red-200 flex items-center gap-2.5 animate-pulse">
+                <div id="peak-urge-warning" class="hidden bg-gradient-to-r from-red-950 to-amber-950 border border-red-600 p-4 rounded-[1.75rem] text-xs text-red-200 flex items-center gap-2.5 animate-pulse shadow-lg">
                     <i class="fa-solid fa-triangle-exclamation text-xl text-amber-400 shrink-0"></i>
                     <div>
                         <strong class="font-black text-white block uppercase text-[10px]">🚨 PEAK URGE HOURS DETECTED!</strong>
@@ -887,7 +870,7 @@
 
                 <section class="oneui-card p-5 text-center border-red-600/60 shadow-xl space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-black text-red-400 uppercase bg-red-950/80 px-3 py-1 rounded-2xl border border-red-600/50">
+                        <span class="text-[10px] font-black text-red-400 uppercase bg-red-950/80 px-3 py-1 rounded-2xl border border-red-600/50 shadow-sm">
                             <i class="fa-solid fa-brain"></i> Brain Rewire Hub
                         </span>
                         <span class="text-xs font-extrabold text-amber-400" id="nofap-badge-top">Lvl 1 - Novice</span>
@@ -907,7 +890,7 @@
                         <button onclick="haptic('heavy'); openPanicModal();" class="bg-gradient-to-r from-amber-600 to-red-600 text-white font-black px-4 py-2.5 rounded-2xl text-xs shadow-lg animate-pulse active-press">
                             🚨 Emergency Panic
                         </button>
-                        <button onclick="haptic('heavy'); resetNoFap();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-2xl text-xs active-press">
+                        <button onclick="haptic('heavy'); resetNoFap();" class="bg-zinc-900 text-red-400 border border-red-900/60 font-bold px-3 py-2.5 rounded-2xl text-xs active-press shadow-sm">
                             Reset
                         </button>
                     </div>
@@ -918,7 +901,7 @@
                         <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider"><i class="fa-solid fa-network-wired mr-1.5"></i> Synapse Network Map</span>
                         <span id="synapse-power-text" class="text-[10px] font-bold text-emerald-400 font-money">Power: 10%</span>
                     </div>
-                    <div class="relative h-40 w-full bg-zinc-950/90 rounded-2xl overflow-hidden border border-zinc-800 flex items-center justify-center">
+                    <div class="relative h-40 w-full bg-zinc-950/90 rounded-2xl overflow-hidden border border-zinc-800 flex items-center justify-center shadow-inner">
                         <canvas id="brainCanvas" class="w-full h-full"></canvas>
                     </div>
                 </section>
@@ -936,8 +919,8 @@
                 <section class="oneui-card p-4 space-y-2.5 border-amber-600/40">
                     <span class="text-xs font-black text-amber-400 uppercase block tracking-wider">⭐ Jurnal Refleksi Mental Harian</span>
                     <div class="grid grid-cols-3 gap-2 text-center">
-                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
-                            <span class="text-[10px] text-slate-400 block mb-1">Energy</span>
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800 shadow-sm">
+                            <span class="text-[10px] text-zinc-400 block mb-1">Energy</span>
                             <select id="mental-energy" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-amber-400 p-1 rounded-xl w-full text-center focus:outline-none">
                                 <option value="1">⭐ 1/5</option>
                                 <option value="2">⭐⭐ 2/5</option>
@@ -946,8 +929,8 @@
                                 <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
                             </select>
                         </div>
-                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
-                            <span class="text-[10px] text-slate-400 block mb-1">Focus</span>
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800 shadow-sm">
+                            <span class="text-[10px] text-zinc-400 block mb-1">Focus</span>
                             <select id="mental-focus" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-blue-400 p-1 rounded-xl w-full text-center focus:outline-none">
                                 <option value="1">⭐ 1/5</option>
                                 <option value="2">⭐⭐ 2/5</option>
@@ -956,8 +939,8 @@
                                 <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
                             </select>
                         </div>
-                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800">
-                            <span class="text-[10px] text-slate-400 block mb-1">Mood</span>
+                        <div class="bg-zinc-950/90 p-2.5 rounded-2xl border border-zinc-800 shadow-sm">
+                            <span class="text-[10px] text-zinc-400 block mb-1">Mood</span>
                             <select id="mental-mood" onchange="saveMentalCheck()" class="bg-zinc-900 text-xs font-bold text-emerald-400 p-1 rounded-xl w-full text-center focus:outline-none">
                                 <option value="1">⭐ 1/5</option>
                                 <option value="2">⭐⭐ 2/5</option>
@@ -972,37 +955,37 @@
                 <section class="oneui-card p-4 space-y-2 border-amber-600/40">
                     <span class="text-xs font-black text-amber-400 uppercase block tracking-wider">🏆 Trophy Room</span>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-                        <div id="badge-7d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                        <div id="badge-7d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40 shadow-sm">
                             <strong class="block text-white text-[11px]">7 Days</strong>
-                            <span class="text-[9px] text-slate-400">Dopamine</span>
+                            <span class="text-[9px] text-zinc-400">Dopamine</span>
                         </div>
-                        <div id="badge-14d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                        <div id="badge-14d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40 shadow-sm">
                             <strong class="block text-white text-[11px]">14 Days</strong>
-                            <span class="text-[9px] text-slate-400">Testosteron</span>
+                            <span class="text-[9px] text-zinc-400">Testosteron</span>
                         </div>
-                        <div id="badge-30d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                        <div id="badge-30d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40 shadow-sm">
                             <strong class="block text-white text-[11px]">30 Days</strong>
-                            <span class="text-[9px] text-slate-400">Focus</span>
+                            <span class="text-[9px] text-zinc-400">Focus</span>
                         </div>
-                        <div id="badge-90d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40">
+                        <div id="badge-90d" class="p-3 rounded-2xl border bg-zinc-950/90 border-zinc-800 text-center opacity-40 shadow-sm">
                             <strong class="block text-white text-[11px]">90 Days</strong>
-                            <span class="text-[9px] text-slate-400">Rewire</span>
+                            <span class="text-[9px] text-zinc-400">Rewire</span>
                         </div>
                     </div>
                 </section>
 
                 <section class="oneui-card p-4 space-y-3 border-red-900/40">
-                    <h3 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800/80 pb-2.5"><i class="fa-solid fa-list-check text-red-400 mr-1.5"></i> Log Clean</h3>
+                    <h3 class="text-xs font-black text-slate-200 uppercase border-b border-zinc-800/80 pb-2.5"><i class="fa-solid fa-clipboard-list text-red-400 mr-1.5"></i> Log Clean</h3>
                     <div id="nofap-history-list" class="space-y-2"></div>
                 </section>
             </main>
         </div>
 
         <!-- FOOTER -->
-        <footer class="max-w-4xl mx-auto px-4 mt-8 pt-3 border-t border-zinc-800 text-center text-xs text-slate-500 flex justify-between items-center gap-2">
+        <footer class="max-w-4xl mx-auto px-4 mt-8 pt-3 border-t border-zinc-800 text-center text-xs text-zinc-500 flex justify-between items-center gap-2">
             <span id="footer-app-name">© 2026 Ubay Progress ⚔️</span>
-            <button onclick="haptic('light'); backupJSON();" class="bg-zinc-900 text-slate-300 border border-zinc-800 px-3 py-1.5 rounded-2xl text-[10px] font-bold active-press">
-                <i class="fa-solid fa-download text-red-400 mr-1"></i> Backup JSON
+            <button onclick="haptic('light'); backupJSON();" class="bg-zinc-900 text-zinc-300 border border-zinc-800 px-3 py-1.5 rounded-2xl text-[10px] font-bold active-press shadow-sm">
+                <i class="fa-solid fa-cloud-arrow-down text-red-400 mr-1"></i> Backup JSON
             </button>
         </footer>
 
@@ -1013,7 +996,7 @@
                     <span>Emergency Panic</span> <i class="fa-solid fa-triangle-exclamation"></i>
                 </button>
                 <button onclick="haptic('light'); switchTab('sholat'); openSholatModal(); toggleFab();" class="bg-zinc-800 text-red-400 font-bold px-4 py-2.5 rounded-2xl text-xs shadow-lg flex items-center gap-1.5 active-press">
-                    <span>Check-in Sholat</span> <i class="fa-solid fa-mosque"></i>
+                    <span>Check-in Sholat</span> <i class="fa-solid fa-kaaba"></i>
                 </button>
             </div>
             <button onclick="haptic('light'); openModal();" class="w-13 h-13 rounded-[1.5rem] bg-gradient-to-r from-red-600 to-rose-700 text-white text-xl font-black flex items-center justify-center shadow-xl active-press shadow-red-950">
@@ -1027,16 +1010,16 @@
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-receipt text-red-400 mr-1.5"></i> Catat Pengeluaran Baru</h3>
-                <button onclick="haptic('light'); closeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic('light'); closeModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="expense-form" class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Tanggal</label>
-                    <input type="date" id="exp-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Tanggal</label>
+                    <input type="date" id="exp-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Kategori</label>
-                    <select id="exp-category" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Kategori</label>
+                    <select id="exp-category" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                         <option value="Makan & Belanja Dapur Harian">Makan & Belanja Dapur Harian</option>
                         <option value="Bensin / Transportasi / Tol">Bensin / Transportasi / Tol</option>
                         <option value="Listrik, Air, Wifi & Pulsa">Listrik, Air, Wifi & Pulsa</option>
@@ -1050,23 +1033,23 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Deskripsi / Catatan</label>
-                    <input type="text" id="exp-desc" placeholder="Contoh: Nasi Padang / Bensin Pertalite" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Deskripsi / Catatan</label>
+                    <input type="text" id="exp-desc" placeholder="Contoh: Nasi Padang / Bensin Pertalite" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nominal (Rp)</label>
-                    <input type="number" id="exp-amount" placeholder="25000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Nominal (Rp)</label>
+                    <input type="number" id="exp-amount" placeholder="25000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Sumber Pembayaran (Wallet)</label>
-                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Sumber Pembayaran (Wallet)</label>
+                    <select id="exp-method" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                         <option value="Bank">Bank Utama (Mbanking)</option>
                         <option value="Cash">Cash (Dompet)</option>
                         <option value="E-Wallet">E-Wallet (Gopay/Ovo/Dana)</option>
                     </select>
                 </div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
+                    <button type="button" onclick="haptic('light'); closeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
                     <button type="submit" onclick="haptic('double'); playSoundEffect('cash');" class="w-1/2 bg-gradient-to-r from-red-600 to-rose-700 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan</button>
                 </div>
             </form>
@@ -1078,20 +1061,20 @@
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-money-bill-wave text-emerald-400 mr-1.5"></i> Edit Gaji & Pemasukan Bulanan</h3>
-                <button onclick="haptic('light'); closeIncomeModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic('light'); closeIncomeModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="income-form" class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Gaji Pokok Bulanan (Rp)</label>
-                    <input type="number" id="input-salary" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Gaji Pokok Bulanan (Rp)</label>
+                    <input type="number" id="input-salary" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Pemasukan Sampingan / Tambahan (Rp)</label>
-                    <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Pemasukan Sampingan / Tambahan (Rp)</label>
+                    <input type="number" id="input-side" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeIncomeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-emerald-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Gaji</button>
+                    <button type="button" onclick="haptic('light'); closeIncomeModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-emerald-600 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan Gaji</button>
                 </div>
             </form>
         </div>
@@ -1102,13 +1085,13 @@
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-chart-pie text-amber-400 mr-1.5"></i> Atur Limit Budget Kategori</h3>
-                <button onclick="haptic('light'); closeBudgetModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic('light'); closeBudgetModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="budget-form" class="space-y-3 text-xs">
                 <div id="budget-inputs-container" class="space-y-2.5 max-h-60 overflow-y-auto pr-1"></div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeBudgetModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Budget</button>
+                    <button type="button" onclick="haptic('light'); closeBudgetModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan Budget</button>
                 </div>
             </form>
         </div>
@@ -1119,36 +1102,36 @@
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-link-slash text-red-400 mr-1.5"></i> Kelola Utang & Cicilan</h3>
-                <button onclick="haptic('light'); closeDebtModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic('light'); closeDebtModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleDebtSubmit(event)" class="space-y-3 text-xs">
                 <input type="hidden" id="debt-edit-id">
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Utang / Cicilan</label>
-                    <input type="text" id="debt-name" placeholder="Contoh: Cicilan Laptop" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Nama Utang / Cicilan</label>
+                    <input type="text" id="debt-name" placeholder="Contoh: Cicilan Laptop" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Total Nominal (Rp)</label>
-                    <input type="number" id="debt-total" placeholder="1800000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Total Nominal (Rp)</label>
+                    <input type="number" id="debt-total" placeholder="1800000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Cicilan Per Bulan (Rp)</label>
-                    <input type="number" id="debt-monthly" placeholder="600000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Cicilan Per Bulan (Rp)</label>
+                    <input type="number" id="debt-monthly" placeholder="600000" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Sisa Bulan / Tenor</label>
-                    <input type="number" id="debt-months" placeholder="3" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Sisa Bulan / Tenor</label>
+                    <input type="number" id="debt-months" placeholder="3" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-red-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Status</label>
-                    <select id="debt-status" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Status</label>
+                    <select id="debt-status" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white focus:outline-none focus:border-red-500 shadow-inner">
                         <option value="Belum Lunas">Belum Lunas</option>
                         <option value="Lunas">Lunas</option>
                     </select>
                 </div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeDebtModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-red-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Utang</button>
+                    <button type="button" onclick="haptic('light'); closeDebtModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-red-600 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan Utang</button>
                 </div>
             </form>
         </div>
@@ -1159,24 +1142,24 @@
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
                 <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-wallet text-amber-400 mr-1.5"></i> Edit Saldo Wallet Real</h3>
-                <button onclick="haptic('light'); closeWalletEditModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="haptic('light'); closeWalletEditModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleWalletEditSubmit(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">💵 Cash (Dompet Fisik)</label>
-                    <input type="number" id="edit-wallet-cash" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">💵 Cash (Dompet Fisik)</label>
+                    <input type="number" id="edit-wallet-cash" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">🏦 Bank Utama (Mbanking)</label>
-                    <input type="number" id="edit-wallet-bank" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">🏦 Bank Utama (Mbanking)</label>
+                    <input type="number" id="edit-wallet-bank" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500 shadow-inner">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">📱 E-Wallet (Gopay/Ovo/Dana)</label>
-                    <input type="number" id="edit-wallet-ewallet" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">📱 E-Wallet (Gopay/Ovo/Dana)</label>
+                    <input type="number" id="edit-wallet-ewallet" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white font-money focus:outline-none focus:border-amber-500 shadow-inner">
                 </div>
                 <div class="pt-2 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeWalletEditModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan Wallet</button>
+                    <button type="button" onclick="haptic('light'); closeWalletEditModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
+                    <button type="submit" onclick="haptic('double');" class="w-1/2 bg-amber-600 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan Wallet</button>
                 </div>
             </form>
         </div>
@@ -1185,27 +1168,27 @@
     <!-- MODAL PANIC NOFAP -->
     <div id="nofap-panic-modal" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="oneui-card border border-red-600 w-full max-w-md rounded-2xl p-6 text-center space-y-4 shadow-2xl">
-            <div class="w-16 h-16 bg-red-950 border border-red-600 rounded-full flex items-center justify-center mx-auto animate-pulse">
-                <i class="fa-solid fa-shield-halved text-2xl text-red-400"></i>
+            <div class="w-16 h-16 bg-zinc-900 border border-red-600 rounded-full flex items-center justify-center mx-auto animate-pulse shadow-inner">
+                <i class="fa-solid fa-shield-heart text-2xl text-red-400"></i>
             </div>
             <div>
                 <h3 class="text-base font-black text-white uppercase">🚨 EMERGENCY PANIC PROTOCOL</h3>
-                <p class="text-[11px] text-slate-300 mt-1">Tenangkan pikiran, atur nafas, dan alihkan perhatian dari godaan.</p>
+                <p class="text-[11px] text-zinc-300 mt-1">Tenangkan pikiran, atur nafas, dan alihkan perhatian dari godaan.</p>
             </div>
             
             <div class="py-2 flex flex-col items-center justify-center">
-                <div id="breathing-ring" class="w-28 h-28 rounded-full border-2 border-red-500 bg-red-950/40 flex items-center justify-center transition-transform duration-1000">
+                <div id="breathing-ring" class="w-28 h-28 rounded-full border-2 border-red-500 bg-red-950/40 flex items-center justify-center transition-transform duration-1000 shadow-inner">
                     <span id="breathing-state-text" class="text-xs font-black text-amber-400">Tarik</span>
                 </div>
             </div>
 
             <div class="flex justify-center gap-2">
-                <button type="button" onclick="setBreathingRhythm('box')" id="btn-rhythm-box" class="bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl">Box 4s</button>
-                <button type="button" onclick="setBreathingRhythm('478')" id="btn-rhythm-478" class="bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl">4-7-8 Relax</button>
+                <button type="button" onclick="setBreathingRhythm('box')" id="btn-rhythm-box" class="bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm">Box 4s</button>
+                <button type="button" onclick="setBreathingRhythm('478')" id="btn-rhythm-478" class="bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm">4-7-8 Relax</button>
             </div>
 
             <div class="pt-2 border-t border-zinc-800">
-                <button type="button" onclick="haptic('light'); closePanicModal();" class="w-full bg-zinc-800 text-white font-bold py-3 rounded-2xl text-xs active-press">Saya Sudah Tenang (Tutup)</button>
+                <button type="button" onclick="haptic('light'); closePanicModal();" class="w-full bg-zinc-800 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-sm">Saya Sudah Tenang (Tutup)</button>
             </div>
         </div>
     </div>
@@ -1214,20 +1197,20 @@
     <div id="sholat-modal-backdrop" class="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="oneui-card border border-zinc-700 w-full max-w-xl rounded-t-[2.25rem] sm:rounded-2xl p-5 shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto bottom-sheet">
             <div class="flex justify-between items-center border-b border-zinc-800 pb-2.5">
-                <h3 class="text-xs font-bold text-white">Check-in Sholat & Mutabaah Visual</h3>
-                <button onclick="haptic('light'); closeSholatModal();" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <h3 class="text-xs font-bold text-white uppercase"><i class="fa-solid fa-kaaba text-emerald-400 mr-1.5"></i> Check-in Sholat & Mutabaah Visual</h3>
+                <button onclick="haptic('light'); closeSholatModal();" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form id="sholat-form" class="space-y-3">
                 <div>
-                    <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Tanggal Check-in</label>
-                    <input type="date" id="input-sholat-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white">
+                    <label class="block text-[10px] font-semibold text-zinc-400 mb-0.5">Tanggal Check-in</label>
+                    <input type="date" id="input-sholat-date" required class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white shadow-inner">
                 </div>
 
-                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-3">
+                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-3 shadow-inner">
                     <span class="text-xs font-bold text-emerald-400 block uppercase">🕌 Sholat Wajib (<span class="text-emerald-300 font-black">+20 XP Jamaah</span>)</span>
                     
                     <div id="fast-sholat-container" class="space-y-2 text-xs">
-                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
+                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl shadow-sm">
                             <span class="font-bold text-slate-200 w-16">Subuh</span>
                             <div class="flex gap-1">
                                 <button type="button" onclick="setFastSholat('subuh', 'Jamaah')" id="btn-subuh-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">🕌 Jamaah</button>
@@ -1235,7 +1218,7 @@
                                 <button type="button" onclick="setFastSholat('subuh', 'Tidak')" id="btn-subuh-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
+                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl shadow-sm">
                             <span class="font-bold text-slate-200 w-16">Dzuhur</span>
                             <div class="flex gap-1">
                                 <button type="button" onclick="setFastSholat('dzuhur', 'Jamaah')" id="btn-dzuhur-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">🕌 Jamaah</button>
@@ -1243,7 +1226,7 @@
                                 <button type="button" onclick="setFastSholat('dzuhur', 'Tidak')" id="btn-dzuhur-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
+                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl shadow-sm">
                             <span class="font-bold text-slate-200 w-16">Ashar</span>
                             <div class="flex gap-1">
                                 <button type="button" onclick="setFastSholat('ashar', 'Jamaah')" id="btn-ashar-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">🕌 Jamaah</button>
@@ -1251,7 +1234,7 @@
                                 <button type="button" onclick="setFastSholat('ashar', 'Tidak')" id="btn-ashar-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
+                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl shadow-sm">
                             <span class="font-bold text-slate-200 w-16">Maghrib</span>
                             <div class="flex gap-1">
                                 <button type="button" onclick="setFastSholat('maghrib', 'Jamaah')" id="btn-maghrib-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">🕌 Jamaah</button>
@@ -1259,7 +1242,7 @@
                                 <button type="button" onclick="setFastSholat('maghrib', 'Tidak')" id="btn-maghrib-Tidak" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">❌ Absen</button>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl">
+                        <div class="flex justify-between items-center bg-zinc-900/90 p-2.5 rounded-2xl shadow-sm">
                             <span class="font-bold text-slate-200 w-16">Isya</span>
                             <div class="flex gap-1">
                                 <button type="button" onclick="setFastSholat('isya', 'Jamaah')" id="btn-isya-Jamaah" class="fast-sholat-btn px-2.5 py-1 bg-zinc-950 border border-zinc-800 text-[10px] font-bold">🕌 Jamaah</button>
@@ -1270,7 +1253,7 @@
                     </div>
                 </div>
 
-                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-2">
+                <div class="bg-zinc-950 p-3.5 rounded-2xl border border-zinc-800 space-y-2 shadow-inner">
                     <div class="flex justify-between items-center text-xs">
                         <span class="font-bold text-amber-400 uppercase">📖 Tilawah Al-Qur'an</span>
                         <span id="tilawah-slider-val" class="font-black text-white font-money">0 Halaman</span>
@@ -1279,8 +1262,8 @@
                 </div>
 
                 <div class="pt-1 flex gap-2 border-t border-zinc-800">
-                    <button type="button" onclick="haptic('light'); closeSholatModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs">Batal</button>
-                    <button type="submit" onclick="haptic('double'); playSoundEffect('gong');" class="w-1/2 bg-emerald-600 text-white font-bold py-3 rounded-2xl text-xs active-press">Simpan</button>
+                    <button type="button" onclick="haptic('light'); closeSholatModal();" class="w-1/2 bg-zinc-800 font-bold py-3 rounded-2xl text-xs shadow-sm">Batal</button>
+                    <button type="submit" onclick="haptic('double'); playSoundEffect('gong');" class="w-1/2 bg-emerald-600 text-white font-bold py-3 rounded-2xl text-xs active-press shadow-md">Simpan</button>
                 </div>
             </form>
         </div>
@@ -1578,7 +1561,7 @@
         function applyCustomAppName(title) {
             document.getElementById('display-app-title').innerText = title;
             document.getElementById('lock-screen-app-name').innerText = title;
-            document.getElementById('html-title-tag').innerText = `${title} - Gemini Sidebar & Main Dashboard v7.1`;
+            document.getElementById('html-title-tag').innerText = `${title} - One UI System Hub v7.1`;
             document.getElementById('footer-app-name').innerText = `© 2026 ${title} ⚔️`;
         }
 
@@ -1730,11 +1713,11 @@
             const prayerTimesGrid = document.getElementById('prayer-times-grid');
             if (prayerTimesGrid) {
                 prayerTimesGrid.innerHTML = `
-                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
-                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
-                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
-                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-emerald-500/80 bg-emerald-950/40"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
-                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800"><span class="text-slate-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800 shadow-sm"><span class="text-zinc-400 block text-[9px]">Subuh</span><strong class="text-white text-xs">04:42</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800 shadow-sm"><span class="text-zinc-400 block text-[9px]">Dzuhur</span><strong class="text-white text-xs">12:02</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800 shadow-sm"><span class="text-zinc-400 block text-[9px]">Ashar</span><strong class="text-white text-xs">15:23</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-emerald-500/80 bg-emerald-950/40 shadow-sm"><span class="text-emerald-400 block text-[9px]">Maghrib</span><strong class="text-amber-400 text-xs">18:00</strong></div>
+                    <div class="bg-zinc-950/90 p-2 rounded-2xl border border-zinc-800 shadow-sm"><span class="text-zinc-400 block text-[9px]">Isya</span><strong class="text-white text-xs">19:12</strong></div>
                 `;
             }
 
@@ -1757,8 +1740,8 @@
 
         let breathInterval = null;
         function setBreathingRhythm(type) {
-            document.getElementById('btn-rhythm-box').className = type === 'box' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl";
-            document.getElementById('btn-rhythm-478').className = type === '478' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl" : "bg-zinc-900 border border-zinc-700 text-slate-400 text-[10px] font-black px-3 py-1.5 rounded-2xl";
+            document.getElementById('btn-rhythm-box').className = type === 'box' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm" : "bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm";
+            document.getElementById('btn-rhythm-478').className = type === '478' ? "bg-red-900 border border-red-500 text-white text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm" : "bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px] font-black px-3 py-1.5 rounded-2xl shadow-sm";
             
             clearInterval(breathInterval);
             let state = 0;
@@ -1953,10 +1936,10 @@
                 [...nofapData.history].reverse().forEach(item => {
                     const isClean = item.status === 'Clean';
                     historyList.innerHTML += `
-                        <div class="bg-zinc-950/90 p-3 rounded-2xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs font-money">
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border ${isClean ? 'border-emerald-600/40' : 'border-red-600/40'} flex justify-between items-center text-xs font-money shadow-sm">
                             <div>
                                 <span class="font-bold text-white block">${formatDateDDMMYYYY(item.date)}</span>
-                                <span class="text-[10px] text-slate-400 font-sans">${item.note || '-'}</span>
+                                <span class="text-[10px] text-zinc-400 font-sans">${item.note || '-'}</span>
                             </div>
                             <span class="px-2.5 py-0.5 rounded-xl text-[10px] font-black ${isClean ? 'bg-emerald-950 text-emerald-300' : 'bg-red-950 text-red-300'} font-sans">
                                 ${isClean ? '✅ Clean' : '⚠️ Reset'}
@@ -2099,7 +2082,7 @@
                 container.innerHTML += `
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-300 mb-0.5">${cat}</label>
-                        <input type="number" id="budget-val-${idx}" data-cat="${cat}" value="${budgetCategories[cat].budget}" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white">
+                        <input type="number" id="budget-val-${idx}" data-cat="${cat}" value="${budgetCategories[cat].budget}" class="w-full bg-zinc-950 border border-zinc-700 rounded-2xl p-2.5 text-xs text-white shadow-inner">
                     </div>
                 `;
             });
@@ -2252,11 +2235,11 @@
             const wishlistContainer = document.getElementById('wishlist-delay-list');
             wishlistContainer.innerHTML = '';
             if (impulsiveWishlist.length === 0) {
-                wishlistContainer.innerHTML = `<span class="text-slate-500 italic text-[10px]">Tidak ada wishlist terkunci.</span>`;
+                wishlistContainer.innerHTML = `<span class="text-zinc-500 italic text-[10px]">Tidak ada wishlist terkunci.</span>`;
             } else {
                 impulsiveWishlist.forEach(w => {
                     wishlistContainer.innerHTML += `
-                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-zinc-800 flex justify-between items-center text-xs font-money">
+                        <div class="bg-zinc-950/90 p-3 rounded-2xl border border-zinc-800 flex justify-between items-center text-xs font-money shadow-sm">
                             <div><strong class="text-white block font-sans">${w.item}</strong><span class="text-amber-400 font-bold">${formatRupiah(w.price)}</span></div>
                             <span class="px-2.5 py-1 bg-amber-950 text-amber-300 rounded-xl font-bold text-[10px] font-sans">Wishlist</span>
                         </div>
@@ -2271,12 +2254,12 @@
                 if (d.status !== 'Lunas') totalDebtAll += d.total;
                 const isLunas = d.status === 'Lunas';
                 debtContainer.innerHTML += `
-                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border ${isLunas ? 'border-emerald-600/40 opacity-60' : 'border-zinc-800'} space-y-1.5 font-money">
+                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border ${isLunas ? 'border-emerald-600/40 opacity-60' : 'border-zinc-800'} space-y-1.5 font-money shadow-sm">
                         <div class="flex justify-between items-center">
                             <span class="font-bold text-white font-sans">${d.name} ${isLunas ? '🎉' : ''}</span>
                             <span class="font-bold ${isLunas ? 'text-emerald-400' : 'text-red-400'}">${formatRupiah(d.total)}</span>
                         </div>
-                        <div class="text-[10px] text-slate-400 flex justify-between items-center font-sans">
+                        <div class="text-[10px] text-zinc-400 flex justify-between items-center font-sans">
                             <span>Cicilan: ${formatRupiah(d.monthlyPay)}/bln</span>
                             <span>Sisa: <strong>${d.remainingMonths} bln</strong></span>
                         </div>
@@ -2284,8 +2267,8 @@
                             <button onclick="haptic('light'); toggleDebtStatus(${d.id});" class="text-[10px] font-bold px-2 py-0.5 rounded-lg ${isLunas ? 'bg-amber-950 text-amber-300' : 'bg-emerald-950 text-emerald-300'}">
                                 ${isLunas ? 'Batal Lunas' : 'Tandai Lunas'}
                             </button>
-                            <button onclick="haptic('light'); editDebtItem(${d.id});" class="text-slate-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <button onclick="haptic('light'); deleteDebtItem(${d.id});" class="text-slate-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash"></i></button>
+                            <button onclick="haptic('light'); editDebtItem(${d.id});" class="text-zinc-400 hover:text-white text-[10px]"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                            <button onclick="haptic('light'); deleteDebtItem(${d.id});" class="text-zinc-500 hover:text-red-400 text-[10px]"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                     </div>
                 `;
@@ -2300,12 +2283,12 @@
                 const pct = b > 0 ? (s / b) * 100 : (s > 0 ? 100 : 0);
                 
                 cardsContainer.innerHTML += `
-                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-2">
+                    <div class="bg-zinc-950/90 p-3.5 rounded-2xl border border-zinc-800 space-y-2 shadow-sm">
                         <div class="flex justify-between text-xs">
                             <span class="font-bold text-slate-200 truncate">${c}</span>
                             <span class="font-bold text-white font-money">${formatRupiah(s)}</span>
                         </div>
-                        <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
+                        <div class="w-full bg-zinc-900 h-2 rounded-full overflow-hidden shadow-inner">
                             <div class="${pct >= 100 ? 'bg-red-600' : 'bg-emerald-500'} h-full rounded-full transition-all duration-300" style="width: ${Math.min(pct, 100)}%"></div>
                         </div>
                     </div>
@@ -2342,19 +2325,19 @@
             const displayList = showAllHistory ? filtered : filtered.slice(0, 5);
 
             if (displayList.length === 0) {
-                historyTable.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-slate-500 italic font-sans">Tidak ada transaksi.</td></tr>`;
+                historyTable.innerHTML = `<tr><td colspan="4" class="p-3 text-center text-zinc-500 italic font-sans">Tidak ada transaksi.</td></tr>`;
             } else {
                 displayList.forEach(t => {
                     historyTable.innerHTML += `
                         <tr class="hover:bg-zinc-800/40">
-                            <td class="p-2.5 text-slate-400 font-bold text-[10px]">${formatDateDDMM(t.date)}</td>
+                            <td class="p-2.5 text-zinc-400 font-bold text-[10px]">${formatDateDDMM(t.date)}</td>
                             <td class="p-2.5 font-semibold text-slate-200 text-xs font-sans">
                                 <div>${t.desc}</div>
-                                <span class="text-[9px] text-slate-500">${t.category}</span>
+                                <span class="text-[9px] text-zinc-500">${t.category}</span>
                             </td>
                             <td class="p-2.5 font-bold text-red-400 text-xs">${formatRupiah(t.amount)}</td>
                             <td class="p-2.5 text-center font-sans">
-                                <button onclick="haptic('light'); deleteTransaction(${t.id});" class="text-slate-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
+                                <button onclick="haptic('light'); deleteTransaction(${t.id});" class="text-zinc-500 hover:text-red-400"><i class="fa-solid fa-trash-can"></i></button>
                             </td>
                         </tr>
                     `;
@@ -2646,8 +2629,8 @@
 
                         heatmapEl.innerHTML += `
                             <div title="Tanggal: ${fullFormattedDate} (${st.jamaah}/5 Jamaah)" class="flex flex-col items-center group cursor-pointer">
-                                <div class="h-6 w-full rounded-xl border ${bgClass} transition-all group-hover:scale-110"></div>
-                                <span class="text-[7px] text-slate-400 font-extrabold mt-1 group-hover:text-amber-400 font-money">${formattedDisplayDate}</span>
+                                <div class="h-6 w-full rounded-xl border ${bgClass} transition-all group-hover:scale-110 shadow-sm"></div>
+                                <span class="text-[7px] text-zinc-400 font-extrabold mt-1 group-hover:text-amber-400 font-money">${formattedDisplayDate}</span>
                             </div>
                         `;
                     }
@@ -2659,11 +2642,11 @@
                     const sortedSholats = [...sholats].sort((a, b) => new Date(b.date) - new Date(a.date));
 
                     if (sortedSholats.length === 0) {
-                        cardsList.innerHTML = `<div class="text-center p-3 text-slate-500 text-xs italic">Belum ada catatan sholat.</div>`;
+                        cardsList.innerHTML = `<div class="text-center p-3 text-zinc-500 text-xs italic">Belum ada catatan sholat.</div>`;
                     } else {
                         sortedSholats.forEach(h => {
                             cardsList.innerHTML += `
-                                <div class="oneui-card border border-zinc-800 p-4 rounded-2xl space-y-2 font-money">
+                                <div class="oneui-card border border-zinc-800 p-4 rounded-2xl space-y-2 font-money shadow-sm">
                                     <div class="flex justify-between items-center text-xs">
                                         <span class="font-bold text-white font-sans">${formatDateDDMMYYYY(h.date)}</span>
                                         <div class="flex gap-1.5 font-sans">
@@ -2673,7 +2656,7 @@
                                         </div>
                                     </div>
                                     <div class="grid grid-cols-5 gap-1.5 text-center text-[10px]">
-                                        ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950/90 p-2 rounded-xl border border-zinc-800"><span class="text-slate-400 block uppercase font-bold text-[8px] font-sans">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-slate-500')}">${h[s] || 'Pending'}</strong></div>`).join('')}
+                                        ${['subuh','dzuhur','ashar','maghrib','isya'].map(s => `<div class="bg-zinc-950/90 p-2 rounded-xl border border-zinc-800 shadow-inner"><span class="text-zinc-400 block uppercase font-bold text-[8px] font-sans">${s}</span><strong class="${h[s]==='Jamaah'?'text-emerald-400':(h[s]==='Munfarid'?'text-blue-400':'text-zinc-500')}">${h[s] || 'Pending'}</strong></div>`).join('')}
                                     </div>
                                 </div>
                             `;
